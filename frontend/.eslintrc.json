@@ -1,0 +1,41 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jest/globals": true
+  },
+  "parser": "babel-eslint",
+  "extends": [
+    "eslint:recommended",
+    "prettier",
+    "prettier/react",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:jest/recommended"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "globals": {
+    "document": true,
+    "window": true,
+    "process": true,
+    "Buffer": true,
+    "require": true,
+    "global": true
+  },
+  "plugins": ["react", "prettier", "jsx-a11y", "jest"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "jsx-a11y/media-has-caption": "off"
+  }
+}
