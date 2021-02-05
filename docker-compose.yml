@@ -7,3 +7,10 @@ services:
      - "8080:8080"
     volumes:
      - ./frontend:/app
+
+  tagging-service:
+    build: ./tagging-service
+    ports:
+    - "5000:5000"
+    volumes:
+    - ./tagging-service:/tagging_service
