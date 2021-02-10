@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restx import Resource, Api, fields
 
 from util.data_loader import load_data
+from util.mongo_helper import get_db_names, get_misconceptions
 
 app = Flask(__name__)
 api = Api(app, version='1.0', title='tagging Service',
@@ -24,13 +25,26 @@ answer = api.model('Answer', {
 
 
 @api.route('/group_similarity')
-@api.route('/group_similarity')
 @api.doc('group answers by similarity')
 class Grouping(Resource):
     @api.doc('group given answers')
     @api.marshal_list_with(answer)
     def get(self):
         return load_data()
+
+
+@api.route('/info')
+class Info(Resource):
+    @api.doc('info about mongo database')
+    def get(self):
+        return get_db_names()
+
+@api.route('/misconceptions')
+class Misconceptions(Resource):
+    @api.doc('lists available misconceptions for Java')
+    def get(self):
+        return get_misconceptions()
+
 
 
 if __name__ == "__main__":

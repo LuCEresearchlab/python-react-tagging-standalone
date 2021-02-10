@@ -1,13 +1,11 @@
 @startuml
 
 
-database "MongoDB\n" as D {
-    [Tagging Data]
+database "MongoDB\n" {
+    [Tagging Data] as D
 }
 
-node "AssignmentService" as AS
-
-package "Tagging Service" {
+package "Tagging Service" as TService {
     [Tagging API] as TAPI
     [Grouper] as G
     [TagUtils] as TU
@@ -16,24 +14,30 @@ package "Tagging Service" {
     [History] as H
     [AnswersLoader] as AL
 
-    TAPI -- MH
+    TAPI -- TU
 
-    TU -- G
-    TU -- MS
-    TU -- H
+    G -- TU
+    MS -- TU
+    H -- TU
     TU -- AL
-    TU -- TAPI
-
-    MH -(0- D
-    AS -0)- AL
+    TU -- MH
 }
 
 package "Front End" {
     [Tagging UI] as tui
     [Tagging session] as ts
+
     tui -- ts
-    ts -(0- TAPI
 }
+
+node "AssignmentService" as AS
+
+MH --(0-- D
+
+AL --(0-- AS
+
+
+ts -(0- TAPI
 
 
 @enduml
