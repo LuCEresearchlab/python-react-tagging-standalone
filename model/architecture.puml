@@ -1,0 +1,43 @@
+@startuml
+
+
+database "MongoDB\n" {
+    [Tagging Data] as D
+}
+
+package "Tagging Service" as TService {
+    [Tagging API] as TAPI
+    [Grouper] as G
+    [TagUtils] as TU
+    [MongoHelper] as MH
+    [MiscSuggester] as MS
+    [History] as H
+    [AnswersLoader] as AL
+
+    TAPI -- TU
+
+    G -- TU
+    MS -- TU
+    H -- TU
+    TU -- AL
+    TU -- MH
+}
+
+package "Front End" {
+    [Tagging UI] as tui
+    [Tagging session] as ts
+
+    tui -- ts
+}
+
+node "AssignmentService" as AS
+
+MH --(0-- D
+
+AL --(0-- AS
+
+
+ts -(0- TAPI
+
+
+@enduml

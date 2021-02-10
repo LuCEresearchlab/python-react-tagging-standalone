@@ -1,0 +1,33 @@
+version: '3'
+services:
+
+  web:
+    build: ./frontend
+    ports:
+     - "8080:8080"
+    volumes:
+     - ./frontend:/app
+
+  tagging-service:
+    build: ./tagging-service
+    ports:
+    - "5000:5000"
+    volumes:
+    - ./tagging-service:/tagging_service
+    restart: on-failure
+    links:
+      - tagging-database
+
+  tagging-database:
+    image: 'library/mongo:3.6.21-xenial'
+    ports:
+    - "27017:27017"
+    volumes:
+    - ./mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    - ./mongodb/misconceptions.json:/misconceptions.json
+    hostname: mongo_database
+
+  mongo-seed:
+    build: ./mongodb
+    links:
+      - tagging-database
