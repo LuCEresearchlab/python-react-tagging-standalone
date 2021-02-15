@@ -6,7 +6,8 @@ services:
     ports:
      - "8080:8080"
     volumes:
-     - ./frontend:/app
+     - ./frontend/src:/app/src
+     - ./frontend/logs:/root/.npm/_logs
 
   tagging-service:
     build: ./tagging-service
