@@ -39,12 +39,12 @@ class Info(Resource):
     def get(self):
         return get_db_names()
 
+
 @api.route('/misconceptions')
 class Misconceptions(Resource):
     @api.doc('lists available misconceptions for Java')
     def get(self):
         return get_misconceptions()
-
 
 
 if __name__ == "__main__":
