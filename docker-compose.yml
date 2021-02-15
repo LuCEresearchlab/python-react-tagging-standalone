@@ -20,7 +20,7 @@ services:
       - tagging-database
 
   tagging-database:
-    image: 'library/mongo:3.6.21-xenial'
+    image: 'mongo:4.4.3'
     ports:
     - "27017:27017"
     volumes:
@@ -31,4 +31,6 @@ services:
   mongo-seed:
     build: ./mongodb
     links:
+      - tagging-database
+    depends_on:
       - tagging-database
