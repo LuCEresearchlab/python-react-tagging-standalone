@@ -41,3 +41,28 @@ The host can connect to the various containers at the following addresses
 Note:
 We can see the available endpoints of the tagging service by connecting directly to its container http://localhost:5000/
 
+
+## Testing
+
+### Set-up local environment
+To test the application it is required to set up a local development environment, to do so run
+```
+cd frontend
+npm ci install
+cd ..
+python3 -m venv venv
+source venv/bin/activate
+cd tagging-service
+pip install -r requirements.txt
+```
+
+### Frontend testing
+```
+cd frontend
+npm test
+```
+
+### Service testing
+```
+pytest
+```
