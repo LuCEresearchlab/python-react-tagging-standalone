@@ -13,6 +13,7 @@ package "Tagging Service" as TService {
     [MiscSuggester] as MS
     [History] as H
     [AnswersLoader] as AL
+    [ProgmisconHelper] as PGH
 
     TAPI -- TU
 
@@ -21,6 +22,7 @@ package "Tagging Service" as TService {
     H -- TU
     TU -- AL
     TU -- MH
+    TU -- PGH
 }
 
 package "Front End" {
@@ -31,6 +33,7 @@ package "Front End" {
 }
 
 node "AssignmentService" as AS
+node "Progmiscon" as PG
 
 MH --(0-- D
 
@@ -38,6 +41,8 @@ AL --(0-- AS
 
 
 ts -(0- TAPI
+
+PGH -(0- PG
 
 
 @enduml
