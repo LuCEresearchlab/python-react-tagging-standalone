@@ -1,13 +1,13 @@
 from pymongo import MongoClient
 from bson import json_util
-import json
+from flask import jsonify
 
 client = MongoClient("mongodb://mongo_database:27017/")
 db = client['tagging_db']
 
 
 def serialize_cursor(cursor):
-    return json.loads(json_util.dumps(cursor))
+    return jsonify(json_util.dumps(cursor))
 
 
 def get_db_names():

@@ -1,3 +1,4 @@
+
 class Answer:
     def __init__(self, content, question_type):
         self.content = content
