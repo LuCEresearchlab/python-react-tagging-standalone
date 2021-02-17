@@ -11,7 +11,7 @@ this will allow for a more scalable tagging experience.
 ##Project Structure
 - frontend: React Typescript application
 - model: models of the project
-- mongodb: init script for MongoDB server, initial data
+- mongodb: Dockerfile for MongoDB server
 - tagging service: Python Flask server
 
 
