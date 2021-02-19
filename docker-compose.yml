@@ -18,6 +18,9 @@ services:
     restart: on-failure
     links:
       - tagging-database
+    environment:
+      - FLASK_APP=${FLASK_APP}
+      - FLASK_ENV=${FLASK_ENV}
 
   tagging-database:
     image: 'mongo:4.4.3'

@@ -1,5 +1,5 @@
 from flask_restx import Namespace, Resource, fields
-from src.util.answers_loader import load_data
+from flaskr.util.answers_loader import load_data
 
 api = Namespace('grouping_api', description='API for grouping answers by similarity')
 

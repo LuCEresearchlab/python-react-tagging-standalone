@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource
-from src.util.progmiscon_helper import get_java_public_misconceptions
-from src import cache
+from flaskr.util.progmiscon_helper import get_java_public_misconceptions
+from flaskr import cache
 
 api = Namespace('progmiscon_api', description='API for grouping answers by similarity')
 

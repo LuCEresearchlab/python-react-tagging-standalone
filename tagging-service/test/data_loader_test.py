@@ -1,4 +1,4 @@
-from src.util.answers_loader import load_data, Answer
+from flaskr.util.answers_loader import load_data, Answer
 
 data = load_data()
 
