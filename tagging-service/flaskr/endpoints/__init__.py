@@ -1,7 +1,7 @@
 from flask_restx import Api
-from src.endpoints.upload_api import api as ns1
-from src.endpoints.grouping_api import api as ns2
-from src.endpoints.progmiscon_api import api as ns3
+from flaskr.endpoints.upload_api import api as ns1
+from flaskr.endpoints.grouping_api import api as ns2
+from flaskr.endpoints.progmiscon_api import api as ns3
 
 api = Api(version='1.0',
           title='tagging Service',

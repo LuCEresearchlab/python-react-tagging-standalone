@@ -7,4 +7,4 @@ config = {
     "CACHE_TYPE": "simple",  # Flask-Caching related configs
     "CACHE_DEFAULT_TIMEOUT": 600,
 }
-cache = Cache()
+cache = Cache(config=config)
