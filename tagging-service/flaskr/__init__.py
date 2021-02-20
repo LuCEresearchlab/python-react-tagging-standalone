@@ -11,5 +11,7 @@ def create_app(test_config=None):
     app.config['UPLOAD_FOLDER'] = './datasets'
     return app
 
-app = create_app()
-app.run(debug=True, host='0.0.0.0', threaded=True)
+
+if __name__ == "__main__":
+    app = create_app()
+    app.run(debug=True, host='0.0.0.0', threaded=True)

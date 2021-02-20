@@ -1,10 +1,11 @@
 import React from "react";
+import {Container} from "@material-ui/core";
 
 function taggingUI() {
     return (
-        <div>
-            tagging UI
-        </div>
+        <Container>
+            Tagging UI
+        </Container>
     )
 }
 

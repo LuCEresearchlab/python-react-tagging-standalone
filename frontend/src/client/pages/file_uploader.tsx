@@ -1,6 +1,6 @@
-import { Button } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import React from 'react';
+import React, {useState} from 'react';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -17,26 +17,40 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Uploader() {
     const classes = useStyles();
+    const [fileName, setFileName] = useState("");
+
     return (
-        <div>
+        <Grid container>
         <form
             encType="multipart/form-data"
             action={"http://localhost:5000/upload"}
+            className={classes.root}
             method="post">
-            <input
-                accept="application/json"
-                className={classes.input}
-                id="contained-button-file"
-                name={"file"}
-                type="file"
-            />
-            <label htmlFor="contained-button-file">
-                <Button variant="contained" component="span">
-                    Select File
-                </Button>
-            </label>
-            <input type="submit" value="Submit" />
+            <Grid item>
+                <input
+                    accept="application/json"
+                    className={classes.input}
+                    id="contained-button-file"
+                    name={"file"}
+                    type="file"
+                    onChange={e => setFileName(e.target.value)}
+                />
+                <label htmlFor="contained-button-file">
+                    <Button variant="contained" component="span">
+                        Select File
+                    </Button>
+                </label>
+                {(() => {
+                    if (fileName === "")
+                        return (<p>Select a file</p>)
+                    else
+                        return (<p>Selected {fileName.substring("C:\\fakepath\\".length)}</p>)
+                })()}
+            </Grid>
+            <Grid item>
+                <Button variant="contained" type="submit">Submit</Button>
+            </Grid>
         </form>
-        </div>
+        </Grid>
     )
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {makeStyles, Link, Container, AppBar, Toolbar, List, ListItem, ListItemText} from "@material-ui/core";
+import {makeStyles, Link, Container, AppBar, Toolbar, List, ListItem, ListItemText, Box} from "@material-ui/core";
 
 const useStyles = makeStyles({
     navDisplayFlex: {
@@ -21,6 +21,7 @@ const navLinks = [
 function NavBar(){
     const classes = useStyles();
     return (
+        <Box pb={5}>
         <AppBar position="static">
             <Toolbar>
                 <Container>
@@ -39,6 +40,7 @@ function NavBar(){
                 </Container>
             </Toolbar>
         </AppBar>
+        </Box>
     )
 }
 
