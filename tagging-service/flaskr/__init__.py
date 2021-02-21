@@ -1,6 +1,7 @@
 from flask import Flask
 from flaskr.config import cache
 from flaskr.endpoints import api
+from flask_cors import CORS
 
 
 def create_app(test_config=None):
@@ -9,6 +10,7 @@ def create_app(test_config=None):
     api.init_app(app)
     cache.init_app(app)
     app.config['UPLOAD_FOLDER'] = './datasets'
+    CORS(app, resources={r'/*': {"origins": "*"}})
     return app
 
 
