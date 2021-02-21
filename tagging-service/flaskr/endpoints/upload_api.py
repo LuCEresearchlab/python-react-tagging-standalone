@@ -4,7 +4,6 @@ from flask_restx import Namespace, Resource
 
 api = Namespace('upload', description='Upload API to load files')
 
-
 @api.route('')
 @api.doc('endpoint to upload answers datasets')
 class Upload(Resource):
