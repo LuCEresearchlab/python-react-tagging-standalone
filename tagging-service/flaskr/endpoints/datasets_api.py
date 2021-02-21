@@ -8,7 +8,7 @@ api = Namespace('datasets', description='API to view available datasets')
 
 dataset_desc = api.model('Answer', {
     'id': fields.String(required=True, readonly=True, description='ID of the dataset'),
-    'title': fields.String(required=True, readonly=True, description='The title of the dataset'),
+    'name': fields.String(required=True, readonly=True, description='The name of the dataset'),
     'date': fields.Date(required=True, readonly=True, description='The Date of the dataset creation')
 })
 
@@ -20,16 +20,18 @@ def _load_datasets():
     folder = current_app.config['UPLOAD_FOLDER']
 
     _, _, filenames = next(walk(folder))
+    counter = 0
 
     for filename in filenames:
-        if filename == '.gitignore':
+        if filename == '.gitignore' or filename == '.DS_Store':
             continue
         file = pathlib.Path(path.join(folder, filename))
         datasets.append({
-            'id': 0,
-            'title': filename[:filename.find('.json')],  # name of file
+            'id': counter,
+            'name': filename[:filename.find('.json')],  # name of file
             'date': datetime.datetime.fromtimestamp(file.stat().st_mtime)
         })
+        counter += 1
 
     return datasets
 
