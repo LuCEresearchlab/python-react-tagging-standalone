@@ -1,10 +1,11 @@
 import React from "react";
 import {Container} from "@material-ui/core";
+import DatasetSelection from "./DatasetSelection";
 
 function taggingUI() {
     return (
         <Container>
-            Tagging UI
+            <DatasetSelection/>
         </Container>
     )
 }

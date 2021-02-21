@@ -2,6 +2,9 @@ import { Button, Grid } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import React, {useState} from 'react';
 
+
+const TAGGING_SERVICE_URL = require('../../../config.json').TAGGING_SERVICE_URL
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -23,7 +26,7 @@ export default function Uploader() {
         <Grid container>
         <form
             encType="multipart/form-data"
-            action={"http://localhost:5000/upload"}
+            action={TAGGING_SERVICE_URL + "/upload"}
             className={classes.root}
             method="post">
             <Grid item>
