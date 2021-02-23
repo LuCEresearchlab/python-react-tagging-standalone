@@ -22,7 +22,9 @@ services:
     environment:
       - FLASK_APP=${FLASK_APP}
       - FLASK_ENV=${FLASK_ENV}
-    hostname: tagging_service
+    depends_on:
+      - tagging-database
+
 
   tagging-database:
     image: 'mongo:4.4.3'
@@ -30,4 +32,4 @@ services:
     - "27017:27017"
     volumes:
     - ./mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-    hostname: mongo_database
+

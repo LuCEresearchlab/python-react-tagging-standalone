@@ -19,8 +19,7 @@ this will allow for a more scalable tagging experience.
 The application is entirely dockerized and as such can be run as long as Docker is installed, to run it:
 ```
 cd python-react-tagging-standalone
-
-docker-compose up --build
+docker-compose up
 ```
 then connect to http://localhost:8080/
 
@@ -28,6 +27,12 @@ To stop the containers
 ```
 docker-compose down
 ```
+
+In case there are issues try to run
+```
+docker-compose up --build
+```
+to rebuild the containers
 
 
 
