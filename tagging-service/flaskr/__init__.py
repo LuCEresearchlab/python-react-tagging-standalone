@@ -2,6 +2,8 @@ from flask import Flask
 from flaskr.config import cache
 from flaskr.endpoints import api
 from flask_cors import CORS
+import logging
+logging.basicConfig(level=logging.INFO)
 
 
 def create_app(test_config=None):
