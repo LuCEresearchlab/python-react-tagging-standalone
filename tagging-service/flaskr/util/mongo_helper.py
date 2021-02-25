@@ -43,7 +43,8 @@ def post_tagged_answer(tagged_answer):
     update = {
         '$set':
             {
-                'tags': tagged_answer['tags']
+                'tags': tagged_answer['tags'],
+                'tagging_time': tagged_answer['tagging_time']
             }
     }
     db.tagged_data.update_one(query, update, upsert=True)

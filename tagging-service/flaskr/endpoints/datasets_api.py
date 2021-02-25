@@ -15,7 +15,7 @@ DATASET_DESC = api.model('Answer', {
     'date': fields.Date(required=True, readonly=True, description='The Date of the dataset creation')
 })
 
-TAGGED_DATA = api.model('Tagged_Question', {
+TAGGED_DATA = api.model('Tagged_Answer', {
     'dataset_id': fields.String(required=True, readonly=True, description='ID of the dataset',
                                 example='603501f39175ac3898e094cc'),
     'question_id': fields.String(required=True, readonly=True, description='ID of the question',
@@ -25,7 +25,9 @@ TAGGED_DATA = api.model('Tagged_Question', {
     'user_id': fields.String(required=True, readonly=True, description='ID of the User tagging the data',
                              example='9435089963cf6ef09a9c418e'),
     'tags': fields.List(fields.String(readonly=True, description='Tags for answer',
-                                      example="NullIsObject"), required=True)
+                                      example="NullIsObject"), required=True),
+    'tagging_time': fields.Integer(required=False, readonly=True, description='Total ms taken to tag the answer',
+                                   example='15000')
 })
 
 IDS = api.model('Ids', {
