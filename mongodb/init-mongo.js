@@ -11,5 +11,4 @@ db.createUser({
 
 db = new Mongo().getDB("tagging_db");
 
-db.createCollection('misconceptions', { capped: false });
 db.createCollection('tagged_data', { capped: false });

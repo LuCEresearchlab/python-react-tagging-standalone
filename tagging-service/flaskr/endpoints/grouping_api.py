@@ -10,9 +10,9 @@ answer = api.model('Answer', {
 
 
 @api.route('/group_similarity')
-@api.doc('group answers by similarity')
+@api.doc(description='group answers by similarity')
 class Grouping(Resource):
-    @api.doc('group given answers')
+    @api.doc(description='group given answers')
     @api.marshal_list_with(answer)
     def get(self):
         return load_data()

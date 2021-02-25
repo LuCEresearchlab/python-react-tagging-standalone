@@ -7,7 +7,7 @@ api = Namespace('progmiscon_api', description='API for grouping answers by simil
 
 @api.route('/misconceptions')
 class Misconceptions(Resource):
-    @api.doc('lists available misconceptions for Java')
+    @api.doc(description='lists available misconceptions for Java')
     @cache.cached(timeout=60 * 60 * 24)
     def get(self):
         return get_java_public_misconceptions()
