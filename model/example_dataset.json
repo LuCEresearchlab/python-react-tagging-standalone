@@ -1,0 +1,18 @@
+{
+  "name": "dataset1",
+  "creation_data": "2020-03-05T07:52:59.665Z",
+  "dataset_id": "hex",
+  "questions": [
+    {
+      "question_id": "hex",
+      "text": "text of the question",
+      "answers": [
+        {
+          "answer_id": "hex",
+          "data": "actual answer",
+          "user_id?": "hex"
+        }
+      ]
+    }
+  ]
+}
