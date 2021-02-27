@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flaskr.config import cache
 from flaskr.endpoints import api
 from flask_cors import CORS
+from flaskr.exceptions.error import Error
 import logging
 logging.basicConfig(level=logging.INFO)
 
@@ -12,7 +13,14 @@ def create_app(test_config=None):
     api.init_app(app)
     cache.init_app(app)
     app.config['UPLOAD_FOLDER'] = './datasets'
-    CORS(app, resources={r'/*': {"origins": "*"}})
+    CORS(app, resources={r'/*': {"origins": "http://localhost:8080"}})
+
+    @app.errorhandler(Error)
+    def handle_invalid_usage(error):
+        response = jsonify(error.to_dict())
+        response.status_code = error.status_code
+        return response
+
     return app
 
 

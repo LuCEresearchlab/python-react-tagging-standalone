@@ -26,7 +26,7 @@ export default function Uploader() {
         <Grid container>
         <form
             encType="multipart/form-data"
-            action={TAGGING_SERVICE_URL + "/upload"}
+            action={TAGGING_SERVICE_URL + "/datasets/upload"}
             className={classes.root}
             method="post">
             <Grid item>
