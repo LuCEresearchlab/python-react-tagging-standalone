@@ -39,8 +39,13 @@ def _assert_valid_schema(data):
     return valid
 
 
-def _load_dataset(file_name):
+# TODO: placeholder function, reimplement once integrated
+def _load_dataset(dataset_id):
     folder = current_app.config['UPLOAD_FOLDER']
+    file_name = _load_dataset_name_list()[dataset_id]['name'] + '.json'
+
+    logger.debug(f"Filename {file_name}")
+
     file = pathlib.Path(path.join(folder, file_name))
     logger.debug(f"Trying to load {file}")
 
@@ -83,7 +88,7 @@ def _load_dataset_name_list():
 @api.doc(description='list all available datasets')
 class DatasetsAPI(Resource):
     @api.marshal_list_with(DATASET_DESC)
-    @cache.cached(key_prefix='datasets')
+    @cache.cached(key_prefix='datasets-cache')
     def get(self):
         return _load_dataset_name_list()
 
@@ -98,18 +103,17 @@ class Upload(Resource):
             return "no file received"
         full_path = os.path.join(current_app.config['UPLOAD_FOLDER'], uploaded_file.filename)
         uploaded_file.save(full_path)
-        logger.debug('Deleting cache:')
-        cache.delete('datasets')
+        cache.delete('datasets-cache')
         logger.debug('Deleted datasets cache')
         return f'uploaded file: {uploaded_file.name} successfully'
 
 
-@api.route('/get-dataset/<string:file_name>')
+@api.route('/get-dataset/<int:index>')
 @api.doc(description='get content of uploaded file')
 class UploadedDataset(Resource):
     @api.doc(description='Get content of specific dataset')
-    @cache.cached(key_prefix='datasets')
-    def get(self, file_name):
-        content = _load_dataset(file_name)
-        logger.debug(f"Loaded {file_name} successfully")
+    @cache.cached(key_prefix='datasets-cache')
+    def get(self, index):
+        content = _load_dataset(index)
+        logger.debug(content)
         return jsonify(content)
