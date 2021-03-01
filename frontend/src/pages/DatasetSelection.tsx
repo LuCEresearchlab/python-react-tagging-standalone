@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
+import {JSONLoader} from '../helpers/LoaderHelper';
 
 
-const { TAGGING_SERVICE_URL } = require('../../../config.json')
+const { TAGGING_SERVICE_URL } = require('../../config.json')
 
 const StyledTableCell = withStyles((theme: Theme) =>
     createStyles({
@@ -46,11 +47,9 @@ function DatasetSelection() {
     const url = TAGGING_SERVICE_URL + "/datasets/list"
 
     if(!loaded) {
-        fetch(url)
-            .then(response => response.json())
-            .then(received_datasets => {
-                setDatasets(received_datasets)
-            })
+        JSONLoader(url, (data:[]) => {
+            setDatasets(data)
+        })
         setLoaded(true)
     }
 
