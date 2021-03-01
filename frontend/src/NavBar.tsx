@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 const navLinks = [
     { title: `Home`, path: `/` },
     { title: `Upload File`, path: `/file_uploader` },
-    { title: `Tagging UI`, path: `/taggingUI` },
+    { title: `Tagging UI`, path: `/taggingUI/selector` },
 ]
 
 function NavBar(){

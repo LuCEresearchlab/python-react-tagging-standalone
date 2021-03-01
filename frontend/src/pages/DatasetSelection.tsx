@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
 import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from '@material-ui/core';
 import {JSONLoader} from '../helpers/LoaderHelper';
+import {useHistory} from 'react-router-dom'
 
 
-const { TAGGING_SERVICE_URL } = require('../../config.json')
+const {TAGGING_SERVICE_URL} = require('../../config.json')
 
 const StyledTableCell = withStyles((theme: Theme) =>
     createStyles({
@@ -34,12 +35,14 @@ const useStyles = makeStyles({
     },
 });
 
-const selectDataset = (id: string) => {
-    console.log(id)
+const selectDataset = (id: string, router: any) => {
+    router.push("/taggingUI/tagView/" + id)
 }
 
 
 function DatasetSelection() {
+    const router = useHistory() // TODO: use router from next once integrated, fix import
+
     const [datasets, setDatasets] = useState([]);
     const [loaded, setLoaded] = useState(false)
 
@@ -64,7 +67,7 @@ function DatasetSelection() {
                 </TableHead>
                 <TableBody>
                     {datasets.map((row: { id:string, name: string, date: string }) => (
-                        <StyledTableRow key={row.id} onClick={() => selectDataset(row.id)}>
+                        <StyledTableRow key={row.id} onClick={() => selectDataset(row.id, router)}>
                             <StyledTableCell component="th" scope="row">
                                 {row.name}
                             </StyledTableCell>

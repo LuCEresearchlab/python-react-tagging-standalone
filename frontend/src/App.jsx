@@ -2,10 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom"
 
-import taggingUI from "./pages/TaggingUI";
 import Home from "./pages/Home"
 import NavBar from "./NavBar";
 import Uploader from "./pages/FileUploader"
+
+import DatasetSelection from "./pages/DatasetSelection";
+import TaggingView from "./pages/TaggingView";
 
 
 ReactDOM.render(
@@ -14,7 +16,8 @@ ReactDOM.render(
             <NavBar/>
             <Switch>
                 <Route exact path={"/"} component={Home}/>
-                <Route path={"/taggingUI"} component={taggingUI}/>
+                <Route exact path={"/taggingUI/selector"} component={DatasetSelection}/>
+                <Route path={"/taggingUI/tagView/:dataset_id"} component={TaggingView}/>
                 <Route path={"/file_uploader"} component={Uploader}/>
             </Switch>
         </div>

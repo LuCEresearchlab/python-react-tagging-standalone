@@ -14,10 +14,30 @@ api = Namespace('datasets', description='Upload API to load files')
 logger = logging.getLogger(__name__)
 
 
-DATASET_DESC = api.model('Answer', {
+DATASET_DESC = api.model('Dataset Description', {
     'id': fields.String(required=True, readonly=True, description='ID of the dataset'),
     'name': fields.String(required=True, readonly=True, description='The name of the dataset'),
     'date': fields.Date(required=True, readonly=True, description='The Date of the dataset creation')
+})
+
+ANSWER = api.model('Answer', {
+    'answer_id': fields.String(required=True, readonly=True, description='ID of the Answer'),
+    'data': fields.String(required=True, readonly=True, description='Text of the Answer'),
+    'user_id': fields.String(required=False, readonly=True, description='ID of the user posting the answer'),
+})
+
+QUESTION = api.model('Question', {
+    'question_id': fields.String(required=True, readonly=True, description='ID of the Question'),
+    'text': fields.String(required=True, readonly=True, description='Text of the Question'),
+    'answers': fields.List(fields.Nested(ANSWER))
+})
+
+
+DATASET = api.model('Dataset', {
+    "name": fields.String(required=True, readonly=True, description='Name of dataset'),
+    "creation_data": fields.Date(required=True, readonly=True, description='The Date of the Dataset creation'),
+    "dataset_id": fields.String(required=True, readonly=True, description='ID of the Dataset'),
+    "questions": fields.List(fields.Nested(QUESTION))
 })
 
 
@@ -112,8 +132,9 @@ class Upload(Resource):
 @api.doc(description='get content of uploaded file')
 class UploadedDataset(Resource):
     @api.doc(description='Get content of specific dataset')
+    @api.marshal_with(DATASET)
     @cache.cached(key_prefix='datasets-cache')
     def get(self, index):
         content = _load_dataset(index)
         logger.debug(content)
-        return jsonify(content)
+        return content
