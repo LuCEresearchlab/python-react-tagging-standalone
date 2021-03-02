@@ -25,12 +25,12 @@ def get_answers_tagged_by_user_in_dataset(dataset_id, user_id):
 
 
 def get_fully_specified_answer(dataset_id, question_id, answer_id, user_id):
-    return db.tagged_data({
+    return list(db.tagged_data.find({
         'dataset_id': dataset_id,
         'question_id': question_id,
         'answer_id': answer_id,
         'user_id': user_id
-    }, {'_id': False})
+    }, {'_id': False}))
 
 
 def post_tagged_answer(tagged_answer):
