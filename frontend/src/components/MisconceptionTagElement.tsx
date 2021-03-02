@@ -35,8 +35,6 @@ function MisconceptionTagElement({dataset_id, question_id, answer_id, user_id}: 
         })
     }
 
-    console.log(get_selected_misc_url)
-
     return (
         <p>misconceptions</p>
     )
