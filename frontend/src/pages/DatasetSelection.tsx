@@ -1,39 +1,11 @@
 import React, {useState} from 'react';
-import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper} from '@material-ui/core';
+import {Table, TableBody, TableContainer, TableHead, TableRow, Paper} from '@material-ui/core';
 import {JSONLoader} from '../helpers/LoaderHelper';
 import {useHistory} from 'react-router-dom'
+import {StyledTableRow, StyledTableCell, useStyles} from "../components/StyledTable";
 
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
-
-const StyledTableCell = withStyles((theme: Theme) =>
-    createStyles({
-        head: {
-            backgroundColor: theme.palette.common.black,
-            color: theme.palette.common.white,
-        },
-        body: {
-            fontSize: 14,
-        },
-    }),
-)(TableCell);
-
-const StyledTableRow = withStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            '&:nth-of-type(odd)': {
-                backgroundColor: theme.palette.action.hover,
-            },
-        },
-    }),
-)(TableRow);
-
-const useStyles = makeStyles({
-    table: {
-        minWidth: 700,
-    },
-});
 
 const selectDataset = (id: string, router: any) => {
     router.push("/taggingUI/tagView/" + id)
