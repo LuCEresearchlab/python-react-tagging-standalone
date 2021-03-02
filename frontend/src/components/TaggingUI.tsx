@@ -1,11 +1,26 @@
-import React from "react";
+import React, {useState} from "react";
 import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from "@material-ui/core";
 import {Dataset, Question, Answer} from "../interfaces/Dataset";
 import {StyledTableCell, StyledTableRow, useStyles} from "./StyledTable";
 import MisconceptionTagElement from "./MisconceptionTagElement";
+import {JSONLoader} from "../helpers/LoaderHelper";
+
+const {TAGGING_SERVICE_URL} = require('../../config.json')
 
 function TaggingUI({dataset_id, questions,}: Dataset) {
     const classes = useStyles();
+
+    const get_available_url = TAGGING_SERVICE_URL + '/progmiscon_api/misconceptions'
+
+    const [misconceptions_available, setMisconceptionsAvailable] = useState([])
+    const [loaded, setLoaded] = useState(false)
+
+    if(!loaded){  // load once per dataset
+        JSONLoader(get_available_url, (avail_misconceptions: []) => {
+            setMisconceptionsAvailable(avail_misconceptions)
+            setLoaded(true)
+        })
+    }
 
     return (
         <TableContainer component={Paper}>
@@ -28,7 +43,9 @@ function TaggingUI({dataset_id, questions,}: Dataset) {
                                         dataset_id={dataset_id}
                                         question_id={question.question_id}
                                         answer_id={answer.answer_id}
-                                        user_id={answer.user_id}/></StyledTableCell>
+                                        user_id={answer.user_id}
+                                        misconceptions_available={misconceptions_available}
+                                    /></StyledTableCell>
                                 </StyledTableRow>)
                         )
                     }
