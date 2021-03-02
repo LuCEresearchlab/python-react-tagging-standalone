@@ -7,7 +7,7 @@ import NavBar from "./NavBar";
 import Uploader from "./pages/FileUploader"
 
 import DatasetSelection from "./pages/DatasetSelection";
-import TaggingView from "./pages/TaggingView";
+import TaggingPage from "./pages/TaggingPage";
 
 
 ReactDOM.render(
@@ -17,7 +17,7 @@ ReactDOM.render(
             <Switch>
                 <Route exact path={"/"} component={Home}/>
                 <Route exact path={"/taggingUI/selector"} component={DatasetSelection}/>
-                <Route path={"/taggingUI/tagView/:dataset_id"} component={TaggingView}/>
+                <Route path={"/taggingUI/tagView/:dataset_id"} component={TaggingPage}/>
                 <Route path={"/file_uploader"} component={Uploader}/>
             </Switch>
         </div>

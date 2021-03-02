@@ -4,7 +4,7 @@ import datetime
 import pathlib
 import logging
 from os import walk, path
-from flask import request, current_app, jsonify
+from flask import request, current_app
 from flask_restx import Namespace, Resource, fields
 from flaskr.exceptions.error import Error
 from flaskr import cache
@@ -60,6 +60,7 @@ def _assert_valid_schema(data):
 
 
 # TODO: placeholder function, reimplement once integrated
+@cache.cached(key_prefix='datasets-cache')
 def _load_dataset(dataset_id):
     folder = current_app.config['UPLOAD_FOLDER']
     file_name = _load_dataset_name_list()[dataset_id]['name'] + '.json'
@@ -81,6 +82,7 @@ def _load_dataset(dataset_id):
 
 
 # load datasets from disk, should be updated to load from service for specified user (currently not given)
+@cache.cached(key_prefix='datasets-cache-list')
 def _load_dataset_name_list():
     datasets = []
 
@@ -108,7 +110,6 @@ def _load_dataset_name_list():
 @api.doc(description='list all available datasets')
 class DatasetsAPI(Resource):
     @api.marshal_list_with(DATASET_DESC)
-    @cache.cached(key_prefix='datasets-cache')
     def get(self):
         return _load_dataset_name_list()
 
@@ -124,6 +125,7 @@ class Upload(Resource):
         full_path = os.path.join(current_app.config['UPLOAD_FOLDER'], uploaded_file.filename)
         uploaded_file.save(full_path)
         cache.delete('datasets-cache')
+        cache.delete('datasets-cache-list')
         logger.debug('Deleted datasets cache')
         return f'uploaded file: {uploaded_file.name} successfully'
 
@@ -133,7 +135,6 @@ class Upload(Resource):
 class UploadedDataset(Resource):
     @api.doc(description='Get content of specific dataset')
     @api.marshal_with(DATASET)
-    @cache.cached(key_prefix='datasets-cache')
     def get(self, index):
         content = _load_dataset(index)
         logger.debug(content)

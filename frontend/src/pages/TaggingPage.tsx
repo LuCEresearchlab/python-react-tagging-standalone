@@ -3,10 +3,11 @@ import {Container} from "@material-ui/core";
 import {JSONLoader} from '../helpers/LoaderHelper';
 import {useParams} from "react-router-dom";
 import { Dataset } from '../interfaces/Dataset'
+import TaggingUI from '../components/TaggingUI'
 
 const { TAGGING_SERVICE_URL } = require('../../config.json')
 
-function TaggingView(){
+function TaggingPage(){
     const [dataset, setDataset] = useState<Dataset | undefined>(undefined)
     const [loaded, setLoaded] = useState(false)
 
@@ -14,10 +15,10 @@ function TaggingView(){
 
     const url:string = TAGGING_SERVICE_URL + '/datasets/get-dataset/' + dataset_id
 
+    console.log(dataset)
 
     if(!loaded){
         JSONLoader(url, (data: any) => {
-            console.log(data)
             setDataset(data)
         })
         setLoaded(true)
@@ -27,7 +28,7 @@ function TaggingView(){
     if (dataset != null) {
         return (
             <Container>
-                Tagging View {dataset?.name}
+                <TaggingUI {...dataset}/>
             </Container>
         )
     } else {
@@ -39,4 +40,4 @@ function TaggingView(){
     }
 }
 
-export default TaggingView
+export default TaggingPage
