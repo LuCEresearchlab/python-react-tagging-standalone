@@ -8,9 +8,19 @@ import {StyledTableRow, StyledTableCell, useStyles} from "../components/StyledTa
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
 const selectDataset = (id: string, router: any) => {
-    router.push("/taggingUI/tagView/" + id)
+    // request user input
+    let temp = requestUserId()
+    while(temp == null || temp == ''){ temp = requestUserId()}
+    router.push("/taggingUI/tagView/" + id + '/' + temp)
 }
 
+function requestUserId() {
+    const user_id:string | null = prompt("Enter your username", "user_id");
+    if (user_id == null || user_id == "") {
+        console.log("No user_id entered")
+    }
+    return user_id
+}
 
 function DatasetSelection() {
     const router = useHistory() // TODO: use router from next once integrated, fix import

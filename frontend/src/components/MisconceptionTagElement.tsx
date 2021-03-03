@@ -22,7 +22,7 @@ interface ids_and_misconceptions {
     dataset_id: string,
     question_id: string,
     answer_id: string,
-    user_id: string | undefined,
+    user_id: string,
     misconceptions_available: string[]
 }
 
@@ -69,7 +69,7 @@ function MisconceptionTagElement({dataset_id, question_id, answer_id, user_id, m
                 // getOptionLabel={(option) => option.name}
                 value={tags}
                 renderInput={(params) => (
-                    <TextField {...params} variant="outlined" label="Misconceptions" placeholder="Favorites" />
+                    <TextField {...params} variant="outlined" label="Misconceptions" placeholder="Misconceptions" />
                 )}
                 onChange={(_, values) => {
                     if(loaded){

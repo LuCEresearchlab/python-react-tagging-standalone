@@ -11,7 +11,7 @@ function TaggingPage(){
     const [dataset, setDataset] = useState<Dataset | undefined>(undefined)
     const [loaded, setLoaded] = useState<boolean>(false)
 
-    const { dataset_id }: {dataset_id:string} = useParams()
+    const { dataset_id, user_id }: {dataset_id:string, user_id:string} = useParams()
 
     const url:string = TAGGING_SERVICE_URL + '/datasets/get-dataset/' + dataset_id
 
@@ -27,7 +27,7 @@ function TaggingPage(){
     if (dataset != null) {
         return (
             <Container>
-                <TaggingUI {...dataset}/>
+                <TaggingUI questions={dataset.questions} dataset_id={dataset_id} user_id={user_id}/>
             </Container>
         )
     } else {
