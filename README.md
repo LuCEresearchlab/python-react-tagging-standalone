@@ -8,7 +8,7 @@ https://progmiscon.org/misconceptions
 The application aims at improving the efficiency of tagging students answers by providing aids in the tagging procedure,
 this will allow for a more scalable tagging experience.
 
-##Project Structure
+## Project Structure
 - frontend: React Typescript application
 - model: models of the project
 - mongodb: Dockerfile for MongoDB server
