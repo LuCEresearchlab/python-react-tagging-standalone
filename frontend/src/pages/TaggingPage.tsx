@@ -9,13 +9,12 @@ const { TAGGING_SERVICE_URL } = require('../../config.json')
 
 function TaggingPage(){
     const [dataset, setDataset] = useState<Dataset | undefined>(undefined)
-    const [loaded, setLoaded] = useState(false)
+    const [loaded, setLoaded] = useState<boolean>(false)
 
     const { dataset_id }: {dataset_id:string} = useParams()
 
     const url:string = TAGGING_SERVICE_URL + '/datasets/get-dataset/' + dataset_id
 
-    console.log(dataset)
 
     if(!loaded){
         JSONLoader(url, (data: any) => {

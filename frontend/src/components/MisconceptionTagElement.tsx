@@ -36,7 +36,7 @@ function post(url: string, data: any){
             'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify(data)
-    });
+    }).then((response: Response) => console.log(response.status));
 }
 
 
@@ -56,10 +56,6 @@ function MisconceptionTagElement({dataset_id, question_id, answer_id, user_id, m
         JSONLoader(get_selected_misc_url, (prev_tagged_misconceptions: []) => {
             setTags(prev_tagged_misconceptions)
             setLoaded(true)
-
-            console.log(misconceptions_available)
-            console.log("loaded current tags")
-            console.log(tags)
         })
     }
 
