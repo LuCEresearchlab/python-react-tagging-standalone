@@ -60,8 +60,8 @@ class TaggedAnswersAPI(Resource):
         return db.get_tagged_dataset(dataset_id=dataset_id)
 
 
-@api.route('/tagged-answer/<string:dataset_id>/<string:question_id>/<string:answer_id>/<string:user_id>')
-@api.doc(description='Get answer tagged by the user',
+@api.route('/tagged-answer/tags/<string:dataset_id>/<string:question_id>/<string:answer_id>/<string:user_id>')
+@api.doc(description='Get tags of specific answer',
          params={
              'dataset_id': 'ID of the dataset',
              'question_id': 'ID of the question',
@@ -69,9 +69,8 @@ class TaggedAnswersAPI(Resource):
              'user_id': 'ID of the user'
          })
 class TaggedAnswersAPI(Resource):
-    @api.marshal_list_with(TAGGED_DATA)
     def get(self, dataset_id, question_id, answer_id, user_id):
-        return db.get_fully_specified_answer(
+        return db.get_fully_specified_answer_tags(
             dataset_id=dataset_id,
             question_id=question_id,
             answer_id=answer_id,

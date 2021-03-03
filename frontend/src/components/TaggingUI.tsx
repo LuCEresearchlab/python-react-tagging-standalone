@@ -7,17 +7,24 @@ import {JSONLoader} from "../helpers/LoaderHelper";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
+interface MiscElem {
+    name:string,
+    description:string
+}
+
 function TaggingUI({dataset_id, questions,}: Dataset) {
     const classes = useStyles();
 
     const get_available_url = TAGGING_SERVICE_URL + '/progmiscon_api/misconceptions'
 
-    const [misconceptions_available, setMisconceptionsAvailable] = useState([])
+    const [misconceptions_available, setMisconceptionsAvailable] = useState<string[]>([])
     const [loaded, setLoaded] = useState(false)
 
     if(!loaded){  // load once per dataset
         JSONLoader(get_available_url, (avail_misconceptions: []) => {
-            setMisconceptionsAvailable(avail_misconceptions)
+            setMisconceptionsAvailable(
+                avail_misconceptions.map<string>((elem:MiscElem) => elem.name)
+            )
             setLoaded(true)
         })
     }
