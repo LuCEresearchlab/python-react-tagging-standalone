@@ -3,6 +3,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import {JSONLoader} from "../helpers/LoaderHelper";
+import {Chip, Popover} from "@material-ui/core";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
@@ -59,6 +60,21 @@ function MisconceptionTagElement({dataset_id, question_id, answer_id, user_id, m
         })
     }
 
+    // popup stuff
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClickPopup = (event:any) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClosePopup = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? "simple-popover" : undefined;
+    // end popup stuff
+
     return (
         <div className={classes.root}>
             <Autocomplete
@@ -69,7 +85,7 @@ function MisconceptionTagElement({dataset_id, question_id, answer_id, user_id, m
                 // getOptionLabel={(option) => option.name}
                 value={tags}
                 renderInput={(params) => (
-                    <TextField {...params} variant="outlined" label="Misconceptions" placeholder="Misconceptions" />
+                    <TextField {...params} variant="outlined" label="Misconceptions" placeholder="Misconceptions"/>
                 )}
                 onChange={(_, values) => {
                     if(loaded){
@@ -86,6 +102,33 @@ function MisconceptionTagElement({dataset_id, question_id, answer_id, user_id, m
                     )
                     }
                 }}
+                renderTags={(tagValue, getTagProps) =>
+                    tagValue.map((option, index) => (
+                        <div key={option}>
+                        <Chip
+                            label={option}
+                            {...getTagProps({ index })}
+                            onClick={handleClickPopup}
+                        />
+                            <Popover
+                                id={id}
+                                open={open}
+                                anchorEl={anchorEl}
+                                onClose={handleClosePopup}
+                                anchorOrigin={{
+                                    vertical: "bottom",
+                                    horizontal: "center"
+                                }}
+                                transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "center"
+                                }}
+                            >
+                                <iframe title={option} width="800" height="800" src={"https://progmiscon.org/iframe/misconceptions/Java/"+ option}/>
+                            </Popover></div>
+                    ))
+                }
+
             />
         </div>
     )
