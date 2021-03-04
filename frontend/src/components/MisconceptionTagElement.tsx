@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
             '& > * + *': {
                 marginTop: theme.spacing(3),
             },
+            float: "right"
         },
     }),
 );
@@ -80,8 +81,8 @@ function MisconceptionTagElement({dataset_id, question_id, answer_id, user_id, m
     // end popup stuff
 
     return (
-        <div className={classes.root}>
-            <Autocomplete
+        <>
+            <Autocomplete className={classes.root}
                 multiple
                 limitTags={2}
                 id="multiple-limit-tags"
@@ -139,7 +140,7 @@ function MisconceptionTagElement({dataset_id, question_id, answer_id, user_id, m
                 }
 
             />
-        </div>
+        </>
     )
 }
 
