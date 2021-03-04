@@ -41,6 +41,11 @@ function post(url: string, data: any){
 }
 
 
+function getMillis(){
+    return new Date().getTime()
+}
+
+
 function MisconceptionTagElement({dataset_id, question_id, answer_id, user_id, misconceptions_available}: ids_and_misconceptions) {
 
     const classes = useStyles();
@@ -49,8 +54,7 @@ function MisconceptionTagElement({dataset_id, question_id, answer_id, user_id, m
 
     const [tags, setTags] = useState<string[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
-
-    const tagging_time = 0
+    const [startTaggingTime, setStartTaggingTime] = useState<number>(0)
 
 
     if (!loaded) {
@@ -97,9 +101,14 @@ function MisconceptionTagElement({dataset_id, question_id, answer_id, user_id, m
                             answer_id,
                             user_id,
                             tags: values,
-                            tagging_time
+                            tagging_time: (getMillis() - startTaggingTime)
                         }
                     )
+                    }
+                }}
+                onFocus={()=>{
+                    if(startTaggingTime == 0) {
+                        setStartTaggingTime(getMillis())
                     }
                 }}
                 renderTags={(tagValue, getTagProps) =>
