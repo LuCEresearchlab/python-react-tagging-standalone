@@ -10,7 +10,7 @@
         {
           "answer_id": "hex",
           "data": "actual answer",
-          "user_id?": "hex"
+          "user_id": "hex"
         }
       ]
     }

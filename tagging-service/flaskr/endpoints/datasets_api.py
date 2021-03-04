@@ -6,7 +6,7 @@ import flaskr.util.mongo_helper as db
 api = Namespace('datasets', description='API to view available datasets')
 
 
-TAGGED_DATA = api.model('Tagged_Answer', {
+TAGGED_DATA = api.model('Tagged Answer', {
     'dataset_id': fields.String(required=True, readonly=True, description='ID of the dataset',
                                 example='603501f39175ac3898e094cc'),
     'question_id': fields.String(required=True, readonly=True, description='ID of the question',
@@ -21,7 +21,7 @@ TAGGED_DATA = api.model('Tagged_Answer', {
                                    example='15000')
 })
 
-IDS = api.model('Ids', {
+IDS = api.model('IDS', {
     'ids': fields.List(fields.String(readonly=True, description='Tags for answer'), required=True,
                        example='603501f39175ac3898e094cc')
 })
@@ -60,8 +60,8 @@ class TaggedAnswersAPI(Resource):
         return db.get_tagged_dataset(dataset_id=dataset_id)
 
 
-@api.route('/tagged-answer/<string:dataset_id>/<string:question_id>/<string:answer_id>/<string:user_id>')
-@api.doc(description='Get answer tagged by the user',
+@api.route('/tagged-answer/tags/<string:dataset_id>/<string:question_id>/<string:answer_id>/<string:user_id>')
+@api.doc(description='Get tags of specific answer',
          params={
              'dataset_id': 'ID of the dataset',
              'question_id': 'ID of the question',
@@ -69,9 +69,8 @@ class TaggedAnswersAPI(Resource):
              'user_id': 'ID of the user'
          })
 class TaggedAnswersAPI(Resource):
-    @api.marshal_list_with(TAGGED_DATA)
     def get(self, dataset_id, question_id, answer_id, user_id):
-        return db.get_fully_specified_answer(
+        return db.get_fully_specified_answer_tags(
             dataset_id=dataset_id,
             question_id=question_id,
             answer_id=answer_id,

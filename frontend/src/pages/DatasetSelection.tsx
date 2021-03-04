@@ -1,44 +1,30 @@
 import React, {useState} from 'react';
-import { withStyles, Theme, createStyles, makeStyles } from '@material-ui/core/styles';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core';
+import {Table, TableBody, TableContainer, TableHead, TableRow, Paper} from '@material-ui/core';
+import {JSONLoader} from '../helpers/LoaderHelper';
+import {useHistory} from 'react-router-dom'
+import {StyledTableRow, StyledTableCell, useStyles} from "../components/StyledTable";
 
 
-const { TAGGING_SERVICE_URL } = require('../../../config.json')
+const {TAGGING_SERVICE_URL} = require('../../config.json')
 
-const StyledTableCell = withStyles((theme: Theme) =>
-    createStyles({
-        head: {
-            backgroundColor: theme.palette.common.black,
-            color: theme.palette.common.white,
-        },
-        body: {
-            fontSize: 14,
-        },
-    }),
-)(TableCell);
-
-const StyledTableRow = withStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            '&:nth-of-type(odd)': {
-                backgroundColor: theme.palette.action.hover,
-            },
-        },
-    }),
-)(TableRow);
-
-const useStyles = makeStyles({
-    table: {
-        minWidth: 700,
-    },
-});
-
-const selectDataset = (id: string) => {
-    console.log(id)
+const selectDataset = (id: string, router: any) => {
+    // request user input
+    let temp = requestUserId()
+    while(temp == null || temp == ''){ temp = requestUserId()}
+    router.push("/taggingUI/tagView/" + id + '/' + temp)
 }
 
+function requestUserId() {
+    const user_id:string | null = prompt("Enter your username", "user_id");
+    if (user_id == null || user_id == "") {
+        console.log("No user_id entered")
+    }
+    return user_id
+}
 
 function DatasetSelection() {
+    const router = useHistory() // TODO: use router from next once integrated, fix import
+
     const [datasets, setDatasets] = useState([]);
     const [loaded, setLoaded] = useState(false)
 
@@ -46,11 +32,9 @@ function DatasetSelection() {
     const url = TAGGING_SERVICE_URL + "/datasets/list"
 
     if(!loaded) {
-        fetch(url)
-            .then(response => response.json())
-            .then(received_datasets => {
-                setDatasets(received_datasets)
-            })
+        JSONLoader(url, (data:[]) => {
+            setDatasets(data)
+        })
         setLoaded(true)
     }
 
@@ -65,7 +49,7 @@ function DatasetSelection() {
                 </TableHead>
                 <TableBody>
                     {datasets.map((row: { id:string, name: string, date: string }) => (
-                        <StyledTableRow key={row.id} onClick={() => selectDataset(row.id)}>
+                        <StyledTableRow key={row.id} onClick={() => selectDataset(row.id, router)}>
                             <StyledTableCell component="th" scope="row">
                                 {row.name}
                             </StyledTableCell>

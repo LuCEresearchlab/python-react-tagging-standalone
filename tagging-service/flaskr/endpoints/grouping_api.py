@@ -3,7 +3,7 @@ from flaskr.util.answers_loader import load_data
 
 api = Namespace('grouping_api', description='API for grouping answers by similarity')
 
-answer = api.model('Answer', {
+answer = api.model('Answer Type (Placeholder)', {
     'content': fields.String(required=True, readonly=True, description='The answer of the student'),
     'question_type': fields.String(required=True, readonly=True, description='The question type')
 })

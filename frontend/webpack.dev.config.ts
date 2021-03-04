@@ -9,7 +9,7 @@ const config: webpack.Configuration = {
   output: {
     publicPath: "/",
   },
-  entry: "./src/client/index.js",
+  entry: "./src/index.js",
   module: {
     rules: [
       {
@@ -33,7 +33,7 @@ const config: webpack.Configuration = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "src/client/index.html",
+      template: "src/index.html",
     }),
     new webpack.HotModuleReplacementPlugin(),
     new ForkTsCheckerWebpackPlugin({
