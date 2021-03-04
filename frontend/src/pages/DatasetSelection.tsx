@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import {Table, TableBody, TableContainer, TableHead, TableRow, Paper} from '@material-ui/core';
+import {Table, TableBody, TableContainer, TableHead, TableRow, Paper, Button} from '@material-ui/core';
 import {JSONLoader} from '../helpers/LoaderHelper';
 import {useHistory} from 'react-router-dom'
 import {StyledTableRow, StyledTableCell, useStyles} from "../components/StyledTable";
+import {downloadDatasetHelper} from "../helpers/DownloadHelper";
 
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
@@ -45,15 +46,19 @@ function DatasetSelection() {
                     <TableRow>
                         <StyledTableCell>Title</StyledTableCell>
                         <StyledTableCell align="right">Creation Date</StyledTableCell>
+                        <StyledTableCell align={"right"}>Utilities</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {datasets.map((row: { id:string, name: string, date: string }) => (
-                        <StyledTableRow key={row.id} onClick={() => selectDataset(row.id, router)}>
-                            <StyledTableCell component="th" scope="row">
+                        <StyledTableRow key={row.id} >
+                            <StyledTableCell component="th" scope="row" onClick={() => selectDataset(row.id, router)}>
                                 {row.name}
                             </StyledTableCell>
-                            <StyledTableCell align="right">{row.date}</StyledTableCell>
+                            <StyledTableCell align="right" onClick={() => selectDataset(row.id, router)}>{row.date}</StyledTableCell>
+                            <StyledTableCell align={"right"}><Button variant="outlined" color="primary" href="#outlined-buttons" onClick={() => downloadDatasetHelper(row.id, row.name)}>
+                                Download
+                            </Button></StyledTableCell>
                         </StyledTableRow>
                     ))}
                 </TableBody>

@@ -9,10 +9,11 @@ from flask_restx import Namespace, Resource, fields
 from flaskr.exceptions.error import Error
 from flaskr import cache
 
+import flaskr.util.mongo_helper as db
+
 api = Namespace('datasets', description='Upload API to load files')
 
 logger = logging.getLogger(__name__)
-
 
 DATASET_DESC = api.model('Dataset Description', {
     'id': fields.String(required=True, readonly=True, description='ID of the dataset'),
@@ -31,7 +32,6 @@ QUESTION = api.model('Question', {
     'text': fields.String(required=True, readonly=True, description='Text of the Question'),
     'answers': fields.List(fields.Nested(ANSWER))
 })
-
 
 DATASET = api.model('Dataset', {
     "name": fields.String(required=True, readonly=True, description='Name of dataset'),
@@ -139,3 +139,31 @@ class UploadedDataset(Resource):
         content = _load_dataset(index)
         logger.debug(content)
         return content
+
+
+@api.route('/download/<string:dataset_id>')
+@api.doc(description='Get all tagged answers in specified dataset in a downloadable format',
+         params={'dataset_id': 'ID of the dataset'})
+class TaggedAnswersDownloadAPI(Resource):
+    def get(self, dataset_id):
+        dataset = _load_dataset(int(dataset_id))
+        id_to_question_data = {}
+        id_to_answer_data = {}
+        for question in dataset['questions']:
+            id_to_question_data[question['question_id']] = question
+            for answer in question['answers']:
+                id_to_answer_data[answer['answer_id']] = answer
+
+        tagged_answers = db.get_tagged_dataset(dataset_id)
+
+        formatted_values = []
+
+        for tagged_answer in tagged_answers:
+            question_id = tagged_answer['question_id']
+            answer_id = tagged_answer['answer_id']
+
+            tagged_answer['question_text'] = id_to_question_data[question_id]['text']
+            tagged_answer['answer_text'] = id_to_answer_data[answer_id]['data']
+            formatted_values.append(tagged_answer)
+
+        return formatted_values
