@@ -15,6 +15,13 @@ const selectDataset = (id: string, router: any) => {
     router.push("/taggingUI/tagView/" + id + '/' + temp)
 }
 
+const visualizeDataset = (id:string, router: any) => {
+    // request user input
+    let temp = requestUserId()
+    while(temp == null || temp == ''){ temp = requestUserId()}
+    router.push("/taggingUI/summary/" + id + '/' + temp)
+}
+
 function requestUserId() {
     const user_id:string | null = prompt("Enter your username", "user_id");
     if (user_id == null || user_id == "") {
@@ -58,6 +65,8 @@ function DatasetSelection() {
                             <StyledTableCell align="right" onClick={() => selectDataset(row.id, router)}>{row.date}</StyledTableCell>
                             <StyledTableCell align={"right"}><Button variant="outlined" color="primary" href="#outlined-buttons" onClick={() => downloadDatasetHelper(row.id, row.name)}>
                                 Download
+                            </Button><Button variant="outlined" color="primary" href="#outlined-buttons" onClick={() => visualizeDataset(row.id, router)}>
+                                Summary
                             </Button></StyledTableCell>
                         </StyledTableRow>
                     ))}

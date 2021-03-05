@@ -2,7 +2,7 @@ const {TAGGING_SERVICE_URL} = require('../../config.json')
 const download_url = TAGGING_SERVICE_URL + '/datasets/download/'
 
 // https://www.codevoila.com/post/30/export-json-data-to-downloadable-file-using-javascript
-function exportToJsonFile(jsonData: any, dataset_name: string) {
+function exportToJsonFile(jsonData: any, dataset_name: string): void {
     let dataStr = JSON.stringify(jsonData);
     let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
 
@@ -14,7 +14,7 @@ function exportToJsonFile(jsonData: any, dataset_name: string) {
     linkElement.click();
 }
 
-export function downloadDatasetHelper(dataset_id: string, dataset_name: string){
+export function downloadDatasetHelper(dataset_id: string, dataset_name: string): void{
     fetch(download_url + dataset_id)
         .then(response => response.json())
         .then(json => {
