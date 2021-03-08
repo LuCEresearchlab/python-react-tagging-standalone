@@ -16,6 +16,12 @@ def get_tagged_dataset(dataset_id):
     return list(db.tagged_data.find({'dataset_id': dataset_id}, {'_id': False}))
 
 
+def get_tagged_dataset_with_tag(dataset_id, tag):
+    return list(db.tagged_data.find({'dataset_id': dataset_id, 'tags': {
+        "$all": [tag]
+    }}, {'_id': False}))
+
+
 def get_tagged_question(dataset_id, question_id):
     return list(db.tagged_data.find({'dataset_id': dataset_id, 'question_id': question_id}, {'_id': False}))
 

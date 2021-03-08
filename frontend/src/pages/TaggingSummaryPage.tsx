@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import {useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import {JSONLoader} from "../helpers/LoaderHelper";
 import {taggedAnswer} from "../interfaces/TaggedAnswer";
 import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from "@material-ui/core";
@@ -38,11 +38,12 @@ function computeStats(data: taggedAnswer[]): Map<string, Stats> {
 
 function TaggingSummaryPage() {
 
+    const router = useHistory() // TODO: use router from next once integrated, fix import
+
     const classes = useStyles();
 
-    const {dataset_id, user_id}: { dataset_id: string, user_id: string } = useParams()
+    const {dataset_id}: { dataset_id: string } = useParams()
 
-    const [taggingData, setTaggingData] = useState(undefined)
     const [stats, setStats] = useState<Map<string, Stats>>(new Map<string, Stats>())
     const [loaded, setLoaded] = useState<boolean>(false)
 
@@ -50,17 +51,11 @@ function TaggingSummaryPage() {
     const get_url = TAGGING_SERVICE_URL + '/datasets/download/' + dataset_id
 
     if (!loaded) {
-        JSONLoader(get_url, (data: any) => {
-            setTaggingData(data)
+        JSONLoader(get_url, (data: taggedAnswer[]) => {
             setLoaded(true)
             setStats(computeStats(data))
         })
     }
-
-    console.log(user_id)
-    console.log(stats)
-    console.log(taggingData)
-
 
     return (
         <TableContainer component={Paper}>
@@ -81,7 +76,9 @@ function TaggingSummaryPage() {
                                     let stat = entry[1]
 
                                     return (
-                                        <StyledTableRow key={key}>
+                                        <StyledTableRow key={key} onClick={() => {
+                                            router.push("/taggingUI/details/" + dataset_id + "/" + key)
+                                        }}>
                                             <StyledTableCell align={"left"}>{key}</StyledTableCell>
                                             <StyledTableCell align={"right"}>{stat.count}</StyledTableCell>
                                         </StyledTableRow>
