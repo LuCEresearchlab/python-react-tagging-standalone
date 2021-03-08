@@ -9,6 +9,7 @@ import Uploader from "./pages/FileUploader"
 import DatasetSelection from "./pages/DatasetSelection";
 import TaggingPage from "./pages/TaggingPage";
 import TaggingSummaryPage from "./pages/TaggingSummaryPage";
+import TaggingDetailPage from "./pages/TaggingDetailPage";
 
 
 ReactDOM.render(
@@ -20,6 +21,7 @@ ReactDOM.render(
                 <Route exact path={"/taggingUI/selector"} component={DatasetSelection}/>
                 <Route path={"/taggingUI/tagView/:dataset_id/:user_id"} component={TaggingPage}/>
                 <Route path={"/taggingUI/summary/:dataset_id/:user_id"} component={TaggingSummaryPage}/>
+                <Route path={"/taggingUI/details/:dataset_id/:tag"} component={TaggingDetailPage}/>
                 <Route path={"/file_uploader"} component={Uploader}/>
             </Switch>
         </div>

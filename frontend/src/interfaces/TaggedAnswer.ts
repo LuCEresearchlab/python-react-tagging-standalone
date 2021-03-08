@@ -7,3 +7,8 @@ export interface taggedAnswer {
     tags: string[],
     tagging_time: number
 }
+
+export interface extendedTaggedAnswer extends taggedAnswer {
+    question_text: string,
+    answer_text: string
+}

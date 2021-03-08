@@ -141,18 +141,26 @@ class UploadedDataset(Resource):
         return content
 
 
+def _populate_retrieving_maps(dataset_id):
+    dataset = _load_dataset(int(dataset_id))
+    id_to_question_data = {}
+    id_to_answer_data = {}
+    for question in dataset['questions']:
+        id_to_question_data[question['question_id']] = question
+        for answer in question['answers']:
+            id_to_answer_data[answer['answer_id']] = answer
+    return id_to_question_data, id_to_answer_data
+
+
+
+
 @api.route('/download/<string:dataset_id>')
 @api.doc(description='Get all tagged answers in specified dataset in a downloadable format',
          params={'dataset_id': 'ID of the dataset'})
 class TaggedAnswersDownloadAPI(Resource):
     def get(self, dataset_id):
-        dataset = _load_dataset(int(dataset_id))
-        id_to_question_data = {}
-        id_to_answer_data = {}
-        for question in dataset['questions']:
-            id_to_question_data[question['question_id']] = question
-            for answer in question['answers']:
-                id_to_answer_data[answer['answer_id']] = answer
+
+        id_to_question_data, id_to_answer_data = _populate_retrieving_maps(dataset_id)
 
         tagged_answers = db.get_tagged_dataset(dataset_id)
 
@@ -167,3 +175,27 @@ class TaggedAnswersDownloadAPI(Resource):
             formatted_values.append(tagged_answer)
 
         return formatted_values
+
+
+@api.route('/tagged-answer/<string:dataset_id>/<string:misconception>')
+@api.doc(description='Get all tagged answers in specified dataset with specific misconception',
+         params={
+             'dataset_id': 'ID of the dataset',
+             'misconception': 'misconception contained by the answers to return'
+         })
+class TaggedAnswersMisconceptionAPI(Resource):
+    def get(self, dataset_id, misconception):
+
+        id_to_question_data, id_to_answer_data = _populate_retrieving_maps(dataset_id)
+
+        answers = db.get_tagged_dataset_with_tag(dataset_id=dataset_id, tag=misconception)
+
+        for answer in answers:
+
+            question_id = answer['question_id']
+            answer_id = answer['answer_id']
+
+            answer['question_text'] = id_to_question_data[question_id]['text']
+            answer['answer_text'] = id_to_answer_data[answer_id]['data']
+
+        return answers
