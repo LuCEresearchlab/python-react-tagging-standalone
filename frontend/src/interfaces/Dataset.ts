@@ -14,5 +14,5 @@ export interface Question {
 export interface Answer {
     "answer_id": string,
     "data": string,
-    "user_id"?: string
+    "user_id": string
 }
