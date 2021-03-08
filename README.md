@@ -28,11 +28,10 @@ To stop the containers
 docker-compose down
 ```
 
-In case there are issues try to run
+In case there are issues due to dependencies try to rebuild the containers (will wipe tagged data) with
 ```
-docker-compose up --build
+docker-compose up --build  # rebuil
 ```
-to rebuild the containers
 
 
 
