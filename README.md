@@ -33,6 +33,24 @@ In case there are issues due to dependencies try to rebuild the containers (will
 docker-compose up --build  # rebuil
 ```
 
+## Convert data from LUMI to required data format
+Create python local environment if not existing
+```
+python3 -m venv venv
+```
+
+Setup python local environment for conversion
+```
+source venv/bin/activate
+cd scripts
+pip install -r requirements.txt
+```
+
+Run with
+```
+python3 converter.py <your-file>.xlsx <quiz-session-file>.json
+```
+A new file `<your-file>.json` will appear.
 
 
 ## Connect to a specific container
