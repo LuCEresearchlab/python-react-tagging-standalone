@@ -152,8 +152,6 @@ def _populate_retrieving_maps(dataset_id):
     return id_to_question_data, id_to_answer_data
 
 
-
-
 @api.route('/download/<string:dataset_id>')
 @api.doc(description='Get all tagged answers in specified dataset in a downloadable format',
          params={'dataset_id': 'ID of the dataset'})

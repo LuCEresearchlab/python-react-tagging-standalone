@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from "@material-ui/core";
 import {Question, Answer} from "../interfaces/Dataset";
-import {StyledTableCell, StyledTableRow, useStyles} from "./StyledTable";
+import {StyledTableCell, useStyles} from "./StyledTable";
 import {JSONLoader} from "../helpers/LoaderHelper";
 import {Pagination} from "@material-ui/lab";
 import MisconceptionTagElement from "./MisconceptionTagElement";
@@ -89,17 +89,14 @@ function TaggingUI({dataset_id, questions, user_id}:Input) {
                         all_answers
                                 .slice(answers_per_page*(page-1), endIndex(page))
                                 .map((answerExtended: AnswerExtended) =>
-                                <StyledTableRow key={dataset_id + "|" + answerExtended.question_id + "|" + answerExtended.answer.answer_id}>
-                                    <StyledTableCell component="th" scope="row">{answerExtended.text}</StyledTableCell>
-                                    <StyledTableCell align="right">{answerExtended.answer.data}</StyledTableCell>
-                                    <StyledTableCell align="right"><MisconceptionTagElement
+                                    <MisconceptionTagElement
+                                        key={dataset_id + "|" + answerExtended.question_id + "|" + answerExtended.answer.answer_id}
                                         dataset_id={dataset_id}
                                         question_id={answerExtended.question_id}
-                                        answer_id={answerExtended.answer.answer_id}
                                         user_id={user_id}
-                                        misconceptions_available={misconceptions_available}
-                                    /></StyledTableCell>
-                                </StyledTableRow>
+                                        question_text={answerExtended.text}
+                                        answer={answerExtended.answer}
+                                        misconceptions_available={misconceptions_available}/>
                             )
                     }
                 </TableBody>

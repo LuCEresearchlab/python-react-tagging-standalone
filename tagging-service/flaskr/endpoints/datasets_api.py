@@ -5,6 +5,13 @@ import flaskr.util.mongo_helper as db
 
 api = Namespace('datasets', description='API to view available datasets')
 
+RANGE = api.model('Range', {
+    'start': fields.Integer(required=True, readonly=True, description='start of the range',
+                            example='0'),
+    'end': fields.Integer(required=True, readonly=True, description='end of the range',
+                          example='10')
+})
+
 
 TAGGED_DATA = api.model('Tagged Answer', {
     'dataset_id': fields.String(required=True, readonly=True, description='ID of the dataset',
@@ -18,7 +25,8 @@ TAGGED_DATA = api.model('Tagged Answer', {
     'tags': fields.List(fields.String(readonly=True, description='Tags for answer',
                                       example="NullIsObject"), required=True),
     'tagging_time': fields.Integer(required=False, readonly=True, description='Total ms taken to tag the answer',
-                                   example='15000')
+                                   example='15000'),
+    'highlighted_ranges': fields.List(fields.Nested(RANGE), required=True)
 })
 
 IDS = api.model('IDS', {
@@ -60,8 +68,8 @@ class TaggedAnswersAPI(Resource):
         return db.get_tagged_dataset(dataset_id=dataset_id)
 
 
-@api.route('/tagged-answer/tags/<string:dataset_id>/<string:question_id>/<string:answer_id>/<string:user_id>')
-@api.doc(description='Get tags of specific answer',
+@api.route('/tagged-answer/<string:dataset_id>/<string:question_id>/<string:answer_id>/<string:user_id>')
+@api.doc(description='Get specific answer',
          params={
              'dataset_id': 'ID of the dataset',
              'question_id': 'ID of the question',
@@ -69,8 +77,9 @@ class TaggedAnswersAPI(Resource):
              'user_id': 'ID of the user'
          })
 class TaggedAnswersAPI(Resource):
+    @api.marshal_list_with(TAGGED_DATA)
     def get(self, dataset_id, question_id, answer_id, user_id):
-        return db.get_fully_specified_answer_tags(
+        return db.get_fully_specified_answer(
             dataset_id=dataset_id,
             question_id=question_id,
             answer_id=answer_id,

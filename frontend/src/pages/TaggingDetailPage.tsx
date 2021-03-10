@@ -43,7 +43,7 @@ function TaggingDetailPage(){
                             .map(answer =>
                                 <StyledTableRow key={answer.answer_id + "|" + answer.user_id}>
                                     <StyledTableCell align={"left"}>{answer.question_text}</StyledTableCell>
-                                    <StyledTableCell align={"left"}>{answer.answer_text}</StyledTableCell>
+                                    <StyledTableCell align={"left"}>{answer.data}</StyledTableCell>
                                     <StyledTableCell align={"left"}>{answer.user_id}</StyledTableCell>
                                     <StyledTableCell align={"left"}>{answer.tags.join(", ")}</StyledTableCell>
                                 </StyledTableRow>
