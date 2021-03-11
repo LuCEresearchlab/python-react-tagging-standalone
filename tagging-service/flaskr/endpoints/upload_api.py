@@ -137,7 +137,6 @@ class UploadedDataset(Resource):
     @api.marshal_with(DATASET)
     def get(self, index):
         content = _load_dataset(index)
-        logger.debug(content)
         return content
 
 
