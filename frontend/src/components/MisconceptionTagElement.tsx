@@ -12,6 +12,7 @@ import {Answer} from "../interfaces/Dataset";
 
 // @ts-ignore
 import Highlightable from "highlightable";
+import {rangesCompressor} from "../util/RangeCompressor";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
@@ -51,7 +52,7 @@ function post(url: string, data: any){
 }
 
 
-function getMillis(){
+function get_millis(){
     return new Date().getTime()
 }
 
@@ -87,11 +88,11 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
     // popup stuff
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const handleClickPopup = (event:any) => {
+    const handle_click_popup = (event:any) => {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClosePopup = () => {
+    const handle_close_popup = () => {
         setAnchorEl(null);
     };
 
@@ -103,7 +104,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
     // time taken setup
     const tagging_time_handler = () => {
         if (startTaggingTime == 0)
-            setStartTaggingTime(getMillis())
+            setStartTaggingTime(get_millis())
     }
 
     return (
@@ -114,7 +115,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                 enabled={true}
                 onTextHighlighted={(e: any) => {
                     const newRange = {start:e.start, end:e.end, text:answer.data}
-                    const r = [...ranges, newRange]
+                    const r = rangesCompressor(ranges, newRange)
 
                     setRanges(r)
 
@@ -125,7 +126,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                             answer_id: answer.answer_id,
                             user_id: user_id,
                             tags: tags,
-                            tagging_time: (getMillis() - startTaggingTime),
+                            tagging_time: (get_millis() - startTaggingTime),
                             highlighted_ranges: r
                         }
                     )
@@ -143,7 +144,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                         answer_id: answer.answer_id,
                         user_id: user_id,
                         tags: tags,
-                        tagging_time: (getMillis() - startTaggingTime),
+                        tagging_time: (get_millis() - startTaggingTime),
                         highlighted_ranges: []
                     }
                 )
@@ -169,7 +170,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                                 answer_id: answer.answer_id,
                                 user_id: user_id,
                                 tags: values,
-                                tagging_time: (getMillis() - startTaggingTime),
+                                tagging_time: (get_millis() - startTaggingTime),
                                 highlighted_ranges: ranges
                             }
                         )
@@ -181,13 +182,13 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                             <Chip
                                 label={option}
                                 {...getTagProps({index})}
-                                onClick={handleClickPopup}
+                                onClick={handle_click_popup}
                             />
                             <Popover
                                 id={id}
                                 open={open}
                                 anchorEl={anchorEl}
-                                onClose={handleClosePopup}
+                                onClose={handle_close_popup}
                                 anchorOrigin={{
                                     vertical: "bottom",
                                     horizontal: "center"
