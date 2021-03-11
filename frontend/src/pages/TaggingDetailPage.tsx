@@ -5,6 +5,9 @@ import {JSONLoader} from "../helpers/LoaderHelper";
 import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from "@material-ui/core";
 import {StyledTableCell, StyledTableRow, useStyles} from "../components/StyledTable";
 
+// @ts-ignore
+import Highlightable from "highlightable";
+
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
 function TaggingDetailPage(){
@@ -43,7 +46,13 @@ function TaggingDetailPage(){
                             .map(answer =>
                                 <StyledTableRow key={answer.answer_id + "|" + answer.user_id}>
                                     <StyledTableCell align={"left"}>{answer.question_text}</StyledTableCell>
-                                    <StyledTableCell align={"left"}>{answer.data}</StyledTableCell>
+                                    <StyledTableCell align={"left"}><Highlightable
+                                        ranges={answer.highlighted_ranges}
+                                        enabled={false}
+                                        text={answer.data}
+                                        highlightStyle={{
+                                            backgroundColor: '#ffcc80'
+                                        }}/></StyledTableCell>
                                     <StyledTableCell align={"left"}>{answer.user_id}</StyledTableCell>
                                     <StyledTableCell align={"left"}>{answer.tags.join(", ")}</StyledTableCell>
                                 </StyledTableRow>
