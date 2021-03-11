@@ -166,7 +166,7 @@ class TaggedAnswersDownloadAPI(Resource):
 
         for tagged_answer in tagged_answers:
             question_id = tagged_answer['question_id']
-            answer_id = tagged_answer['answer_id']
+            answer_id = int(tagged_answer['answer_id'])
 
             tagged_answer['question_text'] = id_to_question_data[question_id]['text']
             tagged_answer['answer_text'] = id_to_answer_data[answer_id]['data']
@@ -191,9 +191,9 @@ class TaggedAnswersMisconceptionAPI(Resource):
         for answer in answers:
 
             question_id = answer['question_id']
-            answer_id = answer['answer_id']
+            answer_id = int(answer['answer_id'])
 
             answer['question_text'] = id_to_question_data[question_id]['text']
-            answer['answer_text'] = id_to_answer_data[answer_id]['data']
+            answer['data'] = id_to_answer_data[answer_id]['data']
 
         return answers
