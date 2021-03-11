@@ -99,8 +99,15 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
     const id = open ? "simple-popover" : undefined;
     // end popup stuff
 
+
+    // time taken setup
+    const tagging_time_handler = () => {
+        if (startTaggingTime == 0)
+            setStartTaggingTime(getMillis())
+    }
+
     return (
-        <StyledTableRow>
+        <StyledTableRow onClick={tagging_time_handler}>
             <StyledTableCell align="right">{question_text}</StyledTableCell>
             <StyledTableCell component="th" scope="row"><Highlightable
                 ranges={ranges}
@@ -166,11 +173,6 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                                 highlighted_ranges: ranges
                             }
                         )
-                    }
-                }}
-                onFocus={() => {
-                    if (startTaggingTime == 0) {
-                        setStartTaggingTime(getMillis())
                     }
                 }}
                 renderTags={(tagValue, getTagProps) =>
