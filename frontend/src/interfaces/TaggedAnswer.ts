@@ -1,14 +1,14 @@
+import {HighlightRange} from "./HighlightRange";
+import {Answer} from "./Dataset";
 
-export interface taggedAnswer {
+export interface taggedAnswer extends Answer{
     dataset_id: string,
     question_id: string,
-    answer_id: string,
-    user_id: string,
     tags: string[],
-    tagging_time: number
+    tagging_time: number,
+    highlighted_ranges: HighlightRange[]
 }
 
 export interface extendedTaggedAnswer extends taggedAnswer {
-    question_text: string,
-    answer_text: string
+    question_text: string
 }

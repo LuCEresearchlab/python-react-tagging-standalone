@@ -137,7 +137,6 @@ class UploadedDataset(Resource):
     @api.marshal_with(DATASET)
     def get(self, index):
         content = _load_dataset(index)
-        logger.debug(content)
         return content
 
 
@@ -150,8 +149,6 @@ def _populate_retrieving_maps(dataset_id):
         for answer in question['answers']:
             id_to_answer_data[answer['answer_id']] = answer
     return id_to_question_data, id_to_answer_data
-
-
 
 
 @api.route('/download/<string:dataset_id>')
@@ -168,7 +165,7 @@ class TaggedAnswersDownloadAPI(Resource):
 
         for tagged_answer in tagged_answers:
             question_id = tagged_answer['question_id']
-            answer_id = tagged_answer['answer_id']
+            answer_id = int(tagged_answer['answer_id'])
 
             tagged_answer['question_text'] = id_to_question_data[question_id]['text']
             tagged_answer['answer_text'] = id_to_answer_data[answer_id]['data']
@@ -193,9 +190,9 @@ class TaggedAnswersMisconceptionAPI(Resource):
         for answer in answers:
 
             question_id = answer['question_id']
-            answer_id = answer['answer_id']
+            answer_id = int(answer['answer_id'])
 
             answer['question_text'] = id_to_question_data[question_id]['text']
-            answer['answer_text'] = id_to_answer_data[answer_id]['data']
+            answer['data'] = id_to_answer_data[answer_id]['data']
 
         return answers
