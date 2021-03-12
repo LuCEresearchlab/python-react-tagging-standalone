@@ -33,7 +33,7 @@ function TaggingPage(){
     } else {
         return (
             <Container>
-                Tagging View
+                Loading...
             </Container>
         )
     }
