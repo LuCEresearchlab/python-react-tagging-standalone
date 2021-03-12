@@ -3,7 +3,6 @@ import json
 import datetime
 import pathlib
 import logging
-from os import walk, path
 from flask import request, current_app
 from flask_restx import Namespace, Resource, fields
 from flaskr.exceptions.error import Error
@@ -62,11 +61,10 @@ def _assert_valid_schema(data):
 # TODO: placeholder function, reimplement once integrated
 @cache.cached(key_prefix='datasets-cache')
 def _load_dataset(dataset_id):
-    file_name = _get_dataset_id_to_filename_map()[dataset_id]
+    id_to_filename, _ = _get_dataset_id_to_filename_name_map()
 
-    logger.debug(f"Filename {file_name}")
+    file = pathlib.Path(id_to_filename[dataset_id])
 
-    file = pathlib.Path(file_name)
     logger.debug(f"Trying to load {file}")
 
     if file.exists():
@@ -77,21 +75,25 @@ def _load_dataset(dataset_id):
             logger.debug("Read file")
             return json.loads(content)
     else:
-        raise Error(f'File {file_name} not found at {file}', status_code=500)
+        raise Error(f'File {file} not found at {file}', status_code=500)
 
 
 @cache.cached(key_prefix='datasets-id-map')
-def _get_dataset_id_to_filename_map():
+def _get_dataset_id_to_filename_name_map():
     id_to_dataset_filename = {}
+    id_to_dataset_name = {}
     folder = current_app.config['UPLOAD_FOLDER']
     for root, dirs, files in os.walk(folder):
         for file_name in files:
-            file_path = pathlib.Path(os.path.join(root, file_name))
+            relative_path = os.path.join(root, file_name)
+            file_path = pathlib.Path(relative_path)
             if file_path.exists() and file_name.endswith('.json'):
                 with open(file_path, 'r') as dataset:
-                    content = dataset.read()
-                    id_to_dataset_filename[json.loads(content)['dataset_id']] = file_path
-    return id_to_dataset_filename
+                    content = json.loads(dataset.read())
+
+                    id_to_dataset_filename[content['dataset_id']] = relative_path
+                    id_to_dataset_name[content['dataset_id']] = content['name']
+    return id_to_dataset_filename, id_to_dataset_name
 
 
 # load datasets from disk, should be updated to load from service for specified user (currently not given)
@@ -101,24 +103,24 @@ def _load_dataset_name_list():
 
     folder = current_app.config['UPLOAD_FOLDER']
 
-    _, _, filenames = next(walk(folder))
+    _, _, filenames = next(os.walk(folder))
     counter = 0
 
     for filename in filenames:
         if filename == '.gitignore' or filename == '.DS_Store':
             continue
-        file_path = pathlib.Path(path.join(folder, filename))
 
-        mapping = _get_dataset_id_to_filename_map()
-        filename_to_dataset_id = {v: k for k, v in mapping.items()}
-        dataset_id = filename_to_dataset_id[file_path]
+        relative_path = os.path.join(folder, filename)
+        file_path = pathlib.Path(relative_path)
 
-        if dataset_id is None:
-            continue
+        dataset_id_to_filename, dataset_id_to_name = _get_dataset_id_to_filename_name_map()
+        filename_to_dataset_id = {v: k for k, v in dataset_id_to_filename.items()}
+
+        dataset_id = filename_to_dataset_id[relative_path]
 
         datasets.append({
             'id': dataset_id,
-            'name': filename[:filename.find('.json')],  # name of file
+            'name': dataset_id_to_name[dataset_id],
             'date': datetime.datetime.fromtimestamp(file_path.stat().st_mtime)
         })
         counter += 1
