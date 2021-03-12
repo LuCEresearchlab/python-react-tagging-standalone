@@ -3,8 +3,8 @@ import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from "@mat
 import {Question, Answer} from "../interfaces/Dataset";
 import {StyledTableCell, useStyles} from "./StyledTable";
 import {JSONLoader} from "../helpers/LoaderHelper";
-import {Pagination} from "@material-ui/lab";
 import MisconceptionTagElement from "./MisconceptionTagElement";
+import {StyledPagination} from "./StyledPagination";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
@@ -101,10 +101,10 @@ function TaggingUI({dataset_id, questions, user_id}:Input) {
                     }
                 </TableBody>
             </Table>
-            <Pagination count={
+            <StyledPagination count={
                 Math.trunc(total_answers / answers_per_page) +
                 (total_answers % answers_per_page == 0 ? 0 : 1)
-            } page={page} onChange={paginationChange} />
+            } page={page} onChange={paginationChange} siblingCount={5}/>
         </TableContainer>
     )
 }
