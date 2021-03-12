@@ -62,12 +62,11 @@ def _assert_valid_schema(data):
 # TODO: placeholder function, reimplement once integrated
 @cache.cached(key_prefix='datasets-cache')
 def _load_dataset(dataset_id):
-    folder = current_app.config['UPLOAD_FOLDER']
-    file_name = _load_dataset_name_list()[dataset_id]['name'] + '.json'
+    file_name = _get_dataset_id_to_filename_map()[dataset_id]
 
     logger.debug(f"Filename {file_name}")
 
-    file = pathlib.Path(path.join(folder, file_name))
+    file = pathlib.Path(file_name)
     logger.debug(f"Trying to load {file}")
 
     if file.exists():
@@ -79,6 +78,20 @@ def _load_dataset(dataset_id):
             return json.loads(content)
     else:
         raise Error(f'File {file_name} not found at {file}', status_code=500)
+
+
+@cache.cached(key_prefix='datasets-id-map')
+def _get_dataset_id_to_filename_map():
+    id_to_dataset_filename = {}
+    folder = current_app.config['UPLOAD_FOLDER']
+    for root, dirs, files in os.walk(folder):
+        for file_name in files:
+            file_path = pathlib.Path(os.path.join(root, file_name))
+            if file_path.exists() and file_name.endswith('.json'):
+                with open(file_path, 'r') as dataset:
+                    content = dataset.read()
+                    id_to_dataset_filename[json.loads(content)['dataset_id']] = file_path
+    return id_to_dataset_filename
 
 
 # load datasets from disk, should be updated to load from service for specified user (currently not given)
@@ -96,8 +109,15 @@ def _load_dataset_name_list():
             continue
         file_path = pathlib.Path(path.join(folder, filename))
 
+        mapping = _get_dataset_id_to_filename_map()
+        filename_to_dataset_id = {v: k for k, v in mapping.items()}
+        dataset_id = filename_to_dataset_id[file_path]
+
+        if dataset_id is None:
+            continue
+
         datasets.append({
-            'id': counter,
+            'id': dataset_id,
             'name': filename[:filename.find('.json')],  # name of file
             'date': datetime.datetime.fromtimestamp(file_path.stat().st_mtime)
         })
@@ -126,22 +146,23 @@ class Upload(Resource):
         uploaded_file.save(full_path)
         cache.delete('datasets-cache')
         cache.delete('datasets-cache-list')
+        cache.delete('dataset-id-map')
         logger.debug('Deleted datasets cache')
         return f'uploaded file: {uploaded_file.name} successfully'
 
 
-@api.route('/get-dataset/<int:index>')
+@api.route('/get-dataset/<string:dataset_id>')
 @api.doc(description='get content of uploaded file')
 class UploadedDataset(Resource):
     @api.doc(description='Get content of specific dataset')
     @api.marshal_with(DATASET)
-    def get(self, index):
-        content = _load_dataset(index)
+    def get(self, dataset_id):
+        content = _load_dataset(dataset_id)
         return content
 
 
 def _populate_retrieving_maps(dataset_id):
-    dataset = _load_dataset(int(dataset_id))
+    dataset = _load_dataset(dataset_id)
     id_to_question_data = {}
     id_to_answer_data = {}
     for question in dataset['questions']:
