@@ -28,13 +28,9 @@ function MergeView() {
             console.log(data)
             setQuestions(data.questions)
             setSelectedQuestion(0)
+            setLoaded(true)
         })
-        setLoaded(true)
     }
-
-    console.log('questions')
-    console.log(questions)
-    console.log(user_id)
 
     if (!loaded)
         return (
@@ -53,7 +49,11 @@ function MergeView() {
                             setQuestionSelect={(value:number) => setSelectedQuestion(value)}/>
                     </Grid>
                     <Grid item xs={6}>
-                        <AnswersMerger/>
+                        <AnswersMerger
+                            dataset_id={dataset_id}
+                            question_id={questions[selectedQuestion].question_id}
+                            user_id={user_id}
+                        />
                     </Grid>
                 </Grid>
 
