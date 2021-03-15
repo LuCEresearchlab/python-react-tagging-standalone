@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         paper: {
             padding: theme.spacing(2),
-            textAlign: 'center',
+            textAlign: 'left',
             color: theme.palette.text.secondary,
             border: 1
         },
@@ -32,24 +32,29 @@ function QuestionSelect({selectedQuestion, setQuestionSelect, questions}: SetQue
 
     return (
         <Grid container spacing={5} className={classes.root} direction={'column'}>
-            <Grid item className={classes.paper} xs={6}>
-                <Select
-                    native
-                    label={'Select Question'}
-                    id={'question-select'}
-                    value={selectedQuestion}
-                    onChange={(event) => {
-                        const newValue: number = typeof(event.target.value) == "string" ? parseInt(event.target.value) : 0
-                        setQuestionSelect(newValue)
-                    }}
-                >{
-                    questions.map((question, index) =>
-                        <option key={question.question_id} value={index}>
-                            {index+1}
-                        </option>
-                    )
-                }
-                </Select>
+            <Grid container spacing={0} className={classes.root} direction={'row'}>
+                <Grid item className={classes.paper} xs={3}>
+                    <p>Select Question</p>
+                </Grid>
+                <Grid item className={classes.paper} xs={3}>
+                    <Select
+                        native
+                        label={'Select Question'}
+                        id={'question-select'}
+                        value={selectedQuestion}
+                        onChange={(event) => {
+                            const newValue: number = typeof(event.target.value) == "string" ? parseInt(event.target.value) : 0
+                            setQuestionSelect(newValue)
+                        }}
+                    >{
+                        questions.map((question, index) =>
+                            <option key={question.question_id} value={index}>
+                                {index+1}
+                            </option>
+                        )
+                    }
+                    </Select>
+                </Grid>
             </Grid>
             <Grid item className={classes.paper} xs={6}>
                 {questions[selectedQuestion].text}
