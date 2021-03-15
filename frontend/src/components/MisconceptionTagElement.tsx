@@ -117,7 +117,8 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                 tags: given_tags,
                 tagging_time: (get_millis() - startTaggingTime),
                 highlighted_ranges: submitted_ranges,
-                question_text
+                question_text,
+                answer_text: answer.data
             }
         )
     }

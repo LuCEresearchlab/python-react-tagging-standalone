@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import {Grid} from "@material-ui/core";
-// import {Answer, Question} from "../interfaces/Dataset";
 import {JSONLoader} from "../helpers/LoaderHelper";
 import {taggedAnswer} from "../interfaces/TaggedAnswer";
 
@@ -29,15 +28,16 @@ function AnswersMerger({dataset_id, user_id, selectedQuestion}: Input){
     }
 
     console.log(user_id, selectedQuestion)
-    console.log(answers)
 
 
+
+    if(!loaded) return (<Grid container>Loading...</Grid>)
 
     return(
-        <Grid container>
+        <Grid container direction={'column'}>
             {
                 answers.map(answer =>
-                    <div key={answer.answer_id + '|' + answer.user_id}>{answer.data}</div>
+                    <Grid item key={answer.answer_id + '|' + answer.user_id}>{answer.answer_text}</Grid>
                 )
             }
         </Grid>

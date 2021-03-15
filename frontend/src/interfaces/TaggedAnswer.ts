@@ -6,6 +6,7 @@ export interface taggedAnswer extends Answer{
     question_id: string,
     tags: string[],
     tagging_time: number,
+    answer_text: string,
     highlighted_ranges: HighlightRange[]
 }
 
