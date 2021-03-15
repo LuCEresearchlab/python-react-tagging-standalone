@@ -22,6 +22,8 @@ TAGGED_DATA = api.model('Tagged Answer', {
                                example='3535089963cf6ef09a9c418e'),
     'user_id': fields.String(required=True, readonly=True, description='ID of the User tagging the data',
                              example='9435089963cf6ef09a9c418e'),
+    'answer_text': fields.String(required=True, readonly=True, description='Answer of the student',
+                                 example='I don\'t know'),
     'tags': fields.List(fields.String(readonly=True, description='Tags for answer',
                                       example="NullIsObject"), required=True),
     'tagging_time': fields.Integer(required=False, readonly=True, description='Total ms taken to tag the answer',

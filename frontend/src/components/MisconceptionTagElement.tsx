@@ -107,6 +107,21 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
             setStartTaggingTime(get_millis())
     }
 
+    const post_answer = (submitted_ranges: HighlightRange[], given_tags: string[]) => {
+        post(post_answer_url,
+            {
+                dataset_id,
+                question_id,
+                answer_id: answer.answer_id,
+                user_id: user_id,
+                tags: given_tags,
+                tagging_time: (get_millis() - startTaggingTime),
+                highlighted_ranges: submitted_ranges,
+                question_text
+            }
+        )
+    }
+
     return (
         <StyledTableRow onClick={tagging_time_handler}>
             <StyledTableCell align="right">{question_text}</StyledTableCell>
@@ -118,18 +133,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                     const r = rangesCompressor(ranges, newRange)
 
                     setRanges(r)
-
-                    post(post_answer_url,
-                        {
-                            dataset_id,
-                            question_id,
-                            answer_id: answer.answer_id,
-                            user_id: user_id,
-                            tags: tags,
-                            tagging_time: (get_millis() - startTaggingTime),
-                            highlighted_ranges: r
-                        }
-                    )
+                    post_answer(r, tags)
                 }}
                 text={answer.data}
                 highlightStyle={{
@@ -137,17 +141,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                 }}
             /><Button onClick={() => {
                 setRanges([])
-                post(post_answer_url,
-                    {
-                        dataset_id,
-                        question_id,
-                        answer_id: answer.answer_id,
-                        user_id: user_id,
-                        tags: tags,
-                        tagging_time: (get_millis() - startTaggingTime),
-                        highlighted_ranges: []
-                    }
-                )
+                post_answer([], tags)
             }}>Clear</Button></StyledTableCell>
             <StyledTableCell align="right"><Autocomplete
                 className={classes.root}
@@ -163,17 +157,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                 onChange={(_, values) => {
                     if (loaded) {
                         setTags(values)
-                        post(post_answer_url,
-                            {
-                                dataset_id,
-                                question_id,
-                                answer_id: answer.answer_id,
-                                user_id: user_id,
-                                tags: values,
-                                tagging_time: (get_millis() - startTaggingTime),
-                                highlighted_ranges: ranges
-                            }
-                        )
+                        post_answer(ranges, values)
                     }
                 }}
                 renderTags={(tagValue, getTagProps) =>

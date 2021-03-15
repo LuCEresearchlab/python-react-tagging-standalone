@@ -22,8 +22,7 @@ DATASET_DESC = api.model('Dataset Description', {
 
 ANSWER = api.model('Answer', {
     'answer_id': fields.String(required=True, readonly=True, description='ID of the Answer'),
-    'data': fields.String(required=True, readonly=True, description='Text of the Answer'),
-    'user_id': fields.String(required=False, readonly=True, description='ID of the user posting the answer'),
+    'data': fields.String(required=True, readonly=True, description='Text of the Answer')
 })
 
 QUESTION = api.model('Question', {

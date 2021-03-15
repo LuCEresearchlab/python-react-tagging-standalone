@@ -28,8 +28,6 @@ function QuestionSelect({selectedQuestion, setQuestionSelect, questions}: SetQue
     const classes = useStyles();
 
 
-    if(questions.length == 0) return (<Grid>Loading...</Grid>)
-
     return (
         <Grid container spacing={5} className={classes.root} direction={'column'}>
             <Grid container spacing={0} className={classes.root} direction={'row'}>

@@ -52,6 +52,7 @@ function MergeView() {
                         <AnswersMerger
                             dataset_id={dataset_id}
                             question_id={questions[selectedQuestion].question_id}
+                            selectedQuestion={selectedQuestion}
                             user_id={user_id}
                         />
                     </Grid>
