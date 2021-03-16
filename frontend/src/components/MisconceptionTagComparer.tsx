@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Collapse, List, ListItem} from "@material-ui/core";
+import {Collapse, List, ListItem, Paper, Table, TableBody, TableContainer} from "@material-ui/core";
 import {taggedAnswer} from "../interfaces/TaggedAnswer";
 import MisconceptionTagElement from "./MisconceptionTagElement";
 
@@ -16,27 +16,34 @@ function MisconceptionTagComparer({answerGroup, user_id}: Input) {
         setOpen(!open);
     };
 
-    console.log(answerGroup)
-    console.log(user_id, handleClick)
     return (
         <List>
             <ListItem button onClick={handleClick}>Open</ListItem>
-            <Collapse in={open} timeout={"auto"} unmountOnExit>
+            <Collapse in={open} timeout={0} unmountOnExit>
                 <List>
                     {
                         answerGroup.map(answer =>
-                            <ListItem key={answer.answer_id + '|' + answer.user_id}><MisconceptionTagElement
-                                dataset_id={answer.dataset_id}
-                                question_id={answer.question_id}
-                                user_id={user_id}
-                                answer={
-                                    {
-                                        answer_id:answer.answer_id,
-                                        data:answer.answer_text,
-                                        user_id: answer.user_id
-                                    }}
-                                question_text={answer.answer_text}
-                                misconceptions_available={[]}/></ListItem>
+                            <ListItem key={answer.answer_id + '|' + answer.user_id}>
+                                <TableContainer component={Paper}>
+                                    <Table aria-label="customized table">
+                                        <TableBody>
+                                            <MisconceptionTagElement
+                                                dataset_id={answer.dataset_id}
+                                                question_id={answer.question_id}
+                                                user_id={answer.user_id}
+                                                enabled={answer.user_id.localeCompare(user_id) === 0}
+                                                answer={
+                                                    {
+                                                        answer_id: answer.answer_id,
+                                                        data: answer.answer_text,
+                                                        user_id: answer.user_id
+                                                    }}
+                                                question_text={answer.answer_text}
+                                                misconceptions_available={[]}/>
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </ListItem>
                         )
                     }
                 </List>

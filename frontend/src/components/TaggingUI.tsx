@@ -94,6 +94,7 @@ function TaggingUI({dataset_id, questions, user_id}:Input) {
                                         dataset_id={dataset_id}
                                         question_id={answerExtended.question_id}
                                         user_id={user_id}
+                                        enabled={true}
                                         question_text={answerExtended.text}
                                         answer={answerExtended.answer}
                                         misconceptions_available={misconceptions_available}/>

@@ -35,7 +35,8 @@ interface ids_and_misconceptions {
     user_id: string,
     answer: Answer,
     question_text: string,
-    misconceptions_available: string[]
+    misconceptions_available: string[],
+    enabled: boolean
 }
 
 
@@ -57,7 +58,7 @@ function get_millis(){
 }
 
 
-function MisconceptionTagElement({dataset_id, question_id, user_id, question_text, answer, misconceptions_available}: ids_and_misconceptions) {
+function MisconceptionTagElement({dataset_id, question_id, user_id, question_text, answer, misconceptions_available, enabled}: ids_and_misconceptions) {
 
     const classes = useStyles();
     const get_selected_misc_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + '/question/'
@@ -79,8 +80,6 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
 
                 setTags(previousTaggedAnswer.tags == null ? [] : previousTaggedAnswer.tags)
                 setRanges(previousTaggedAnswer.highlighted_ranges == null ? [] : previousTaggedAnswer.highlighted_ranges)
-
-                console.log(previousTaggedAnswer)
             }
             setLoaded(true)
         })
@@ -108,7 +107,6 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
             setStartTaggingTime(get_millis())
     }
 
-    const valid_user = user_id == answer.user_id
 
     const post_answer = (submitted_ranges: HighlightRange[], given_tags: string[]) => {
         post(post_answer_url,
@@ -131,12 +129,12 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
             <StyledTableCell align="right">{question_text}</StyledTableCell>
             <StyledTableCell component="th" scope="row"><Highlightable
                 ranges={ranges}
-                enabled={valid_user}
+                enabled={enabled}
                 onTextHighlighted={(e: any) => {
                     const newRange = {start:e.start, end:e.end, text:answer.data}
                     const r = rangesCompressor(ranges, newRange)
 
-                    setRanges(r)
+                    setRanges([...r])
                     post_answer(r, tags)
                 }}
                 text={answer.data}
@@ -144,7 +142,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                     backgroundColor: '#ffcc80'
                 }}
             /><Button onClick={() => {
-                if(valid_user){
+                if(enabled){
                     setRanges([])
                     post_answer([], tags)
                 }
@@ -154,14 +152,13 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                 multiple
                 limitTags={2}
                 options={misconceptions_available}
-                disabled={!valid_user}
-                // getOptionLabel={(option) => option.name}
+                disabled={!enabled}
                 value={tags}
                 renderInput={(params) => (
                     <TextField {...params} variant="outlined" label="Misconceptions" placeholder="Misconceptions"/>
                 )}
                 onChange={(_, values) => {
-                    if (valid_user && loaded) {
+                    if (enabled && loaded) {
                         setTags(values)
                         post_answer(ranges, values)
                     }
