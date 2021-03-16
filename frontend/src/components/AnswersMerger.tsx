@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React from "react";
 import {Grid} from "@material-ui/core";
-import {JSONLoader} from "../helpers/LoaderHelper";
+import {useFetch} from "../helpers/LoaderHelper";
 import {taggedAnswer} from "../interfaces/TaggedAnswer";
 
 
@@ -17,30 +17,30 @@ function AnswersMerger({dataset_id, question_id, user_id, selectedQuestion}: Inp
 
     const url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + '/question/' + question_id
 
-    const [answers, setAnswers] = useState<taggedAnswer[]>([])
-    const [loaded, setLoaded] = useState<boolean>(false)
-
-    if(!loaded){
-        JSONLoader(url, (data: taggedAnswer[]) => {
-            const groupedAnswers = data.reduce((previousValue: any, currentValue) => {
-                if (previousValue[currentValue.answer_id] == undefined) previousValue[currentValue.answer_id] = [currentValue]
-                else previousValue[currentValue.answer_id].push(currentValue)
-                return previousValue
-            }, {})
-
-            console.log(question_id)
-            console.log(data)
-            console.log(groupedAnswers)
-            setAnswers(data)
-            setLoaded(true)
-        })
-    }
+    const response = useFetch<taggedAnswer[]>(url)
 
     console.log(user_id, selectedQuestion)
 
 
 
-    if(!loaded) return (<Grid container>Loading...</Grid>)
+    if(response.isLoading) return (<Grid container>Loading...</Grid>)
+
+    const answers: taggedAnswer[] = response.response == undefined ? [] : response.response
+        .filter(answer => answer.question_id == question_id) // only keep needed answers
+
+    const groupedAnswers = answers
+        .reduce((map: Map<string, taggedAnswer[]>, currentValue: taggedAnswer) => {
+        if (!map.has(currentValue.answer_id)){
+            map.set(currentValue.answer_id, [currentValue])
+        }
+        else {
+            // @ts-ignore
+            map.get(currentValue.answer_id).push(currentValue)
+        }
+        return map
+    }, new Map<string, taggedAnswer[]>())
+
+    console.log(groupedAnswers)
 
     return(
         <Grid container direction={'column'}>
