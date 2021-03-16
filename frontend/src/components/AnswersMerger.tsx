@@ -2,6 +2,7 @@ import React from "react";
 import {Grid} from "@material-ui/core";
 import {useFetch} from "../helpers/LoaderHelper";
 import {taggedAnswer} from "../interfaces/TaggedAnswer";
+import MisconceptionTagComparer from "./MisconceptionTagComparer";
 
 
 const { TAGGING_SERVICE_URL } = require('../../config.json')
@@ -45,8 +46,14 @@ function AnswersMerger({dataset_id, question_id, user_id, selectedQuestion}: Inp
     return(
         <Grid container direction={'column'}>
             {
-                answers.map(answer =>
-                    <Grid item key={answer.answer_id + '|' + answer.user_id}>{answer.answer_text}</Grid>
+                Array.from(groupedAnswers.entries()).map((entry) => {
+                    const answer_id = entry[0]
+                    const answer_group = entry[1]
+                    return <Grid item key={answer_id}><MisconceptionTagComparer
+                        answerGroup={answer_group}
+                        user_id={user_id}
+                    /></Grid>
+                }
                 )
             }
         </Grid>

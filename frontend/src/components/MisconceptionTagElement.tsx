@@ -108,6 +108,8 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
             setStartTaggingTime(get_millis())
     }
 
+    const valid_user = user_id == answer.user_id
+
     const post_answer = (submitted_ranges: HighlightRange[], given_tags: string[]) => {
         post(post_answer_url,
             {
@@ -129,7 +131,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
             <StyledTableCell align="right">{question_text}</StyledTableCell>
             <StyledTableCell component="th" scope="row"><Highlightable
                 ranges={ranges}
-                enabled={true}
+                enabled={valid_user}
                 onTextHighlighted={(e: any) => {
                     const newRange = {start:e.start, end:e.end, text:answer.data}
                     const r = rangesCompressor(ranges, newRange)
@@ -142,21 +144,24 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                     backgroundColor: '#ffcc80'
                 }}
             /><Button onClick={() => {
-                setRanges([])
-                post_answer([], tags)
+                if(valid_user){
+                    setRanges([])
+                    post_answer([], tags)
+                }
             }}>Clear</Button></StyledTableCell>
             <StyledTableCell align="right"><Autocomplete
                 className={classes.root}
                 multiple
                 limitTags={2}
                 options={misconceptions_available}
+                disabled={!valid_user}
                 // getOptionLabel={(option) => option.name}
                 value={tags}
                 renderInput={(params) => (
                     <TextField {...params} variant="outlined" label="Misconceptions" placeholder="Misconceptions"/>
                 )}
                 onChange={(_, values) => {
-                    if (loaded) {
+                    if (valid_user && loaded) {
                         setTags(values)
                         post_answer(ranges, values)
                     }
