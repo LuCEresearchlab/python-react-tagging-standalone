@@ -150,7 +150,7 @@ class Upload(Resource):
         return f'uploaded file: {uploaded_file.name} successfully'
 
 
-@api.route('/get-dataset/<string:dataset_id>')
+@api.route('/get-dataset/dataset/<string:dataset_id>')
 @api.doc(description='get content of uploaded file')
 class UploadedDataset(Resource):
     @api.doc(description='Get content of specific dataset')
@@ -171,7 +171,7 @@ def _populate_retrieving_maps(dataset_id):
     return id_to_question_data, id_to_answer_data
 
 
-@api.route('/download/<string:dataset_id>')
+@api.route('/download/dataset/<string:dataset_id>')
 @api.doc(description='Get all tagged answers in specified dataset in a downloadable format',
          params={'dataset_id': 'ID of the dataset'})
 class TaggedAnswersDownloadAPI(Resource):
@@ -194,7 +194,7 @@ class TaggedAnswersDownloadAPI(Resource):
         return formatted_values
 
 
-@api.route('/tagged-answer/<string:dataset_id>/<string:misconception>')
+@api.route('/tagged-answer/dataset/<string:dataset_id>/tag/<string:misconception>')
 @api.doc(description='Get all tagged answers in specified dataset with specific misconception',
          params={
              'dataset_id': 'ID of the dataset',

@@ -60,7 +60,8 @@ function get_millis(){
 function MisconceptionTagElement({dataset_id, question_id, user_id, question_text, answer, misconceptions_available}: ids_and_misconceptions) {
 
     const classes = useStyles();
-    const get_selected_misc_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/' + dataset_id + '/' + question_id + '/' + answer.answer_id + '/' + user_id
+    const get_selected_misc_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + '/question/'
+        + question_id + '/answer/' + answer.answer_id + '/user/' + user_id
     const post_answer_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer'
 
     const [tags, setTags] = useState<string[]>([])
@@ -148,7 +149,6 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                 className={classes.root}
                 multiple
                 limitTags={2}
-                id="multiple-limit-tags"
                 options={misconceptions_available}
                 // getOptionLabel={(option) => option.name}
                 value={tags}

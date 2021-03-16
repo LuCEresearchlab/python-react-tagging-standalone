@@ -13,7 +13,7 @@ function TaggingPage(){
 
     const { dataset_id, user_id }: {dataset_id:string, user_id:string} = useParams()
 
-    const url:string = TAGGING_SERVICE_URL + '/datasets/get-dataset/' + dataset_id
+    const url:string = TAGGING_SERVICE_URL + '/datasets/get-dataset/dataset/' + dataset_id
 
 
     if(!loaded){

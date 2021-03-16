@@ -21,7 +21,7 @@ function MergeView() {
     const [loaded, setLoaded] = useState<boolean>(false)
 
 
-    const url = TAGGING_SERVICE_URL + '/datasets/get-dataset/' + dataset_id
+    const url = TAGGING_SERVICE_URL + '/datasets/get-dataset/dataset/' + dataset_id
 
     if (!loaded) {
         JSONLoader(url, (data: Dataset) => {

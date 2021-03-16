@@ -13,15 +13,24 @@ interface Input {
     selectedQuestion: number
 }
 
-function AnswersMerger({dataset_id, user_id, selectedQuestion}: Input){
+function AnswersMerger({dataset_id, question_id, user_id, selectedQuestion}: Input){
 
-    const url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/' + dataset_id
+    const url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + '/question/' + question_id
 
     const [answers, setAnswers] = useState<taggedAnswer[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
 
     if(!loaded){
         JSONLoader(url, (data: taggedAnswer[]) => {
+            const groupedAnswers = data.reduce((previousValue: any, currentValue) => {
+                if (previousValue[currentValue.answer_id] == undefined) previousValue[currentValue.answer_id] = [currentValue]
+                else previousValue[currentValue.answer_id].push(currentValue)
+                return previousValue
+            }, {})
+
+            console.log(question_id)
+            console.log(data)
+            console.log(groupedAnswers)
             setAnswers(data)
             setLoaded(true)
         })

@@ -16,7 +16,7 @@ function TaggingDetailPage(){
 
     const classes = useStyles();
 
-    const get_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/' + dataset_id + "/" + tag
+    const get_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + "/tag/" + tag
 
     const [answers, setAnswers] = useState<extendedTaggedAnswer[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
