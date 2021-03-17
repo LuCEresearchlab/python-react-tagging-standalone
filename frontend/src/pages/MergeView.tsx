@@ -18,7 +18,7 @@ const useStyles = makeStyles(() =>
             textAlign: 'center',
             marginLeft: 'auto',
             marginRight: 'auto'
-        },s
+        },
     }),
 );
 
