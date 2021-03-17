@@ -12,11 +12,17 @@ interface SetQuestionSelectFunction {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
+            width: '100%',
+            justifyContent: 'center',
+            position: 'sticky',
+            top: '100px',
             flexGrow: 1
         },
         paper: {
             padding: theme.spacing(2),
             textAlign: 'left',
+            marginLeft: 'auto',
+            marginRight: 'auto',
             color: theme.palette.text.secondary,
             border: 1
         },

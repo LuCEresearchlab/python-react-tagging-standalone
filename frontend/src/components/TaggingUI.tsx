@@ -5,6 +5,7 @@ import {StyledTableCell, useStyles} from "./StyledTable";
 import {JSONLoader} from "../helpers/LoaderHelper";
 import MisconceptionTagElement from "./MisconceptionTagElement";
 import {StyledPagination} from "./StyledPagination";
+import {createStyles, makeStyles} from "@material-ui/core/styles";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
@@ -25,14 +26,26 @@ interface AnswerExtended {
     text: string
 }
 
+const useTable = makeStyles(() =>
+    createStyles({
+        table: {
+            width: '90%',
+            textAlign: 'left',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    }),
+);
+
 function TaggingUI({dataset_id, questions, user_id}:Input) {
-    const classes = useStyles();
+    const classes = useStyles()
+    const tableStyle= useTable()
 
     const get_available_url = TAGGING_SERVICE_URL + '/progmiscon_api/misconceptions'
 
     const [misconceptions_available, setMisconceptionsAvailable] = useState<string[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
-    const [page, setPage] = useState<number>(1);
+    const [page, setPage] = useState<number>(1)
 
     const answers_per_page: number = 10
 
@@ -75,7 +88,7 @@ function TaggingUI({dataset_id, questions, user_id}:Input) {
     console.log(questions.slice(answers_per_page*(page-1), endIndex(page)))
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} className={tableStyle.table}>
             <Table className={classes.table} aria-label="customized table">
                 <TableHead>
                     <TableRow>

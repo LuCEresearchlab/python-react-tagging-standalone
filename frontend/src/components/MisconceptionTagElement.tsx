@@ -126,7 +126,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
 
     return (
         <StyledTableRow onClick={tagging_time_handler}>
-            <StyledTableCell align="right">{question_text}</StyledTableCell>
+            {question_text.length > 0 ? <StyledTableCell align="right">{question_text}</StyledTableCell> : <></>}
             <StyledTableCell component="th" scope="row"><Highlightable
                 ranges={ranges}
                 enabled={enabled}
@@ -141,12 +141,16 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                 highlightStyle={{
                     backgroundColor: '#ffcc80'
                 }}
-            /><Button onClick={() => {
-                if(enabled){
-                    setRanges([])
-                    post_answer([], tags)
-                }
-            }}>Clear</Button></StyledTableCell>
+            />{
+                enabled ?
+                    <Button hidden={!enabled} onClick={() => {
+                        if (enabled) {
+                            setRanges([])
+                            post_answer([], tags)
+                        }
+                    }}>Clear</Button> :
+                    <></>
+            }</StyledTableCell>
             <StyledTableCell align="right"><Autocomplete
                 className={classes.root}
                 multiple

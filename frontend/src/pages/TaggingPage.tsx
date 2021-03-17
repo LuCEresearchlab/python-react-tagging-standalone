@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Container} from "@material-ui/core";
 import {JSONLoader} from '../helpers/LoaderHelper';
 import {useParams} from "react-router-dom";
-import { Dataset } from '../interfaces/Dataset'
+import {Dataset} from '../interfaces/Dataset'
 import TaggingUI from '../components/TaggingUI'
 
 const { TAGGING_SERVICE_URL } = require('../../config.json')
@@ -26,9 +26,10 @@ function TaggingPage(){
 
     if (dataset != null) {
         return (
-            <Container>
-                <TaggingUI questions={dataset.questions} dataset_id={dataset_id} user_id={user_id}/>
-            </Container>
+            <TaggingUI
+                questions={dataset.questions}
+                dataset_id={dataset_id}
+                user_id={user_id}/>
         )
     } else {
         return (
