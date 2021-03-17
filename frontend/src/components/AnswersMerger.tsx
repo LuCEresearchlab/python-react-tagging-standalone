@@ -44,7 +44,7 @@ function AnswersMerger({dataset_id, question_id, user_id, selectedQuestion}: Inp
     return (
         <Grid container direction={'column'}>
             {
-                Array.from(groupedAnswers.entries()).map((entry) => {
+                Array.from(groupedAnswers.entries()).map((entry:[string, taggedAnswer[]]) => {
                         const answer_id = entry[0]
                         const answer_group = entry[1]
                         return <Grid item key={answer_id}><MisconceptionTagComparer
