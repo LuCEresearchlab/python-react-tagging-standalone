@@ -34,7 +34,6 @@ interface ids_and_misconceptions {
     question_id: string,
     user_id: string,
     answer: Answer,
-    question_text: string,
     misconceptions_available: string[],
     enabled: boolean
 }
@@ -63,7 +62,6 @@ function MisconceptionTagElement(
         dataset_id,
         question_id,
         user_id,
-        question_text,
         answer,
         misconceptions_available,
         enabled
@@ -127,7 +125,6 @@ function MisconceptionTagElement(
                 tags: given_tags,
                 tagging_time: (get_millis() - startTaggingTime),
                 highlighted_ranges: submitted_ranges,
-                question_text,
                 answer_text: answer.data
             }
         )
@@ -135,7 +132,6 @@ function MisconceptionTagElement(
 
     return (
         <StyledTableRow onClick={tagging_time_handler}>
-            {question_text.length > 0 ? <StyledTableCell align="right">{question_text}</StyledTableCell> : <></>}
             <StyledTableCell component="th" scope="row"><Highlightable
                 ranges={ranges}
                 enabled={enabled}

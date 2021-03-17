@@ -62,7 +62,6 @@ function MisconceptionTagComparer({answerGroup, user_id, available_misconception
                                                         data: answer.answer_text,
                                                         user_id: answer.user_id
                                                     }}
-                                                question_text={""}
                                                 misconceptions_available={available_misconceptions}/>
                                         </TableBody>
                                     </Table>
