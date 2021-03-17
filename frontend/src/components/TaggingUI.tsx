@@ -1,12 +1,12 @@
 import React, {useState} from "react";
-import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from "@material-ui/core";
+import {Grid, List, ListItem, Paper, Table, TableBody, TableContainer} from "@material-ui/core";
 import {Question, Answer} from "../interfaces/Dataset";
-import {StyledTableCell, useStyles} from "./StyledTable";
 import {JSONLoader} from "../helpers/LoaderHelper";
 import MisconceptionTagElement from "./MisconceptionTagElement";
 import {StyledPagination} from "./StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {MisconceptionElement} from "../interfaces/MisconceptionElement";
+import QuestionSelect from "./QuestionSelect";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
@@ -22,44 +22,52 @@ interface AnswerExtended {
     text: string
 }
 
-const useTable = makeStyles(() =>
+const useStyles = makeStyles(() =>
     createStyles({
-        table: {
-            width: '90%',
-            textAlign: 'left',
-            marginLeft: 'auto',
-            marginRight: 'auto',
+        root: {
+            width: '100%',
+            justifyContent: 'center',
+            position: 'sticky',
+            top: '100px',
+            flexGrow: 1
         },
     }),
 );
 
 function TaggingUI({dataset_id, questions, user_id}: Input) {
     const classes = useStyles()
-    const tableStyle = useTable()
 
     const get_available_url = TAGGING_SERVICE_URL + '/progmiscon_api/misconceptions'
 
     const [misconceptions_available, setMisconceptionsAvailable] = useState<string[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
+    const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
     const [page, setPage] = useState<number>(1)
 
     const answers_per_page: number = 10
 
 
-    const total_answers = questions.reduce((total: number, current: Question) => {
-        return total + current.answers.length
-    }, 0)
+    const current_question_id: string = questions[selectedQuestion].question_id
+    const filtered_questions: Question[] = questions
+        .filter(question => question.question_id.localeCompare(current_question_id) === 0)
 
-    const all_answers: AnswerExtended[] = questions.reduce((answers: AnswerExtended[], current: Question) => {
-        const extended: AnswerExtended[] = current.answers.map(answer => {
-            return {
-                answer: answer,
-                question_id: current.question_id,
-                text: current.text
-            }
-        })
-        return answers.concat(extended)
-    }, [])
+
+    const total_answers = filtered_questions
+        .reduce((total: number, current: Question) => {
+            return total + current.answers.length
+        }, 0)
+
+    const all_answers: AnswerExtended[] = filtered_questions
+        .reduce((answers: AnswerExtended[], current: Question) => {
+            const extended: AnswerExtended[] = current.answers.map(answer => {
+                return {
+                    answer: answer,
+                    question_id: current.question_id,
+                    text: current.text
+                }
+            })
+            return answers.concat(extended)
+        }, [])
 
 
     const paginationChange = (event: any, value: number) => {
@@ -81,41 +89,45 @@ function TaggingUI({dataset_id, questions, user_id}: Input) {
         })
     }
 
-    console.log(questions.slice(answers_per_page * (page - 1), endIndex(page)))
-
     return (
-        <TableContainer component={Paper} className={tableStyle.table}>
-            <Table className={classes.table} aria-label="customized table">
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell>Question</StyledTableCell>
-                        <StyledTableCell align="right">Answer</StyledTableCell>
-                        <StyledTableCell align="right">Misconceptions</StyledTableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
+        <Grid container direction={'row'} className={classes.root} spacing={10}>
+            <Grid item xs={6}>
+                <QuestionSelect
+                    questions={questions}
+                    selectedQuestion={selectedQuestion}
+                    setQuestionSelect={(value: number) => setSelectedQuestion(value)}/>
+            </Grid>
+            <Grid item xs={6}>
+                <List>
                     {
                         all_answers
                             .slice(answers_per_page * (page - 1), endIndex(page))
                             .map((answerExtended: AnswerExtended) =>
-                                <MisconceptionTagElement
-                                    key={dataset_id + "|" + answerExtended.question_id + "|" + answerExtended.answer.answer_id}
-                                    dataset_id={dataset_id}
-                                    question_id={answerExtended.question_id}
-                                    user_id={user_id}
-                                    enabled={true}
-                                    question_text={answerExtended.text}
-                                    answer={answerExtended.answer}
-                                    misconceptions_available={misconceptions_available}/>
+                                <ListItem key={answerExtended.answer.answer_id + '|' + answerExtended.answer.user_id}>
+                                    <TableContainer component={Paper}>
+                                        <Table aria-label="customized table">
+                                            <TableBody>
+                                                <MisconceptionTagElement
+                                                    key={dataset_id + "|" + answerExtended.question_id + "|" + answerExtended.answer.answer_id}
+                                                    dataset_id={dataset_id}
+                                                    question_id={answerExtended.question_id}
+                                                    user_id={user_id}
+                                                    enabled={true}
+                                                    answer={answerExtended.answer}
+                                                    misconceptions_available={misconceptions_available}/></TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </ListItem>
                             )
                     }
-                </TableBody>
-            </Table>
-            <StyledPagination count={
-                Math.trunc(total_answers / answers_per_page) +
-                (total_answers % answers_per_page == 0 ? 0 : 1)
-            } page={page} onChange={paginationChange} siblingCount={5}/>
-        </TableContainer>
+                </List>
+                <StyledPagination count={
+                    Math.trunc(total_answers / answers_per_page) +
+                    (total_answers % answers_per_page == 0 ? 0 : 1)
+                } page={page} onChange={paginationChange} siblingCount={5}/>
+            </Grid>
+        </Grid>
+
     )
 }
 
