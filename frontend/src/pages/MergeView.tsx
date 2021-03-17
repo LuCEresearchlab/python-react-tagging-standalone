@@ -8,7 +8,7 @@ import AnswersMerger from "../components/AnswersMerger";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 
 
-const { TAGGING_SERVICE_URL } = require('../../config.json')
+const {TAGGING_SERVICE_URL} = require('../../config.json')
 
 
 const useStyles = makeStyles(() =>
@@ -18,7 +18,7 @@ const useStyles = makeStyles(() =>
             textAlign: 'center',
             marginLeft: 'auto',
             marginRight: 'auto'
-        },
+        },s
     }),
 );
 

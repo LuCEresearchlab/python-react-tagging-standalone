@@ -1,6 +1,6 @@
 import React, {useState} from "react"
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import {JSONLoader} from "../helpers/LoaderHelper";
 import {Button, Chip, Popover} from "@material-ui/core";
@@ -40,7 +40,7 @@ interface ids_and_misconceptions {
 }
 
 
-function post(url: string, data: any){
+function post(url: string, data: any) {
     console.log('posting to ' + url)
     console.log(data)
     fetch(url, {
@@ -53,12 +53,21 @@ function post(url: string, data: any){
 }
 
 
-function get_millis(){
+function get_millis() {
     return new Date().getTime()
 }
 
 
-function MisconceptionTagElement({dataset_id, question_id, user_id, question_text, answer, misconceptions_available, enabled}: ids_and_misconceptions) {
+function MisconceptionTagElement(
+    {
+        dataset_id,
+        question_id,
+        user_id,
+        question_text,
+        answer,
+        misconceptions_available,
+        enabled
+    }: ids_and_misconceptions) {
 
     const classes = useStyles();
     const get_selected_misc_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + '/question/'
@@ -75,7 +84,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
 
     if (!loaded) {
         JSONLoader(get_selected_misc_url, (prev_tagged_answers: taggedAnswer[]) => {
-            if(prev_tagged_answers.length > 0){
+            if (prev_tagged_answers.length > 0) {
                 const previousTaggedAnswer: taggedAnswer = prev_tagged_answers[0]
 
                 setTags(previousTaggedAnswer.tags == null ? [] : previousTaggedAnswer.tags)
@@ -88,7 +97,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
     // popup stuff
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const handle_click_popup = (event:any) => {
+    const handle_click_popup = (event: any) => {
         setAnchorEl(event.currentTarget);
     };
 
@@ -131,7 +140,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
                 ranges={ranges}
                 enabled={enabled}
                 onTextHighlighted={(e: any) => {
-                    const newRange = {start:e.start, end:e.end, text:answer.data}
+                    const newRange = {start: e.start, end: e.end, text: answer.data}
                     const r = rangesCompressor(ranges, newRange)
 
                     setRanges([...r])

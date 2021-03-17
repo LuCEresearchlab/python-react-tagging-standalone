@@ -4,7 +4,8 @@ import {Question} from "../interfaces/Dataset";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
 interface SetQuestionSelectFunction {
-    setQuestionSelect(value:number): void,
+    setQuestionSelect(value: number): void,
+
     selectedQuestion: number,
     questions: Question[]
 }
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-function QuestionSelect({selectedQuestion, setQuestionSelect, questions}: SetQuestionSelectFunction){
+function QuestionSelect({selectedQuestion, setQuestionSelect, questions}: SetQuestionSelectFunction) {
 
     const classes = useStyles();
 
@@ -47,13 +48,13 @@ function QuestionSelect({selectedQuestion, setQuestionSelect, questions}: SetQue
                         id={'question-select'}
                         value={selectedQuestion}
                         onChange={(event) => {
-                            const newValue: number = typeof(event.target.value) == "string" ? parseInt(event.target.value) : 0
+                            const newValue: number = typeof (event.target.value) == "string" ? parseInt(event.target.value) : 0
                             setQuestionSelect(newValue)
                         }}
                     >{
                         questions.map((question, index) =>
                             <option key={question.question_id} value={index}>
-                                {index+1}
+                                {index + 1}
                             </option>
                         )
                     }

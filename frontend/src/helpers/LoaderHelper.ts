@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-export function JSONLoader(url:string, next:Function): void{
+export function JSONLoader(url: string, next: Function): void {
     fetch(url)
         .then(response => response.json())
         .then(json => {
@@ -27,5 +27,5 @@ export function useFetch<T>(url: string) {
         };
         fetchData()
     }, []);
-    return { response, error, isLoading };
+    return {response, error, isLoading};
 };

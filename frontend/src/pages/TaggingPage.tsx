@@ -5,18 +5,18 @@ import {useParams} from "react-router-dom";
 import {Dataset} from '../interfaces/Dataset'
 import TaggingUI from '../components/TaggingUI'
 
-const { TAGGING_SERVICE_URL } = require('../../config.json')
+const {TAGGING_SERVICE_URL} = require('../../config.json')
 
-function TaggingPage(){
+function TaggingPage() {
     const [dataset, setDataset] = useState<Dataset | undefined>(undefined)
     const [loaded, setLoaded] = useState<boolean>(false)
 
-    const { dataset_id, user_id }: {dataset_id:string, user_id:string} = useParams()
+    const {dataset_id, user_id}: { dataset_id: string, user_id: string } = useParams()
 
-    const url:string = TAGGING_SERVICE_URL + '/datasets/get-dataset/dataset/' + dataset_id
+    const url: string = TAGGING_SERVICE_URL + '/datasets/get-dataset/dataset/' + dataset_id
 
 
-    if(!loaded){
+    if (!loaded) {
         JSONLoader(url, (data: any) => {
             setDataset(data)
         })
