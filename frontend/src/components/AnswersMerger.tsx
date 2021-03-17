@@ -10,17 +10,14 @@ const {TAGGING_SERVICE_URL} = require('../../config.json')
 interface Input {
     dataset_id: string,
     question_id: string,
-    user_id: string,
-    selectedQuestion: number
+    user_id: string
 }
 
-function AnswersMerger({dataset_id, question_id, user_id, selectedQuestion}: Input) {
+function AnswersMerger({dataset_id, question_id, user_id}: Input) {
 
     const url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + '/question/' + question_id
 
     const response = useFetch<taggedAnswer[]>(url)
-
-    console.log(user_id, selectedQuestion)
 
 
     if (response.isLoading) return (<Grid container>Loading...</Grid>)
@@ -39,12 +36,11 @@ function AnswersMerger({dataset_id, question_id, user_id, selectedQuestion}: Inp
             return map
         }, new Map<string, taggedAnswer[]>())
 
-    console.log(groupedAnswers)
 
     return (
         <Grid container direction={'column'}>
             {
-                Array.from(groupedAnswers.entries()).map((entry:[string, taggedAnswer[]]) => {
+                Array.from(groupedAnswers.entries()).map((entry: [string, taggedAnswer[]]) => {
                         const answer_id = entry[0]
                         const answer_group = entry[1]
                         return <Grid item key={answer_id}><MisconceptionTagComparer

@@ -36,7 +36,7 @@ function MisconceptionTagComparer({answerGroup, user_id}: Input) {
 
     const conflicts: taggedAnswer[] = _get_conflicts(answerGroup, user_id)
 
-    if(conflicts.length === 0)
+    if (conflicts.length === 0)
         return <></>
 
     return (
