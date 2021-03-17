@@ -6,13 +6,9 @@ import {JSONLoader} from "../helpers/LoaderHelper";
 import MisconceptionTagElement from "./MisconceptionTagElement";
 import {StyledPagination} from "./StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
+import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
-
-interface MiscElem {
-    name: string,
-    description: string
-}
 
 interface Input {
     dataset_id: string,
@@ -79,7 +75,7 @@ function TaggingUI({dataset_id, questions, user_id}: Input) {
     if (!loaded) {  // load once per dataset
         JSONLoader(get_available_url, (avail_misconceptions: []) => {
             setMisconceptionsAvailable(
-                avail_misconceptions.map<string>((elem: MiscElem) => elem.name)
+                avail_misconceptions.map<string>((elem: MisconceptionElement) => elem.name)
             )
             setLoaded(true)
         })

@@ -6,6 +6,7 @@ import {JSONLoader} from "../helpers/LoaderHelper";
 import QuestionSelect from "../components/QuestionSelect";
 import AnswersMerger from "../components/AnswersMerger";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
+import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
@@ -30,20 +31,29 @@ function MergeView() {
 
     const [questions, setQuestions] = useState<Question[]>([])
     const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
-    const [loaded, setLoaded] = useState<boolean>(false)
+    const [misconceptionsAvailable, setMisconceptionsAvailable] = useState<string[]>([])
+    const [loaded, setLoaded] = useState<boolean[]>([false, false])
 
 
     const url = TAGGING_SERVICE_URL + '/datasets/get-dataset/dataset/' + dataset_id
+    const misconceptions_url = TAGGING_SERVICE_URL + '/progmiscon_api/misconceptions'
 
-    if (!loaded) {
+    if (!loaded[0]) {
         JSONLoader(url, (data: Dataset) => {
             setQuestions(data.questions)
             setSelectedQuestion(0)
-            setLoaded(true)
+            setLoaded([true, loaded[1]])
         })
     }
 
-    if (!loaded)
+    if(!loaded[1]){
+        JSONLoader(misconceptions_url, (data: MisconceptionElement[]) => {
+            setMisconceptionsAvailable(data.map<string>((elem: MisconceptionElement) => elem.name))
+            setLoaded([loaded[0], true])
+        })
+    }
+
+    if (!(loaded[0] && loaded[1]))
         return (
             <Container>
                 Loading...
@@ -63,6 +73,7 @@ function MergeView() {
                         dataset_id={dataset_id}
                         question_id={questions[selectedQuestion].question_id}
                         user_id={user_id}
+                        available_misconceptions={misconceptionsAvailable}
                     />
                 </Grid>
             </Grid>

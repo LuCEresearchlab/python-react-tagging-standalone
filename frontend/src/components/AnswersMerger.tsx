@@ -10,10 +10,11 @@ const {TAGGING_SERVICE_URL} = require('../../config.json')
 interface Input {
     dataset_id: string,
     question_id: string,
-    user_id: string
+    user_id: string,
+    available_misconceptions: string[]
 }
 
-function AnswersMerger({dataset_id, question_id, user_id}: Input) {
+function AnswersMerger({dataset_id, question_id, user_id, available_misconceptions}: Input) {
 
     const url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + '/question/' + question_id
 
@@ -46,6 +47,7 @@ function AnswersMerger({dataset_id, question_id, user_id}: Input) {
                         return <Grid item key={answer_id}><MisconceptionTagComparer
                             answerGroup={answer_group}
                             user_id={user_id}
+                            available_misconceptions={available_misconceptions}
                         /></Grid>
                     }
                 )

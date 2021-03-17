@@ -5,7 +5,8 @@ import MisconceptionTagElement from "./MisconceptionTagElement";
 
 interface Input {
     answerGroup: taggedAnswer[],
-    user_id: string
+    user_id: string,
+    available_misconceptions: string[]
 }
 
 function _get_conflicts(answerGroup: taggedAnswer[], user_id: string): taggedAnswer[] {
@@ -26,7 +27,7 @@ function _get_conflicts(answerGroup: taggedAnswer[], user_id: string): taggedAns
     return [my_answer, ...conflicts]
 }
 
-function MisconceptionTagComparer({answerGroup, user_id}: Input) {
+function MisconceptionTagComparer({answerGroup, user_id, available_misconceptions}: Input) {
 
     const [open, setOpen] = useState<boolean>(true);
 
@@ -62,7 +63,7 @@ function MisconceptionTagComparer({answerGroup, user_id}: Input) {
                                                         user_id: answer.user_id
                                                     }}
                                                 question_text={""}
-                                                misconceptions_available={[]}/>
+                                                misconceptions_available={available_misconceptions}/>
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
