@@ -21,4 +21,7 @@ def get_java_public_misconceptions():
     misconceptions = get_misconceptions()
     filtered = filter(lambda misc: misc['pl'] == 'Java' and misc['status'] == 'public', misconceptions)
     clean = map(lambda misc: {'name': misc['name'], 'description': misc['shortDescription']}, filtered)
-    return list(clean)
+    return [{
+               'name': 'NoMisconception',
+               'description': 'No Misconception'
+           }] + list(clean)

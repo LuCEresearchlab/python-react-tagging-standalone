@@ -5,13 +5,10 @@ import {StyledTableCell, useStyles} from "./StyledTable";
 import {JSONLoader} from "../helpers/LoaderHelper";
 import MisconceptionTagElement from "./MisconceptionTagElement";
 import {StyledPagination} from "./StyledPagination";
+import {createStyles, makeStyles} from "@material-ui/core/styles";
+import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
-
-interface MiscElem {
-    name:string,
-    description:string
-}
 
 interface Input {
     dataset_id: string,
@@ -25,14 +22,26 @@ interface AnswerExtended {
     text: string
 }
 
-function TaggingUI({dataset_id, questions, user_id}:Input) {
-    const classes = useStyles();
+const useTable = makeStyles(() =>
+    createStyles({
+        table: {
+            width: '90%',
+            textAlign: 'left',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    }),
+);
+
+function TaggingUI({dataset_id, questions, user_id}: Input) {
+    const classes = useStyles()
+    const tableStyle = useTable()
 
     const get_available_url = TAGGING_SERVICE_URL + '/progmiscon_api/misconceptions'
 
     const [misconceptions_available, setMisconceptionsAvailable] = useState<string[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
-    const [page, setPage] = useState<number>(1);
+    const [page, setPage] = useState<number>(1)
 
     const answers_per_page: number = 10
 
@@ -41,7 +50,7 @@ function TaggingUI({dataset_id, questions, user_id}:Input) {
         return total + current.answers.length
     }, 0)
 
-    const all_answers: AnswerExtended[] = questions.reduce((answers:AnswerExtended[], current: Question) => {
+    const all_answers: AnswerExtended[] = questions.reduce((answers: AnswerExtended[], current: Question) => {
         const extended: AnswerExtended[] = current.answers.map(answer => {
             return {
                 answer: answer,
@@ -57,25 +66,25 @@ function TaggingUI({dataset_id, questions, user_id}:Input) {
         setPage(value);
     };
 
-    const endIndex = (page:number) => {
+    const endIndex = (page: number) => {
         if (page * answers_per_page >= total_answers)
             return total_answers
-        return page* answers_per_page
+        return page * answers_per_page
     }
 
-    if(!loaded){  // load once per dataset
+    if (!loaded) {  // load once per dataset
         JSONLoader(get_available_url, (avail_misconceptions: []) => {
             setMisconceptionsAvailable(
-                avail_misconceptions.map<string>((elem:MiscElem) => elem.name)
+                avail_misconceptions.map<string>((elem: MisconceptionElement) => elem.name)
             )
             setLoaded(true)
         })
     }
 
-    console.log(questions.slice(answers_per_page*(page-1), endIndex(page)))
+    console.log(questions.slice(answers_per_page * (page - 1), endIndex(page)))
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} className={tableStyle.table}>
             <Table className={classes.table} aria-label="customized table">
                 <TableHead>
                     <TableRow>
@@ -87,16 +96,17 @@ function TaggingUI({dataset_id, questions, user_id}:Input) {
                 <TableBody>
                     {
                         all_answers
-                                .slice(answers_per_page*(page-1), endIndex(page))
-                                .map((answerExtended: AnswerExtended) =>
-                                    <MisconceptionTagElement
-                                        key={dataset_id + "|" + answerExtended.question_id + "|" + answerExtended.answer.answer_id}
-                                        dataset_id={dataset_id}
-                                        question_id={answerExtended.question_id}
-                                        user_id={user_id}
-                                        question_text={answerExtended.text}
-                                        answer={answerExtended.answer}
-                                        misconceptions_available={misconceptions_available}/>
+                            .slice(answers_per_page * (page - 1), endIndex(page))
+                            .map((answerExtended: AnswerExtended) =>
+                                <MisconceptionTagElement
+                                    key={dataset_id + "|" + answerExtended.question_id + "|" + answerExtended.answer.answer_id}
+                                    dataset_id={dataset_id}
+                                    question_id={answerExtended.question_id}
+                                    user_id={user_id}
+                                    enabled={true}
+                                    question_text={answerExtended.text}
+                                    answer={answerExtended.answer}
+                                    misconceptions_available={misconceptions_available}/>
                             )
                     }
                 </TableBody>

@@ -10,13 +10,13 @@ import Highlightable from "highlightable";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
-function TaggingDetailPage(){
+function TaggingDetailPage() {
 
-    const {dataset_id, tag} : {dataset_id:string, tag: string} = useParams()
+    const {dataset_id, tag}: { dataset_id: string, tag: string } = useParams()
 
     const classes = useStyles();
 
-    const get_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/' + dataset_id + "/" + tag
+    const get_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + "/tag/" + tag
 
     const [answers, setAnswers] = useState<extendedTaggedAnswer[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
@@ -56,7 +56,7 @@ function TaggingDetailPage(){
                                     <StyledTableCell align={"left"}>{answer.user_id}</StyledTableCell>
                                     <StyledTableCell align={"left"}>{answer.tags.join(", ")}</StyledTableCell>
                                 </StyledTableRow>
-                                )
+                            )
                     }
                 </TableBody>
             </Table>

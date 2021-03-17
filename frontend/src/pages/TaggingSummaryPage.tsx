@@ -48,7 +48,7 @@ function TaggingSummaryPage() {
     const [loaded, setLoaded] = useState<boolean>(false)
 
 
-    const get_url = TAGGING_SERVICE_URL + '/datasets/download/' + dataset_id
+    const get_url = TAGGING_SERVICE_URL + '/datasets/download/dataset/' + dataset_id
 
     if (!loaded) {
         JSONLoader(get_url, (data: taggedAnswer[]) => {

@@ -1,6 +1,6 @@
 import React, {useState} from "react"
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import {JSONLoader} from "../helpers/LoaderHelper";
 import {Button, Chip, Popover} from "@material-ui/core";
@@ -35,11 +35,12 @@ interface ids_and_misconceptions {
     user_id: string,
     answer: Answer,
     question_text: string,
-    misconceptions_available: string[]
+    misconceptions_available: string[],
+    enabled: boolean
 }
 
 
-function post(url: string, data: any){
+function post(url: string, data: any) {
     console.log('posting to ' + url)
     console.log(data)
     fetch(url, {
@@ -52,15 +53,25 @@ function post(url: string, data: any){
 }
 
 
-function get_millis(){
+function get_millis() {
     return new Date().getTime()
 }
 
 
-function MisconceptionTagElement({dataset_id, question_id, user_id, question_text, answer, misconceptions_available}: ids_and_misconceptions) {
+function MisconceptionTagElement(
+    {
+        dataset_id,
+        question_id,
+        user_id,
+        question_text,
+        answer,
+        misconceptions_available,
+        enabled
+    }: ids_and_misconceptions) {
 
     const classes = useStyles();
-    const get_selected_misc_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/' + dataset_id + '/' + question_id + '/' + answer.answer_id + '/' + user_id
+    const get_selected_misc_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + '/question/'
+        + question_id + '/answer/' + answer.answer_id + '/user/' + user_id
     const post_answer_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer'
 
     const [tags, setTags] = useState<string[]>([])
@@ -73,13 +84,11 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
 
     if (!loaded) {
         JSONLoader(get_selected_misc_url, (prev_tagged_answers: taggedAnswer[]) => {
-            if(prev_tagged_answers.length > 0){
+            if (prev_tagged_answers.length > 0) {
                 const previousTaggedAnswer: taggedAnswer = prev_tagged_answers[0]
 
                 setTags(previousTaggedAnswer.tags == null ? [] : previousTaggedAnswer.tags)
                 setRanges(previousTaggedAnswer.highlighted_ranges == null ? [] : previousTaggedAnswer.highlighted_ranges)
-
-                console.log(previousTaggedAnswer)
             }
             setLoaded(true)
         })
@@ -88,7 +97,7 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
     // popup stuff
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const handle_click_popup = (event:any) => {
+    const handle_click_popup = (event: any) => {
         setAnchorEl(event.currentTarget);
     };
 
@@ -107,73 +116,64 @@ function MisconceptionTagElement({dataset_id, question_id, user_id, question_tex
             setStartTaggingTime(get_millis())
     }
 
+
+    const post_answer = (submitted_ranges: HighlightRange[], given_tags: string[]) => {
+        post(post_answer_url,
+            {
+                dataset_id,
+                question_id,
+                answer_id: answer.answer_id,
+                user_id: user_id,
+                tags: given_tags,
+                tagging_time: (get_millis() - startTaggingTime),
+                highlighted_ranges: submitted_ranges,
+                question_text,
+                answer_text: answer.data
+            }
+        )
+    }
+
     return (
         <StyledTableRow onClick={tagging_time_handler}>
-            <StyledTableCell align="right">{question_text}</StyledTableCell>
+            {question_text.length > 0 ? <StyledTableCell align="right">{question_text}</StyledTableCell> : <></>}
             <StyledTableCell component="th" scope="row"><Highlightable
                 ranges={ranges}
-                enabled={true}
+                enabled={enabled}
                 onTextHighlighted={(e: any) => {
-                    const newRange = {start:e.start, end:e.end, text:answer.data}
+                    const newRange = {start: e.start, end: e.end, text: answer.data}
                     const r = rangesCompressor(ranges, newRange)
 
-                    setRanges(r)
-
-                    post(post_answer_url,
-                        {
-                            dataset_id,
-                            question_id,
-                            answer_id: answer.answer_id,
-                            user_id: user_id,
-                            tags: tags,
-                            tagging_time: (get_millis() - startTaggingTime),
-                            highlighted_ranges: r
-                        }
-                    )
+                    setRanges([...r])
+                    post_answer(r, tags)
                 }}
                 text={answer.data}
                 highlightStyle={{
                     backgroundColor: '#ffcc80'
                 }}
-            /><Button onClick={() => {
-                setRanges([])
-                post(post_answer_url,
-                    {
-                        dataset_id,
-                        question_id,
-                        answer_id: answer.answer_id,
-                        user_id: user_id,
-                        tags: tags,
-                        tagging_time: (get_millis() - startTaggingTime),
-                        highlighted_ranges: []
-                    }
-                )
-            }}>Clear</Button></StyledTableCell>
+            />{
+                enabled ?
+                    <Button hidden={!enabled} onClick={() => {
+                        if (enabled) {
+                            setRanges([])
+                            post_answer([], tags)
+                        }
+                    }}>Clear</Button> :
+                    <></>
+            }</StyledTableCell>
             <StyledTableCell align="right"><Autocomplete
                 className={classes.root}
                 multiple
                 limitTags={2}
-                id="multiple-limit-tags"
                 options={misconceptions_available}
-                // getOptionLabel={(option) => option.name}
+                disabled={!enabled}
                 value={tags}
                 renderInput={(params) => (
                     <TextField {...params} variant="outlined" label="Misconceptions" placeholder="Misconceptions"/>
                 )}
                 onChange={(_, values) => {
-                    if (loaded) {
+                    if (enabled && loaded) {
                         setTags(values)
-                        post(post_answer_url,
-                            {
-                                dataset_id,
-                                question_id,
-                                answer_id: answer.answer_id,
-                                user_id: user_id,
-                                tags: values,
-                                tagging_time: (get_millis() - startTaggingTime),
-                                highlighted_ranges: ranges
-                            }
-                        )
+                        post_answer(ranges, values)
                     }
                 }}
                 renderTags={(tagValue, getTagProps) =>

@@ -8,22 +8,18 @@ import {downloadDatasetHelper} from "../helpers/DownloadHelper";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
-const selectDataset = (id: string, router: any) => {
-    // request user input
-    let temp = requestUserId()
-    while(temp == null || temp == ''){ temp = requestUserId()}
-    router.push("/taggingUI/tagView/" + id + '/' + temp)
-}
 
-const visualizeDataset = (id:string, router: any) => {
+const redirect = (id: string, url: string, router: any) => {
     // request user input
     let temp = requestUserId()
-    while(temp == null || temp == ''){ temp = requestUserId()}
-    router.push("/taggingUI/summary/" + id + '/' + temp)
+    while (temp == null || temp == '') {
+        temp = requestUserId()
+    }
+    router.push(url + id + '/' + temp)
 }
 
 function requestUserId() {
-    const user_id:string | null = prompt("Enter your username", "user_id");
+    const user_id: string | null = prompt("Enter your username", "user_id");
     if (user_id == null || user_id == "") {
         console.log("No user_id entered")
     }
@@ -33,14 +29,14 @@ function requestUserId() {
 function DatasetSelection() {
     const router = useHistory() // TODO: use router from next once integrated, fix import
 
-    const [datasets, setDatasets] = useState([]);
+    const [datasets, setDatasets] = useState([])
     const [loaded, setLoaded] = useState(false)
 
     const classes = useStyles();
     const url = TAGGING_SERVICE_URL + "/datasets/list"
 
-    if(!loaded) {
-        JSONLoader(url, (data:[]) => {
+    if (!loaded) {
+        JSONLoader(url, (data: []) => {
             setDatasets(data)
         })
         setLoaded(true)
@@ -57,16 +53,28 @@ function DatasetSelection() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {datasets.map((row: { id:string, name: string, date: string }) => (
-                        <StyledTableRow key={row.id} >
-                            <StyledTableCell component="th" scope="row" onClick={() => selectDataset(row.id, router)}>
+                    {datasets.map((row: { id: string, name: string, date: string }) => (
+                        <StyledTableRow key={row.id}>
+                            <StyledTableCell component="th" scope="row" onClick={
+                                () => redirect(row.id, "/taggingUI/tagView/", router)
+                            }>
                                 {row.name}
                             </StyledTableCell>
-                            <StyledTableCell align="right" onClick={() => selectDataset(row.id, router)}>{row.date}</StyledTableCell>
-                            <StyledTableCell align={"right"}><Button variant="outlined" color="primary" href="#outlined-buttons" onClick={() => downloadDatasetHelper(row.id, row.name)}>
+                            <StyledTableCell align="right" onClick={
+                                () => redirect(row.id, "/taggingUI/tagView/", router)
+                            }>{row.date}</StyledTableCell>
+                            <StyledTableCell align={"right"}><Button variant="outlined" color="primary"
+                                                                     href="#outlined-buttons"
+                                                                     onClick={() => downloadDatasetHelper(row.id, row.name)}>
                                 Download
-                            </Button><Button variant="outlined" color="primary" href="#outlined-buttons" onClick={() => visualizeDataset(row.id, router)}>
+                            </Button><Button variant="outlined" color="primary" onClick={
+                                () => redirect(row.id, "/taggingUI/summary/", router)
+                            }>
                                 Summary
+                            </Button><Button variant="outlined" color="primary" onClick={
+                                () => redirect(row.id, "/taggingUI/mergeView/", router)
+                            }>
+                                Merge Data
                             </Button></StyledTableCell>
                         </StyledTableRow>
                     ))}

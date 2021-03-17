@@ -22,8 +22,7 @@ DATASET_DESC = api.model('Dataset Description', {
 
 ANSWER = api.model('Answer', {
     'answer_id': fields.String(required=True, readonly=True, description='ID of the Answer'),
-    'data': fields.String(required=True, readonly=True, description='Text of the Answer'),
-    'user_id': fields.String(required=False, readonly=True, description='ID of the user posting the answer'),
+    'data': fields.String(required=True, readonly=True, description='Text of the Answer')
 })
 
 QUESTION = api.model('Question', {
@@ -85,13 +84,12 @@ def _get_dataset_id_to_filename_name_map():
     folder = current_app.config['UPLOAD_FOLDER']
     for root, dirs, files in os.walk(folder):
         for file_name in files:
-            relative_path = os.path.join(root, file_name)
-            file_path = pathlib.Path(relative_path)
+            file_path = pathlib.Path(os.path.join(root, file_name)).absolute()
             if file_path.exists() and file_name.endswith('.json'):
                 with open(file_path, 'r') as dataset:
                     content = json.loads(dataset.read())
 
-                    id_to_dataset_filename[content['dataset_id']] = relative_path
+                    id_to_dataset_filename[content['dataset_id']] = file_path
                     id_to_dataset_name[content['dataset_id']] = content['name']
     return id_to_dataset_filename, id_to_dataset_name
 
@@ -110,13 +108,12 @@ def _load_dataset_name_list():
         if filename == '.gitignore' or filename == '.DS_Store':
             continue
 
-        relative_path = os.path.join(folder, filename)
-        file_path = pathlib.Path(relative_path)
+        file_path = pathlib.Path(os.path.join(folder, filename)).absolute()
 
         dataset_id_to_filename, dataset_id_to_name = _get_dataset_id_to_filename_name_map()
         filename_to_dataset_id = {v: k for k, v in dataset_id_to_filename.items()}
 
-        dataset_id = filename_to_dataset_id[relative_path]
+        dataset_id = filename_to_dataset_id[file_path]
 
         datasets.append({
             'id': dataset_id,
@@ -153,7 +150,7 @@ class Upload(Resource):
         return f'uploaded file: {uploaded_file.name} successfully'
 
 
-@api.route('/get-dataset/<string:dataset_id>')
+@api.route('/get-dataset/dataset/<string:dataset_id>')
 @api.doc(description='get content of uploaded file')
 class UploadedDataset(Resource):
     @api.doc(description='Get content of specific dataset')
@@ -174,7 +171,7 @@ def _populate_retrieving_maps(dataset_id):
     return id_to_question_data, id_to_answer_data
 
 
-@api.route('/download/<string:dataset_id>')
+@api.route('/download/dataset/<string:dataset_id>')
 @api.doc(description='Get all tagged answers in specified dataset in a downloadable format',
          params={'dataset_id': 'ID of the dataset'})
 class TaggedAnswersDownloadAPI(Resource):
@@ -197,7 +194,7 @@ class TaggedAnswersDownloadAPI(Resource):
         return formatted_values
 
 
-@api.route('/tagged-answer/<string:dataset_id>/<string:misconception>')
+@api.route('/tagged-answer/dataset/<string:dataset_id>/tag/<string:misconception>')
 @api.doc(description='Get all tagged answers in specified dataset with specific misconception',
          params={
              'dataset_id': 'ID of the dataset',
