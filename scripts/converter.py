@@ -56,16 +56,19 @@ with open(quiz_file) as jsonfile:
     questions = output['questions']
 
     for question_nr, question_element in enumerate(question_list):
-        data = question_element['contents']
-        question_id = question_element['_id']['$oid']
+        question_text = question_element['contents']
+        for option in question_element['options']:
+            # append option text to the one from the question
+            extended_question = question_text + '\nOption:\n' + option['contents']
+            option_id = option['_id']['$oid']
 
-        dataset.loc[dataset['question'] == question_nr, 'question_id'] = question_id
-        dataset.loc[dataset['question_id'] == question_id, 'text'] = data
-        questions.append({
-            'question_id': question_id,
-            'text': data[3:-3],  # skip ```
-            'answers': []
-        })
+            dataset.loc[dataset['question'] == question_nr, 'question_id'] = option_id
+            dataset.loc[dataset['question_id'] == option_id, 'text'] = extended_question
+            questions.append({
+                'question_id': option_id,
+                'text': extended_question,
+                'answers': []
+            })
 
     dataset['text'] = dataset['text'].astype('category')
     dataset['question_id'] = dataset['question_id'].astype('category')
