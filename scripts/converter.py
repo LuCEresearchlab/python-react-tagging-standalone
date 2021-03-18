@@ -22,23 +22,19 @@ cols = ['question', 'option', 'isCorrect', 'explanation']
 
 dataset = pd.read_excel(filepath, usecols=cols)
 # drop invalid columns
-dataset = dataset.dropna(axis='rows', subset=['question'])
+dataset = dataset.dropna(axis='rows', subset=['question', 'explanation'])
 
 # remove comma
 dataset['question'] = dataset['question'].astype(np.int8)
 dataset['option'] = dataset['option'].astype(np.int8)
 
-# fix for no explanation
-dataset['data'] = dataset['explanation'].fillna('').astype('category')
+dataset.rename(columns={'explanation': 'data'}, inplace=True)
 
-# drop unused columns
-dataset.drop(['explanation'], axis='columns', inplace=True)
 
 # create columns
 dataset['text'] = pd.Series(dtype=object)
 dataset['question_id'] = pd.Series(dtype=object)
 dataset['question_option_index'] = pd.Series(dtype=object)
-
 
 output = {}
 
@@ -85,8 +81,6 @@ dataset.drop(['option'], axis='columns', inplace=True)
 # drop questions not in session file
 dataset = dataset.dropna(axis='rows', subset=['question_id', 'text'])
 
-dataset['question_option_index'] = dataset['question_option_index'].astype(np.int8)
-
 # build output
 for i, row in dataset.iterrows():
     answer = {
@@ -99,4 +93,3 @@ for i, row in dataset.iterrows():
 # Write the object to file.
 with open(output['name'] + '.json', 'w') as jsonFile:
     json.dump(output, jsonFile)
-
