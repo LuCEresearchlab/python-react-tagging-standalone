@@ -74,6 +74,11 @@ function TaggingUI({dataset_id, questions, user_id}: Input) {
         setPage(value);
     };
 
+    const selectedChange = (value: number) => {
+        setSelectedQuestion(value)
+        setPage(1)  // fix page selected on question change
+    }
+
     const endIndex = (page: number) => {
         if (page * answers_per_page >= total_answers)
             return total_answers
@@ -95,10 +100,10 @@ function TaggingUI({dataset_id, questions, user_id}: Input) {
                 <QuestionSelect
                     questions={questions}
                     selectedQuestion={selectedQuestion}
-                    setQuestionSelect={(value: number) => setSelectedQuestion(value)}/>
+                    setQuestionSelect={selectedChange}/>
             </Grid>
             <Grid item xs={6}>
-                <List>
+                <List key={'list|answers|'+ selectedQuestion}>
                     {
                         all_answers
                             .slice(answers_per_page * (page - 1), endIndex(page))
@@ -121,10 +126,15 @@ function TaggingUI({dataset_id, questions, user_id}: Input) {
                             )
                     }
                 </List>
-                <StyledPagination count={
-                    Math.trunc(total_answers / answers_per_page) +
-                    (total_answers % answers_per_page == 0 ? 0 : 1)
-                } page={page} onChange={paginationChange} siblingCount={5}/>
+                <StyledPagination
+                    count={
+                        Math.trunc(total_answers / answers_per_page) +
+                        (total_answers % answers_per_page == 0 ? 0 : 1)
+                    }
+                    page={page}
+                    onChange={paginationChange}
+                    siblingCount={5}
+                />
             </Grid>
         </Grid>
 
