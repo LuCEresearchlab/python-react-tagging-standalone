@@ -1,9 +1,7 @@
 import React, {useState} from "react"
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import {JSONLoader} from "../helpers/LoaderHelper";
-import {Button, Chip, Popover} from "@material-ui/core";
+import {Button} from "@material-ui/core";
 import {HighlightRange} from "../interfaces/HighlightRange";
 import {StyledTableCell, StyledTableRow} from "./StyledTable";
 import {taggedAnswer} from "../interfaces/TaggedAnswer";
@@ -13,13 +11,14 @@ import {Answer} from "../interfaces/Dataset";
 // @ts-ignore
 import Highlightable from "highlightable";
 import {rangesCompressor} from "../util/RangeCompressor";
+import SingleTagSelector from "./SingleTagSelector";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            width: 500,
+            width: 300,
             '& > * + *': {
                 marginTop: theme.spacing(3),
             },
@@ -72,7 +71,7 @@ function MisconceptionTagElement(
         + question_id + '/answer/' + answer.answer_id + '/user/' + user_id
     const post_answer_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer'
 
-    const [tags, setTags] = useState<string[]>([])
+    const [tags, setTags] = useState<(string | null)[]>([])
     const [ranges, setRanges] = useState<HighlightRange[]>([])
 
     const [startTaggingTime, setStartTaggingTime] = useState<number>(0)
@@ -84,28 +83,16 @@ function MisconceptionTagElement(
         JSONLoader(get_selected_misc_url, (prev_tagged_answers: taggedAnswer[]) => {
             if (prev_tagged_answers.length > 0) {
                 const previousTaggedAnswer: taggedAnswer = prev_tagged_answers[0]
+                const previous_tags = previousTaggedAnswer.tags == null || previousTaggedAnswer.tags.length == 0 ?
+                    [null] :
+                    previousTaggedAnswer.tags
 
-                setTags(previousTaggedAnswer.tags == null ? [] : previousTaggedAnswer.tags)
+                setTags(previous_tags)
                 setRanges(previousTaggedAnswer.highlighted_ranges == null ? [] : previousTaggedAnswer.highlighted_ranges)
             }
             setLoaded(true)
         })
     }
-
-    // popup stuff
-    const [anchorEl, setAnchorEl] = useState(null);
-
-    const handle_click_popup = (event: any) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handle_close_popup = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? "simple-popover" : undefined;
-    // end popup stuff
 
 
     // time taken setup
@@ -115,14 +102,14 @@ function MisconceptionTagElement(
     }
 
 
-    const post_answer = (submitted_ranges: HighlightRange[], given_tags: string[]) => {
+    const post_answer = (submitted_ranges: HighlightRange[], given_tags:  (string | null)[]) => {
         post(post_answer_url,
             {
                 dataset_id,
                 question_id,
                 answer_id: answer.answer_id,
                 user_id: user_id,
-                tags: given_tags,
+                tags: given_tags.filter(value => value != null),
                 tagging_time: (get_millis() - startTaggingTime),
                 highlighted_ranges: submitted_ranges,
                 answer_text: answer.data
@@ -156,50 +143,27 @@ function MisconceptionTagElement(
                     }}>Clear</Button> :
                     <></>
             }</StyledTableCell>
-            <StyledTableCell align="right"><Autocomplete
-                className={classes.root}
-                multiple
-                limitTags={2}
-                options={misconceptions_available}
-                disabled={!enabled}
-                value={tags}
-                renderInput={(params) => (
-                    <TextField {...params} variant="outlined" label="Misconceptions" placeholder="Misconceptions"/>
-                )}
-                onChange={(_, values) => {
-                    if (enabled && loaded) {
-                        setTags(values)
-                        post_answer(ranges, values)
-                    }
-                }}
-                renderTags={(tagValue, getTagProps) =>
-                    tagValue.map((option, index) => (
-                        <div key={option}>
-                            <Chip
-                                label={option}
-                                {...getTagProps({index})}
-                                onClick={handle_click_popup}
-                            />
-                            <Popover
-                                id={id}
-                                open={open}
-                                anchorEl={anchorEl}
-                                onClose={handle_close_popup}
-                                anchorOrigin={{
-                                    vertical: "bottom",
-                                    horizontal: "center"
-                                }}
-                                transformOrigin={{
-                                    vertical: "top",
-                                    horizontal: "center"
-                                }}
-                            >
-                                <iframe title={option} width="800" height="800"
-                                        src={"https://progmiscon.org/iframe/misconceptions/Java/" + option}/>
-                            </Popover></div>
-                    ))
+            <StyledTableCell align="right" className={classes.root}>
+                {
+                    loaded ?
+                    [...Array( (tags.length) > 0 ? tags.length : 1)].map((_, index) =>
+                        <SingleTagSelector
+                            key={"tag-selector-" + index}
+                            misconceptions_available={misconceptions_available}
+                            enabled={enabled}
+                            handled_element={index}
+                            tags={tags}
+                            setTagElement={(element: (string | null), index: number) => {
+                                let tmp_tags: (string | null)[] = [...tags]
+                                tmp_tags.splice(index, 1, element)
+                                setTags(tmp_tags)
+                                post_answer(ranges, tmp_tags)
+                            }}
+                        />
+                    )
+                    : <></>
                 }
-            /></StyledTableCell>
+            </StyledTableCell>
         </StyledTableRow>
     )
 }
