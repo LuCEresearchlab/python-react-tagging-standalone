@@ -55,6 +55,10 @@ function get_millis() {
     return new Date().getTime()
 }
 
+function _is_no_misconception(tag: (string | null)): boolean {
+    return tag != null && ("NoMisconception".localeCompare(tag) == 0)
+}
+
 
 function MisconceptionTagElement(
     {
@@ -78,6 +82,8 @@ function MisconceptionTagElement(
 
     const [loaded, setLoaded] = useState<boolean>(false)
 
+    const misconceptions_available_without_no_misc = misconceptions_available.slice(1)
+
 
     if (!loaded) {
         JSONLoader(get_selected_misc_url, (prev_tagged_answers: taggedAnswer[]) => {
@@ -85,7 +91,10 @@ function MisconceptionTagElement(
                 const previousTaggedAnswer: taggedAnswer = prev_tagged_answers[0]
                 const previous_tags = previousTaggedAnswer.tags == null || previousTaggedAnswer.tags.length == 0 ?
                     [null] :
-                    previousTaggedAnswer.tags
+                    _is_no_misconception(previousTaggedAnswer.tags[0]) ?
+                        previousTaggedAnswer.tags :
+                        [...previousTaggedAnswer.tags, null]  // append null to allow inserting
+
 
                 setTags(previous_tags)
                 setRanges(previousTaggedAnswer.highlighted_ranges == null ? [] : previousTaggedAnswer.highlighted_ranges)
@@ -146,21 +155,52 @@ function MisconceptionTagElement(
             <StyledTableCell align="right" className={classes.root}>
                 {
                     loaded ?
-                    [...Array( (tags.length) > 0 ? tags.length : 1)].map((_, index) =>
-                        <SingleTagSelector
-                            key={"tag-selector-" + index}
-                            misconceptions_available={misconceptions_available}
-                            enabled={enabled}
-                            handled_element={index}
-                            tags={tags}
-                            setTagElement={(element: (string | null), index: number) => {
-                                let tmp_tags: (string | null)[] = [...tags]
-                                tmp_tags.splice(index, 1, element)
-                                setTags(tmp_tags)
-                                post_answer(ranges, tmp_tags)
-                            }}
-                        />
-                    )
+                        <>
+                            <>
+                                <SingleTagSelector
+                                    key={"tag-selector-0"}
+                                    misconceptions_available={misconceptions_available}
+                                    enabled={enabled}
+                                    handled_element={0}
+                                    tags={tags}
+                                    setTagElement={(element: (string | null), index: number) => {
+                                        let tmp_tags: (string | null)[] = [...tags]
+                                        tmp_tags.splice(index, 1, element)
+                                        // added tag, should increase size
+                                        if(tmp_tags.length == 1 && element != null)
+                                            tmp_tags.push(null)
+                                        // removed tag, should decrease
+                                        if(tmp_tags.length >= 2 && element == null)
+                                            tmp_tags.splice(index, 1)
+                                        if(element != null && _is_no_misconception(element))
+                                            tmp_tags = ["NoMisconception"]
+                                        setTags(tmp_tags)
+                                        post_answer(ranges, tmp_tags)
+                                    }}
+                                />
+                            </>
+                            {
+                                [...Array((tags.length) > 1 ? tags.length - 1 : 0)].map((_, index) =>
+                                    <React.Fragment key={"tag-selector-" + (index + 1)}>
+                                        <SingleTagSelector
+                                            misconceptions_available={misconceptions_available_without_no_misc}
+                                            enabled={enabled}
+                                            handled_element={(index + 1)}
+                                            tags={tags}
+                                            setTagElement={(element: (string | null), index: number) => {
+                                                let tmp_tags: (string | null)[] = [...tags]
+                                                tmp_tags.splice(index, 1, element)
+                                                setTags(tmp_tags)
+                                                post_answer(ranges, tmp_tags)
+                                            }}
+                                        />
+                                        <Button
+                                            key={"button-" + (index + 1)}
+                                        >index {index + 1}</Button>
+                                    </React.Fragment>
+                                )
+                            }
+                        </>
                     : <></>
                 }
             </StyledTableCell>
