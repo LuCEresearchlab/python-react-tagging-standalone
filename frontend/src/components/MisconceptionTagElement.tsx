@@ -186,26 +186,27 @@ function MisconceptionTagElement(
                                 />
                             </>
                             {
-                                [...Array((tags.length) > 1 ? tags.length - 1 : 0)].map((_, index) =>
-                                    <React.Fragment key={"tag-selector-" + (index + 1)}>
-                                        <SingleTagSelector
-                                            misconceptions_available={misconceptions_available_without_no_misc}
-                                            enabled={enabled}
-                                            handled_element={(index + 1)}
-                                            tags={tags}
-                                            setTagElement={(element: (string | null), index: number) => {
-                                                const tmp_tags: (string | null)[] =
-                                                    compute_misc_list(tags, element, index)
+                                [...Array((tags.length) > 1 ? Math.min(tags.length - 1, 4) : 0)]
+                                    .map((_, index) =>
+                                        <React.Fragment key={"tag-selector-" + (index + 1)}>
+                                            <SingleTagSelector
+                                                misconceptions_available={misconceptions_available_without_no_misc}
+                                                enabled={enabled}
+                                                handled_element={(index + 1)}
+                                                tags={tags}
+                                                setTagElement={(element: (string | null), index: number) => {
+                                                    const tmp_tags: (string | null)[] =
+                                                        compute_misc_list(tags, element, index)
 
-                                                setTags(tmp_tags)
-                                                post_answer(ranges, tmp_tags)
-                                            }}
-                                        />
-                                        <Button
-                                            key={"button-" + (index + 1)}
-                                        >index {index + 1}</Button>
-                                    </React.Fragment>
-                                )
+                                                    setTags(tmp_tags)
+                                                    post_answer(ranges, tmp_tags)
+                                                }}
+                                            />
+                                            <Button
+                                                key={"button-" + (index + 1)}
+                                            >index {index + 1}</Button>
+                                        </React.Fragment>
+                                    )
                             }
                         </>
                     : <></>
