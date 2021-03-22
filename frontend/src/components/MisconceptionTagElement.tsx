@@ -12,6 +12,7 @@ import {Answer} from "../interfaces/Dataset";
 import Highlightable from "highlightable";
 import {rangesCompressor} from "../util/RangeCompressor";
 import SingleTagSelector from "./SingleTagSelector";
+import MisconceptionInfoButton from "./MisconceptionInfoButton";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
@@ -189,9 +190,10 @@ function MisconceptionTagElement(
                                         post_answer(ranges, tmp_tags)
                                     }}
                                 />
-                                <Button
-                                    key={"button-" + 0}
-                                >index {0}</Button>
+                                <MisconceptionInfoButton
+                                    tags={tags}
+                                    handled_element={0}
+                                />
                             </div>
                             {
                                 [...Array((tags.length) > 1 ? Math.min(tags.length - 1, 4) : 0)]
@@ -210,9 +212,10 @@ function MisconceptionTagElement(
                                                     post_answer(ranges, tmp_tags)
                                                 }}
                                             />
-                                            <Button
-                                                key={"button-" + (index + 1)}
-                                            >index {index + 1}</Button>
+                                            <MisconceptionInfoButton
+                                                tags={tags}
+                                                handled_element={(index + 1)}
+                                            />
                                         </div>
                                     )
                             }
