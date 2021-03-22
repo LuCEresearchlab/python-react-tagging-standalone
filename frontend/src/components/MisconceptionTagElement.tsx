@@ -126,6 +126,18 @@ function MisconceptionTagElement(
         )
     }
 
+    // computes updates for the whole misconception list to handle common functionality of increase/decrease of size
+    const compute_misc_list = (tags: (string | null)[], element: (string | null), index: number): (string | null)[] => {
+        let tmp_tags: (string | null)[] = [...tags]
+        tmp_tags.splice(index, 1, element)
+        if(tmp_tags.length == (index+1) && element != null)
+            tmp_tags.push(null)
+        // removed tag, should decrease
+        if(tmp_tags.length >= (index+2) && element == null)
+            tmp_tags.splice(index, 1)
+        return tmp_tags
+    }
+
     return (
         <StyledTableRow onClick={tagging_time_handler}>
             <StyledTableCell component="th" scope="row"><Highlightable
@@ -164,14 +176,8 @@ function MisconceptionTagElement(
                                     handled_element={0}
                                     tags={tags}
                                     setTagElement={(element: (string | null), index: number) => {
-                                        let tmp_tags: (string | null)[] = [...tags]
-                                        tmp_tags.splice(index, 1, element)
-                                        // added tag, should increase size
-                                        if(tmp_tags.length == 1 && element != null)
-                                            tmp_tags.push(null)
-                                        // removed tag, should decrease
-                                        if(tmp_tags.length >= 2 && element == null)
-                                            tmp_tags.splice(index, 1)
+                                        let tmp_tags: (string | null)[] = compute_misc_list(tags, element, index)
+                                        // handle specific case of NoMisconception, only possible in first tag
                                         if(element != null && _is_no_misconception(element))
                                             tmp_tags = ["NoMisconception"]
                                         setTags(tmp_tags)
@@ -188,13 +194,8 @@ function MisconceptionTagElement(
                                             handled_element={(index + 1)}
                                             tags={tags}
                                             setTagElement={(element: (string | null), index: number) => {
-                                                let tmp_tags: (string | null)[] = [...tags]
-                                                tmp_tags.splice(index, 1, element)
-                                                if(tmp_tags.length == (index+1) && element != null)
-                                                    tmp_tags.push(null)
-                                                // removed tag, should decrease
-                                                if(tmp_tags.length >= (index+2) && element == null)
-                                                    tmp_tags.splice(index, 1)
+                                                const tmp_tags: (string | null)[] =
+                                                    compute_misc_list(tags, element, index)
 
                                                 setTags(tmp_tags)
                                                 post_answer(ranges, tmp_tags)
