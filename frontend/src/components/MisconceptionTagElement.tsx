@@ -153,12 +153,9 @@ function MisconceptionTagElement(
     }
 
     const get_color = (misc: (string | null)) => {
-        console.log("\ncolor for ", misc)
         if(misc == null)
             return ""
         const found = misconceptions_available.find((elem: MisconceptionElement) => elem.name.localeCompare(misc) == 0)
-
-        console.log(found ? found.color : "undefined")
         return found ? found.color : ""
     }
 
