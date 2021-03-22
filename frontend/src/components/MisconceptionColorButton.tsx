@@ -2,11 +2,15 @@ import React from "react";
 import {FiberManualRecord} from "@material-ui/icons";
 import {Button} from "@material-ui/core";
 
+interface Input {
+    color: string
+}
 
-function MisconceptionColorButton(){
+function MisconceptionColorButton({color}: Input){
+
     return(
         <Button title={"Select Misconception for highlighting"} disabled={true}>
-            <FiberManualRecord style={{color: "red"}}/>
+            <FiberManualRecord style={{color: color}}/>
         </Button>
     )
 }

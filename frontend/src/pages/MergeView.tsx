@@ -31,7 +31,7 @@ function MergeView() {
 
     const [questions, setQuestions] = useState<Question[]>([])
     const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
-    const [misconceptionsAvailable, setMisconceptionsAvailable] = useState<string[]>([])
+    const [misconceptionsAvailable, setMisconceptionsAvailable] = useState<MisconceptionElement[]>([])
     const [loaded, setLoaded] = useState<boolean[]>([false, false])
 
 
@@ -48,7 +48,7 @@ function MergeView() {
 
     if(!loaded[1]){
         JSONLoader(misconceptions_url, (data: MisconceptionElement[]) => {
-            setMisconceptionsAvailable(data.map<string>((elem: MisconceptionElement) => elem.name))
+            setMisconceptionsAvailable(data)
             setLoaded([loaded[0], true])
         })
     }

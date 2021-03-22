@@ -39,7 +39,7 @@ function TaggingUI({dataset_id, questions, user_id}: Input) {
 
     const get_available_url = TAGGING_SERVICE_URL + '/progmiscon_api/misconceptions'
 
-    const [misconceptions_available, setMisconceptionsAvailable] = useState<string[]>([])
+    const [misconceptions_available, setMisconceptionsAvailable] = useState<MisconceptionElement[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
     const [selectedQuestion, setSelectedQuestion] = useState<number>(0)
     const [page, setPage] = useState<number>(1)
@@ -88,7 +88,7 @@ function TaggingUI({dataset_id, questions, user_id}: Input) {
     if (!loaded) {  // load once per dataset
         JSONLoader(get_available_url, (avail_misconceptions: []) => {
             setMisconceptionsAvailable(
-                avail_misconceptions.map<string>((elem: MisconceptionElement) => elem.name)
+                avail_misconceptions
             )
             setLoaded(true)
         })

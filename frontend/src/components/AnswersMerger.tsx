@@ -3,6 +3,7 @@ import {Grid} from "@material-ui/core";
 import {useFetch} from "../helpers/LoaderHelper";
 import {taggedAnswer} from "../interfaces/TaggedAnswer";
 import MisconceptionTagComparer from "./MisconceptionTagComparer";
+import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
@@ -11,7 +12,7 @@ interface Input {
     dataset_id: string,
     question_id: string,
     user_id: string,
-    available_misconceptions: string[]
+    available_misconceptions: MisconceptionElement[]
 }
 
 function AnswersMerger({dataset_id, question_id, user_id, available_misconceptions}: Input) {

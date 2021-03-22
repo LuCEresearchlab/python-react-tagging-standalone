@@ -15,6 +15,7 @@ import SingleTagSelector from "./SingleTagSelector";
 import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import MisconceptionColorButton from "./MisconceptionColorButton";
+import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
@@ -39,7 +40,7 @@ interface ids_and_misconceptions {
     question_id: string,
     user_id: string,
     answer: Answer,
-    misconceptions_available: string[],
+    misconceptions_available: MisconceptionElement[],
     enabled: boolean
 }
 
@@ -88,7 +89,9 @@ function MisconceptionTagElement(
 
     const [loaded, setLoaded] = useState<boolean>(false)
 
-    const misconceptions_available_without_no_misc = misconceptions_available.slice(1)
+    const misconceptions_string_list: string[] = misconceptions_available.map<string>(misc => misc.name)
+    const misconceptions_available_without_no_misc = misconceptions_string_list.slice(1)
+
 
 
     if (!loaded) {
@@ -149,6 +152,16 @@ function MisconceptionTagElement(
         return tmp_tags
     }
 
+    const get_color = (misc: (string | null)) => {
+        console.log("\ncolor for ", misc)
+        if(misc == null)
+            return ""
+        const found = misconceptions_available.find((elem: MisconceptionElement) => elem.name.localeCompare(misc) == 0)
+
+        console.log(found ? found.color : "undefined")
+        return found ? found.color : ""
+    }
+
     return (
         <StyledTableRow onClick={tagging_time_handler}>
             <StyledTableCell component="th" scope="row"><Highlightable
@@ -180,10 +193,10 @@ function MisconceptionTagElement(
                     loaded ?
                         <>
                             <div className={classes.divLine}>
-                                <MisconceptionColorButton/>
+                                <MisconceptionColorButton color={get_color(tags[0])}/>
                                 <SingleTagSelector
                                     key={"tag-selector-0"}
-                                    misconceptions_available={misconceptions_available}
+                                    misconceptions_available={misconceptions_string_list}
                                     enabled={enabled}
                                     handled_element={0}
                                     tags={tags}
@@ -206,7 +219,7 @@ function MisconceptionTagElement(
                                 [...Array((tags.length) > 1 ? Math.min(tags.length - 1, 4) : 0)]
                                     .map((_, index) =>
                                         <div key={"tag-selector-" + (index + 1)} className={classes.divLine}>
-                                            <MisconceptionColorButton/>
+                                            <MisconceptionColorButton  color={(() => get_color(tags[index + 1]))()}/>
                                             <SingleTagSelector
                                                 misconceptions_available={misconceptions_available_without_no_misc}
                                                 enabled={enabled}
