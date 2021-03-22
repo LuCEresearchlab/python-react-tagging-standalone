@@ -1,6 +1,15 @@
 import React, {useState} from "react"
 import HelpIcon from "@material-ui/icons/Help";
 import {Button, Popover} from "@material-ui/core";
+import {createStyles, makeStyles} from "@material-ui/core/styles";
+
+const useStyles = makeStyles(() =>
+    createStyles({
+        root: {
+            "min-width": "48px"
+        }
+    }),
+);
 
 interface Input {
     handled_element: number,
@@ -8,6 +17,9 @@ interface Input {
 }
 
 function MisconceptionInfoButton({tags, handled_element}: Input){
+
+    const classes = useStyles()
+
     const tag: (string | null) = tags[handled_element]
 
     const should_display = () => {
@@ -32,11 +44,11 @@ function MisconceptionInfoButton({tags, handled_element}: Input){
     return (
         !should_display() ?
             <>
-                <Button disabled={true}>
+                <Button disabled={true} className={classes.root}>
                 </Button>
             </> :
             <>
-                <Button onClick={handle_click_popup}>
+                <Button onClick={handle_click_popup} className={classes.root}>
                     <HelpIcon/>
                 </Button>
                 <Popover

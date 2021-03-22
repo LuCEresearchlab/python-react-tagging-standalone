@@ -13,6 +13,7 @@ import Highlightable from "highlightable";
 import {rangesCompressor} from "../util/RangeCompressor";
 import SingleTagSelector from "./SingleTagSelector";
 import MisconceptionInfoButton from "./MisconceptionInfoButton";
+import MisconceptionNoteButton from "./MisconceptionNoteButton";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
@@ -27,8 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         divLine: {
             display: "inline-flex",
-            width: "max-content",
-
         }
     }),
 );
@@ -194,6 +193,7 @@ function MisconceptionTagElement(
                                     tags={tags}
                                     handled_element={0}
                                 />
+                                <MisconceptionNoteButton/>
                             </div>
                             {
                                 [...Array((tags.length) > 1 ? Math.min(tags.length - 1, 4) : 0)]
@@ -216,6 +216,7 @@ function MisconceptionTagElement(
                                                 tags={tags}
                                                 handled_element={(index + 1)}
                                             />
+                                            <MisconceptionNoteButton/>
                                         </div>
                                     )
                             }
