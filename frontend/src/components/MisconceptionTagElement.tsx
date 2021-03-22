@@ -190,6 +190,12 @@ function MisconceptionTagElement(
                                             setTagElement={(element: (string | null), index: number) => {
                                                 let tmp_tags: (string | null)[] = [...tags]
                                                 tmp_tags.splice(index, 1, element)
+                                                if(tmp_tags.length == (index+1) && element != null)
+                                                    tmp_tags.push(null)
+                                                // removed tag, should decrease
+                                                if(tmp_tags.length >= (index+2) && element == null)
+                                                    tmp_tags.splice(index, 1)
+
                                                 setTags(tmp_tags)
                                                 post_answer(ranges, tmp_tags)
                                             }}
