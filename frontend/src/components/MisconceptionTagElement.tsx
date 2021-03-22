@@ -97,7 +97,7 @@ function MisconceptionTagElement(
                 const previousTaggedAnswer: taggedAnswer = prev_tagged_answers[0]
                 const previous_tags = previousTaggedAnswer.tags == null || previousTaggedAnswer.tags.length == 0 ?
                     [null] :
-                    _is_no_misconception(previousTaggedAnswer.tags[0]) ?
+                    _is_no_misconception(previousTaggedAnswer.tags[0]) || !enabled ?
                         previousTaggedAnswer.tags :
                         [...previousTaggedAnswer.tags, null]  // append null to allow inserting
 
