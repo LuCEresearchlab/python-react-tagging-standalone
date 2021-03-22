@@ -18,12 +18,17 @@ const {TAGGING_SERVICE_URL} = require('../../config.json')
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            width: 300,
+            width: "min-content",
             '& > * + *': {
                 marginTop: theme.spacing(3),
             },
             float: "right"
         },
+        divLine: {
+            display: "inline-flex",
+            width: "max-content",
+
+        }
     }),
 );
 
@@ -168,7 +173,7 @@ function MisconceptionTagElement(
                 {
                     loaded ?
                         <>
-                            <>
+                            <div className={classes.divLine}>
                                 <SingleTagSelector
                                     key={"tag-selector-0"}
                                     misconceptions_available={misconceptions_available}
@@ -184,11 +189,14 @@ function MisconceptionTagElement(
                                         post_answer(ranges, tmp_tags)
                                     }}
                                 />
-                            </>
+                                <Button
+                                    key={"button-" + 0}
+                                >index {0}</Button>
+                            </div>
                             {
                                 [...Array((tags.length) > 1 ? Math.min(tags.length - 1, 4) : 0)]
                                     .map((_, index) =>
-                                        <React.Fragment key={"tag-selector-" + (index + 1)}>
+                                        <div key={"tag-selector-" + (index + 1)} className={classes.divLine}>
                                             <SingleTagSelector
                                                 misconceptions_available={misconceptions_available_without_no_misc}
                                                 enabled={enabled}
@@ -205,7 +213,7 @@ function MisconceptionTagElement(
                                             <Button
                                                 key={"button-" + (index + 1)}
                                             >index {index + 1}</Button>
-                                        </React.Fragment>
+                                        </div>
                                     )
                             }
                         </>

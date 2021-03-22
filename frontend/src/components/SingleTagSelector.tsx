@@ -2,6 +2,16 @@ import React, {useState} from "react"
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Chip, Popover} from "@material-ui/core";
+import {createStyles, makeStyles} from "@material-ui/core/styles";
+
+
+const useStyles = makeStyles(() =>
+    createStyles({
+        root: {
+            width: 350
+        }
+    }),
+);
 
 interface Input {
     misconceptions_available: string[],
@@ -13,6 +23,7 @@ interface Input {
 
 
 function SingleTagSelector({misconceptions_available, enabled, handled_element, tags, setTagElement}: Input){
+    const classes = useStyles()
 
     // popup stuff
     const [anchorEl, setAnchorEl] = useState(null);
@@ -31,6 +42,7 @@ function SingleTagSelector({misconceptions_available, enabled, handled_element, 
 
     return (
         <Autocomplete
+            className={classes.root}
             options={misconceptions_available}
             disabled={!enabled}
             value={tags[handled_element]}
