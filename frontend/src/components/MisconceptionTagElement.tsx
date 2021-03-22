@@ -93,6 +93,7 @@ function MisconceptionTagElement(
 
     if (!loaded) {
         JSONLoader(get_selected_misc_url, (prev_tagged_answers: taggedAnswer[]) => {
+            // has existing value
             if (prev_tagged_answers.length > 0) {
                 const previousTaggedAnswer: taggedAnswer = prev_tagged_answers[0]
                 const previous_tags = previousTaggedAnswer.tags == null || previousTaggedAnswer.tags.length == 0 ?
@@ -104,6 +105,10 @@ function MisconceptionTagElement(
 
                 setTags(previous_tags)
                 setRanges(previousTaggedAnswer.highlighted_ranges == null ? [] : previousTaggedAnswer.highlighted_ranges)
+            }
+            else {  // has never been tagged
+                setTags([null])
+                setRanges([])
             }
             setLoaded(true)
         })
