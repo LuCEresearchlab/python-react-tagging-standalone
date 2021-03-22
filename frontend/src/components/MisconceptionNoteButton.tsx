@@ -18,7 +18,7 @@ function MisconceptionNoteButton() {
     const classes = useStyles()
 
     return (
-        <Button disabled={true} className={classes.root}>
+        <Button title={"Note"} disabled={true} className={classes.root}>
             <CommentIcon/>
         </Button>
     )

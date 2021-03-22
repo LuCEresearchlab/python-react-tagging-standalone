@@ -7,13 +7,14 @@ import {StyledTableCell, StyledTableRow} from "./StyledTable";
 import {taggedAnswer} from "../interfaces/TaggedAnswer";
 import {Answer} from "../interfaces/Dataset";
 
-
 // @ts-ignore
 import Highlightable from "highlightable";
+
 import {rangesCompressor} from "../util/RangeCompressor";
 import SingleTagSelector from "./SingleTagSelector";
 import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import MisconceptionNoteButton from "./MisconceptionNoteButton";
+import MisconceptionColorButton from "./MisconceptionColorButton";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
@@ -174,6 +175,7 @@ function MisconceptionTagElement(
                     loaded ?
                         <>
                             <div className={classes.divLine}>
+                                <MisconceptionColorButton/>
                                 <SingleTagSelector
                                     key={"tag-selector-0"}
                                     misconceptions_available={misconceptions_available}
@@ -199,6 +201,7 @@ function MisconceptionTagElement(
                                 [...Array((tags.length) > 1 ? Math.min(tags.length - 1, 4) : 0)]
                                     .map((_, index) =>
                                         <div key={"tag-selector-" + (index + 1)} className={classes.divLine}>
+                                            <MisconceptionColorButton/>
                                             <SingleTagSelector
                                                 misconceptions_available={misconceptions_available_without_no_misc}
                                                 enabled={enabled}

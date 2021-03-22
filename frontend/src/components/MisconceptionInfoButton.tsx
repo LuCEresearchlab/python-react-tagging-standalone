@@ -48,7 +48,7 @@ function MisconceptionInfoButton({tags, handled_element}: Input){
                 </Button>
             </> :
             <>
-                <Button onClick={handle_click_popup} className={classes.root}>
+                <Button title={"Definition"} onClick={handle_click_popup} className={classes.root}>
                     <HelpIcon/>
                 </Button>
                 <Popover
