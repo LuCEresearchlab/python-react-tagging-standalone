@@ -1,4 +1,5 @@
 export interface MisconceptionElement {
     name: string,
-    description: string
+    description: string,
+    color: string
 }

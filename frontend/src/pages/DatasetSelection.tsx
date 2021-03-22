@@ -4,6 +4,7 @@ import {JSONLoader} from '../helpers/LoaderHelper';
 import {useHistory} from 'react-router-dom'
 import {StyledTableRow, StyledTableCell, useStyles} from "../components/StyledTable";
 import {downloadDatasetHelper} from "../helpers/DownloadHelper";
+import {Assignment, AssignmentLate, CloudDownload} from "@material-ui/icons";
 
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
@@ -63,19 +64,33 @@ function DatasetSelection() {
                             <StyledTableCell align="right" onClick={
                                 () => redirect(row.id, "/taggingUI/tagView/", router)
                             }>{row.date}</StyledTableCell>
-                            <StyledTableCell align={"right"}><Button variant="outlined" color="primary"
-                                                                     href="#outlined-buttons"
-                                                                     onClick={() => downloadDatasetHelper(row.id, row.name)}>
-                                Download
-                            </Button><Button variant="outlined" color="primary" onClick={
-                                () => redirect(row.id, "/taggingUI/summary/", router)
-                            }>
-                                Summary
-                            </Button><Button variant="outlined" color="primary" onClick={
-                                () => redirect(row.id, "/taggingUI/mergeView/", router)
-                            }>
-                                Merge Data
-                            </Button></StyledTableCell>
+                            <StyledTableCell align={"right"}>
+                                <Button
+                                    title={"Download"}
+                                    variant="outlined" color="primary"
+                                    href="#outlined-buttons"
+                                    onClick={() => downloadDatasetHelper(row.id, row.name)}>
+                                    <CloudDownload/>
+                                </Button>
+                                <Button
+                                    title={"Summary"}
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={
+                                        () => redirect(row.id, "/taggingUI/summary/", router)
+                                    }>
+                                    <Assignment/>
+                                </Button>
+                                <Button
+                                    title={"Diff Data"}
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={
+                                        () => redirect(row.id, "/taggingUI/mergeView/", router)
+                                    }>
+                                    <AssignmentLate/>
+                                </Button>
+                            </StyledTableCell>
                         </StyledTableRow>
                     ))}
                 </TableBody>

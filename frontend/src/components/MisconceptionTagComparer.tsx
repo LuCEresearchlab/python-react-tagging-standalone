@@ -2,11 +2,12 @@ import React, {useState} from "react";
 import {Collapse, List, ListItem, Paper, Table, TableBody, TableContainer} from "@material-ui/core";
 import {taggedAnswer} from "../interfaces/TaggedAnswer";
 import MisconceptionTagElement from "./MisconceptionTagElement";
+import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 
 interface Input {
     answerGroup: taggedAnswer[],
     user_id: string,
-    available_misconceptions: string[]
+    available_misconceptions: MisconceptionElement[]
 }
 
 function _get_conflicts(answerGroup: taggedAnswer[], user_id: string): taggedAnswer[] {
