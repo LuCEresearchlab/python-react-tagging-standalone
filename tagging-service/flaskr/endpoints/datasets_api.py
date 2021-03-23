@@ -9,7 +9,9 @@ RANGE = api.model('Range', {
     'start': fields.Integer(required=True, readonly=True, description='start of the range',
                             example='0'),
     'end': fields.Integer(required=True, readonly=True, description='end of the range',
-                          example='10')
+                          example='10'),
+    'color': fields.String(required=True, readonly=True, description='HEX representing a color',
+                           example='#00FF00'),
 })
 
 

@@ -3,6 +3,7 @@ import {HighlightRange} from "../interfaces/HighlightRange";
 
 // https://stackoverflow.com/questions/22784883/check-if-more-than-two-date-ranges-overlap
 function is_range_overlap(range1: HighlightRange, range2: HighlightRange): boolean {
+    if (range1.color != range2.color) return false // different misconceptions
     if (range1.start <= range2.start && range2.start <= range1.end) return true // b starts in a
     if (range1.start <= range2.end && range2.end <= range1.end) return true // b ends in a
     if (range2.start < range1.start && range1.end < range2.end) return true // a in b
@@ -12,7 +13,8 @@ function is_range_overlap(range1: HighlightRange, range2: HighlightRange): boole
 function merge_ranges(range1: HighlightRange, range2: HighlightRange): HighlightRange {
     return {
         start: Math.min(range1.start, range2.start),
-        end: Math.max(range1.end, range2.end)
+        end: Math.max(range1.end, range2.end),
+        color: range1.color
     }
 }
 
@@ -20,8 +22,13 @@ function comparator(r1: HighlightRange, r2: HighlightRange): number {
     return r1.start - r2.start
 }
 
+// put same misconceptions close to each other
+function compare_colors(r1: HighlightRange, r2: HighlightRange): number {
+    return r1.color.localeCompare(r2.color)
+}
+
 export function rangesCompressor(ranges: HighlightRange[], newRange: HighlightRange): HighlightRange[] {
-    const sorted_ranges: HighlightRange[] = [...ranges, newRange].sort(comparator)
+    const sorted_ranges: HighlightRange[] = [...ranges, newRange].sort(compare_colors).sort(comparator)
 
     return sorted_ranges.reduce(((previousValue: HighlightRange[], currentValue: HighlightRange) => {
         if (previousValue.length == 0) return [currentValue]
