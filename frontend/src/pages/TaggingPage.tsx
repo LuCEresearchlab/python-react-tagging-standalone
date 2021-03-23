@@ -17,7 +17,7 @@ function TaggingPage() {
 
 
     if (!loaded) {
-        JSONLoader(url, (data: any) => {
+        JSONLoader(url, (data: Dataset) => {
             setDataset(data)
         })
         setLoaded(true)
