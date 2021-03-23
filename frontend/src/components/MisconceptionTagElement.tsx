@@ -162,7 +162,7 @@ function MisconceptionTagElement(
         return found ? found.color : ""
     }
 
-    const unchanged_color = () => currentColor.localeCompare(NO_COLOR) == 0
+    const using_default_color = () => currentColor.localeCompare(NO_COLOR) == 0
 
     const highlight_ranges_color_updating = (tags: (string | null)[], element: (string | null), index: number) => {
         if (element == null || tags[index] != null) {
@@ -182,7 +182,7 @@ function MisconceptionTagElement(
                 ranges={ranges}
                 enabled={enabled}
                 onTextHighlighted={(e: any) => {
-                    if (unchanged_color()) return
+                    if (using_default_color()) return
 
                     const newRange = {start: e.start, end: e.end, text: answer.data, color: currentColor}
                     const r = rangesCompressor(ranges, newRange)
