@@ -9,6 +9,7 @@ from flaskr.exceptions.error import Error
 from flaskr import cache
 
 import flaskr.util.mongo_helper as db
+from flaskr.util.xlnet_loader import get_sorted_answers
 
 api = Namespace('datasets', description='Upload API to load files')
 
@@ -72,7 +73,12 @@ def _load_dataset(dataset_id):
             logger.debug("File Opened")
             content = file.read()
             logger.debug("Read file")
-            return json.loads(content)
+            j = json.loads(content)
+            for question in j['questions']:
+                answers = question['answers']
+                logger.debug("USING ANSWERS ", answers)
+                question['answers'] = get_sorted_answers(answers)
+            return j
     else:
         raise Error(f'File {file} not found at {file}', status_code=500)
 
