@@ -3,6 +3,7 @@ import {Collapse, List, ListItem, Paper, Table, TableBody, TableContainer} from 
 import {taggedAnswer} from "../interfaces/TaggedAnswer";
 import MisconceptionTagElement from "./MisconceptionTagElement";
 import {MisconceptionElement} from "../interfaces/MisconceptionElement";
+import stringEquals from "../util/StringEquals";
 
 interface Input {
     answerGroup: taggedAnswer[],
@@ -12,7 +13,7 @@ interface Input {
 
 function _get_conflicts(answerGroup: taggedAnswer[], user_id: string): taggedAnswer[] {
     const has_my_answer: boolean = answerGroup.some(
-        (element: taggedAnswer) => element.user_id.localeCompare(user_id) === 0
+        (element: taggedAnswer) => stringEquals(element.user_id, user_id)
     )
     if (!has_my_answer || answerGroup.length === 1) // only tagged by user or not tagged by user
         return []
@@ -56,7 +57,7 @@ function MisconceptionTagComparer({answerGroup, user_id, available_misconception
                                                 dataset_id={answer.dataset_id}
                                                 question_id={answer.question_id}
                                                 user_id={answer.user_id}
-                                                enabled={answer.user_id.localeCompare(user_id) === 0}
+                                                enabled={stringEquals(answer.user_id, user_id)}
                                                 answer={
                                                     {
                                                         answer_id: answer.answer_id,

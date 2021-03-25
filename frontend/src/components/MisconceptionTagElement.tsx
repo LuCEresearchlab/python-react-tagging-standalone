@@ -16,6 +16,7 @@ import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import MisconceptionColorButton from "./MisconceptionColorButton";
 import {MisconceptionElement} from "../interfaces/MisconceptionElement";
+import stringEquals from "../util/StringEquals";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
@@ -63,7 +64,7 @@ function get_millis() {
 }
 
 function _is_no_misconception(tag: (string | null)): boolean {
-    return tag != null && ("NoMisconception".localeCompare(tag) == 0)
+    return tag != null && stringEquals("NoMisconception", tag)
 }
 
 const NO_COLOR: string = "#000000"
@@ -93,7 +94,6 @@ function MisconceptionTagElement(
     const [loaded, setLoaded] = useState<boolean>(false)
 
     const misconceptions_string_list: string[] = misconceptions_available.map<string>(misc => misc.name)
-    const misconceptions_available_without_no_misc = misconceptions_string_list.slice(1)
 
 
 
@@ -158,19 +158,20 @@ function MisconceptionTagElement(
     const get_color = (misc: (string | null)) => {
         if (misc == null)
             return ""
-        const found = misconceptions_available.find((elem: MisconceptionElement) => elem.name.localeCompare(misc) == 0)
+        const found = misconceptions_available.find((elem: MisconceptionElement) => stringEquals(elem.name, misc))
         return found ? found.color : ""
     }
 
     const using_default_color = () => currentColor.localeCompare(NO_COLOR) == 0
 
     const highlight_ranges_color_updating = (tags: (string | null)[], element: (string | null), index: number) => {
+        if (_is_no_misconception(element)) return []
         if (element == null || tags[index] != null) {
             let removed_color: string = NO_COLOR
             if (tags[index] != null) removed_color = get_color(tags[index])
 
             return [...ranges]
-                .filter((elem: HighlightRange) => elem.color.localeCompare(removed_color) != 0)
+                .filter((elem: HighlightRange) => !stringEquals(elem.color, removed_color))
         }
         return ranges
     }
@@ -244,41 +245,50 @@ function MisconceptionTagElement(
                                 <MisconceptionNoteButton/>
                             </div>
                             {
-                                [...Array((tags.length) > 1 ? Math.min(tags.length - 1, 4) : 0)]
-                                    .map((_, index) =>
-                                        <div key={"tag-selector-" + (index + 1)} className={classes.divLine}>
-                                            <MisconceptionColorButton
-                                                color={(() => get_color(tags[index + 1]))()}
-                                                enabled={enabled}
-                                                current_color={currentColor}
-                                                setColor={setCurrentColor}
-                                            />
-                                            <SingleTagSelector
-                                                misconceptions_available={misconceptions_available_without_no_misc}
-                                                enabled={enabled}
-                                                handled_element={(index + 1)}
-                                                tags={tags}
-                                                setTagElement={(element: (string | null), index: number) => {
-                                                    const new_ranges = highlight_ranges_color_updating(tags, element, index)
+                                [...Array(Math.min(tags.length - 1, 4))]
+                                    .map((_, index) => {
+                                            let filtered_misconceptions = misconceptions_string_list
+                                            // only allow misconceptions that aren't already present
+                                            tags.forEach(tag => {
+                                                filtered_misconceptions = filtered_misconceptions
+                                                    .filter(misc => !stringEquals(misc, tag))
+                                            })
 
-                                                    const tmp_tags: (string | null)[] =
-                                                        compute_misc_list(tags, element, index)
+                                            return (
+                                                <div key={"tag-selector-" + (index + 1)} className={classes.divLine}>
+                                                    <MisconceptionColorButton
+                                                        color={(() => get_color(tags[index + 1]))()}
+                                                        enabled={enabled}
+                                                        current_color={currentColor}
+                                                        setColor={setCurrentColor}
+                                                    />
+                                                    <SingleTagSelector
+                                                        misconceptions_available={filtered_misconceptions}
+                                                        enabled={enabled}
+                                                        handled_element={(index + 1)}
+                                                        tags={tags}
+                                                        setTagElement={(element: (string | null), index: number) => {
+                                                            const new_ranges = highlight_ranges_color_updating(tags, element, index)
 
-                                                    setTags(tmp_tags)
-                                                    setRanges(new_ranges)
-                                                    post_answer(new_ranges, tmp_tags)
-                                                }}
-                                            />
-                                            <MisconceptionInfoButton
-                                                tags={tags}
-                                                handled_element={(index + 1)}
-                                            />
-                                            <MisconceptionNoteButton/>
-                                        </div>
+                                                            const tmp_tags: (string | null)[] =
+                                                                compute_misc_list(tags, element, index)
+
+                                                            setTags(tmp_tags)
+                                                            setRanges(new_ranges)
+                                                            post_answer(new_ranges, tmp_tags)
+                                                        }}
+                                                    />
+                                                    <MisconceptionInfoButton
+                                                        tags={tags}
+                                                        handled_element={(index + 1)}
+                                                    />
+                                                    <MisconceptionNoteButton/>
+                                                </div>)
+                                        }
                                     )
                             }
                         </>
-                    : <></>
+                        : <></>
                 }
             </StyledTableCell>
         </StyledTableRow>
