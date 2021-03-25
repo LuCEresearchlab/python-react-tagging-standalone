@@ -64,7 +64,7 @@ function get_millis() {
 }
 
 function _is_no_misconception(tag: (string | null)): boolean {
-    return tag != null && ("NoMisconception".localeCompare(tag) == 0)
+    return tag != null && stringEquals("NoMisconception", tag)
 }
 
 const NO_COLOR: string = "#000000"

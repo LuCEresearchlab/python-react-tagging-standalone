@@ -1,6 +1,7 @@
 import React from "react";
 import {FiberManualRecord, FiberManualRecordOutlined} from "@material-ui/icons";
 import {Button} from "@material-ui/core";
+import stringEquals from "../util/StringEquals";
 
 interface Input {
     color: string,
@@ -12,7 +13,7 @@ interface Input {
 
 function MisconceptionColorButton({color, enabled, current_color, setColor}: Input) {
 
-    const disabled: boolean = (color.localeCompare("") == 0) || (color.localeCompare("#000000") == 0)
+    const disabled: boolean = stringEquals(color, "") || stringEquals(color, "#000000")
 
     if (disabled) return (<Button disabled={true}/>)
 
@@ -25,7 +26,7 @@ function MisconceptionColorButton({color, enabled, current_color, setColor}: Inp
             disabled={disabled || !enabled}
         >
             {
-                color.localeCompare(current_color) == 0 || !enabled ?
+                stringEquals(color, current_color) || !enabled ?
                     <FiberManualRecord style={{color: color}}/> :
                     <FiberManualRecordOutlined
                         style={{color: color}}
