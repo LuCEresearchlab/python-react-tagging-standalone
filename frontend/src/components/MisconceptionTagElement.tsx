@@ -165,6 +165,7 @@ function MisconceptionTagElement(
     const using_default_color = () => currentColor.localeCompare(NO_COLOR) == 0
 
     const highlight_ranges_color_updating = (tags: (string | null)[], element: (string | null), index: number) => {
+        if (_is_no_misconception(element)) return []
         if (element == null || tags[index] != null) {
             let removed_color: string = NO_COLOR
             if (tags[index] != null) removed_color = get_color(tags[index])
@@ -244,7 +245,7 @@ function MisconceptionTagElement(
                                 <MisconceptionNoteButton/>
                             </div>
                             {
-                                [...Array((tags.length) > 1 ? Math.min(tags.length - 1, 4) : 0)]
+                                [...Array(Math.min(tags.length - 1, 4))]
                                     .map((_, index) =>
                                         <div key={"tag-selector-" + (index + 1)} className={classes.divLine}>
                                             <MisconceptionColorButton
