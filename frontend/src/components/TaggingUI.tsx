@@ -7,6 +7,7 @@ import {StyledPagination} from "./StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 import QuestionSelect from "./QuestionSelect";
+import stringEquals from "../util/StringEquals";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
@@ -49,7 +50,7 @@ function TaggingUI({dataset_id, questions, user_id}: Input) {
 
     const current_question_id: string = questions[selectedQuestion].question_id
     const filtered_questions: Question[] = questions
-        .filter(question => question.question_id.localeCompare(current_question_id) === 0)
+        .filter(question => stringEquals(question.question_id, current_question_id))
 
 
     const total_answers = filtered_questions
