@@ -4,7 +4,7 @@ from flaskr.endpoints import api
 from flask_cors import CORS
 from flaskr.exceptions.error import Error
 import logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 
 def create_app(test_config=None):
