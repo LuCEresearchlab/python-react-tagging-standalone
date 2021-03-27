@@ -21,9 +21,10 @@ from sklearn.cluster import SpectralClustering
 #             return answers
 #         return j
 
+web_model = WebBertSimilarity(device='cpu', batch_size=10)
+
 
 def get_similarity_matrix(answers):
-    web_model = WebBertSimilarity(device='cpu', batch_size=10)
     nr_elements = len(answers)
     sim_matrix = np.zeros((nr_elements, nr_elements))
 
