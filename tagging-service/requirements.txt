@@ -1,10 +1,10 @@
 Flask~=1.1.2
 flask_restx~=0.2.0
-pymongo~=3.11.3
-pytest~=6.2.2
-requests~=2.21.0
 Flask-Caching~=1.9.0
 Flask-Cors~=3.0.10
-keras-xlnet~=0.18.0
-embedding-as-service~=2.0.1
+pymongo~=3.11.3
+requests~=2.25.1
+numpy~=1.19.5
 scikit-learn~=0.24.1
+semantic-text-similarity~=1.0.3
+pytest~=6.2.2

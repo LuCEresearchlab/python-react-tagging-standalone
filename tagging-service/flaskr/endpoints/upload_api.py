@@ -76,7 +76,7 @@ def _load_dataset(dataset_id):
             j = json.loads(content)
             for question in j['questions']:
                 answers = question['answers']
-                logger.debug("USING ANSWERS ", answers)
+                logger.debug("SORTING ANSWERS")
                 question['answers'] = get_sorted_answers(answers)
             return j
     else:
