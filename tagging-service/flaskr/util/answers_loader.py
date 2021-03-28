@@ -7,8 +7,6 @@ import json
 import datetime
 import logging
 
-import flaskr.util.mongo_helper as db
-
 logger = logging.getLogger(__name__)
 
 
