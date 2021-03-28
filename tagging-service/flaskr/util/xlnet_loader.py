@@ -21,7 +21,7 @@ from sklearn.cluster import SpectralClustering
 #             return answers
 #         return j
 
-web_model = WebBertSimilarity(device='cpu', batch_size=10)
+web_model = WebBertSimilarity(device='cpu', batch_size=32)
 
 
 def get_similarity_matrix(answers):
@@ -103,7 +103,7 @@ def get_sorted_answers(answers):
 
 # anss = load_answers()
 # all_clusters = cluster(answers=anss)
-# sorted_ans = get_sorted_answers2(anss)
+# sorted_ans = get_sorted_answers(anss)
 # print(all_clusters)
 
 # get_sorted_answers2(anss)
