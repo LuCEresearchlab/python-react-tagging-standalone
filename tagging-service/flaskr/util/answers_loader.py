@@ -7,6 +7,8 @@ import json
 import datetime
 import logging
 
+from flaskr.util.grouper_helper import fake_get_clusters
+
 logger = logging.getLogger(__name__)
 
 
@@ -28,7 +30,7 @@ def load_dataset(dataset_id):
             for question in j['questions']:
                 answers = question['answers']
                 logger.debug("SORTING ANSWERS")
-                question['answers'] = answers
+                question['clustered_answers'] = fake_get_clusters(answers)
             return j
     else:
         raise Error(f'File {file} not found at {file}', status_code=500)
@@ -86,16 +88,11 @@ def populate_retrieving_maps(dataset_id):
     dataset = load_dataset(dataset_id)
     id_to_question_data = {}
     id_to_answer_data = {}
+    logger.debug(dataset)
     for question in dataset['questions']:
         id_to_question_data[question['question_id']] = question
-        for answer in question['answers']:
-            id_to_answer_data[answer['answer_id']] = answer
+        for c in question['clustered_answers']:
+            for answer in c:
+                id_to_answer_data[answer['answer_id']] = answer
     return id_to_question_data, id_to_answer_data
 
-
-def get_dataset_answers(dataset_id, question_id):
-    dataset = load_dataset(dataset_id)
-    for question in dataset['questions']:
-        if question['question_id'] == question_id:
-            return question['answers']
-    return []

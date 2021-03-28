@@ -8,7 +8,7 @@ export interface Dataset {
 export interface Question {
     "question_id": string,
     "text": string,
-    "answers": [Answer]
+    "clustered_answers": [[Answer]]
 }
 
 export interface Answer {

@@ -5,8 +5,7 @@ from flask_restx import Namespace, Resource, fields
 from flaskr import cache
 
 import flaskr.util.mongo_helper as db
-from flaskr.util.answers_loader import load_dataset_name_list, load_dataset, populate_retrieving_maps, \
-    get_dataset_answers
+from flaskr.util.answers_loader import load_dataset_name_list, load_dataset, populate_retrieving_maps
 
 api = Namespace('datasets', description='Upload API to load files')
 
@@ -26,7 +25,7 @@ ANSWER = api.model('Answer', {
 QUESTION = api.model('Question', {
     'question_id': fields.String(required=True, readonly=True, description='ID of the Question'),
     'text': fields.String(required=True, readonly=True, description='Text of the Question'),
-    'answers': fields.List(fields.Nested(ANSWER))
+    'clustered_answers': fields.List(fields.List(fields.Nested(ANSWER)))
 })
 
 DATASET = api.model('Dataset', {

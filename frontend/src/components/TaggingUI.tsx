@@ -55,12 +55,15 @@ function TaggingUI({dataset_id, questions, user_id}: Input) {
 
     const total_answers = filtered_questions
         .reduce((total: number, current: Question) => {
-            return total + current.answers.length
+            return total + current.clustered_answers.length
         }, 0)
 
     const all_answers: AnswerExtended[] = filtered_questions
         .reduce((answers: AnswerExtended[], current: Question) => {
-            const extended: AnswerExtended[] = current.answers.map(answer => {
+            const flattened = current.clustered_answers.reduce(
+                (accumulator: Answer[], value: Answer[]) => accumulator.concat(value), []
+            )
+            const extended: AnswerExtended[] = flattened.map(answer => {
                 return {
                     answer: answer,
                     question_id: current.question_id,
