@@ -22,11 +22,13 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         paper: {
             padding: theme.spacing(2),
+            position: 'sticky',
             textAlign: 'left',
             marginLeft: 'auto',
             marginRight: 'auto',
             color: theme.palette.text.secondary,
-            border: 1
+            border: 1,
+            width: 'max-content'
         },
     }),
 );
@@ -62,7 +64,7 @@ function QuestionSelect({selectedQuestion, setQuestionSelect, questions}: SetQue
                     </Select>
                 </Grid>
             </Grid>
-            <Grid item className={classes.paper} xs={6}>
+            <Grid item className={classes.paper} xs={11}>
                 <QuestionView question_text={questions[selectedQuestion].text}/>
             </Grid>
         </Grid>

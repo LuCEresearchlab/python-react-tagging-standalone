@@ -1,5 +1,6 @@
 import React from "react";
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter';
+// https://www.npmjs.com/package/react-syntax-highlighter
 
 function parseString(text: string) {
     const tokens: JSX.Element[] = []
@@ -37,18 +38,30 @@ function parseString(text: string) {
             if (temp_string.indexOf("```") != -1) {
                 end = temp_string.indexOf("```")
                 tokens.push(
-                    <pre key={"text" + index}><code>{temp_string.slice(0, end)}</code></pre>
+                    <pre key={"text" + index} style={{overflow: "auto"}}>
+                        <code>
+                            {temp_string.slice(0, end)}
+                        </code>
+                    </pre>
                 )
                 temp_string = temp_string.slice(end)
             } else if (temp_string.indexOf("![") != -1) {
                 end = temp_string.indexOf("![")
                 tokens.push(
-                    <pre key={"text" + index}><code>{temp_string.slice(0, end)}</code></pre>
+                    <pre key={"text" + index} style={{overflow: "auto"}}>
+                        <code>
+                            {temp_string.slice(0, end)}
+                        </code>
+                    </pre>
                 )
                 temp_string = temp_string.slice(end)
             } else {
                 tokens.push(
-                    <pre key={"text" + index}><code>{temp_string}</code></pre>
+                    <pre key={"text" + index} style={{overflow: "auto"}}>
+                        <code>
+                            {temp_string}
+                        </code>
+                    </pre>
                 )
                 temp_string = ""
             }
