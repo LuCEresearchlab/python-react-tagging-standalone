@@ -2,6 +2,7 @@ import React from "react";
 import {Grid, Select} from "@material-ui/core";
 import {Question} from "../interfaces/Dataset";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import QuestionView from "./QuestionView";
 
 interface SetQuestionSelectFunction {
     setQuestionSelect(value: number): void,
@@ -21,11 +22,13 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         paper: {
             padding: theme.spacing(2),
+            position: 'sticky',
             textAlign: 'left',
             marginLeft: 'auto',
             marginRight: 'auto',
             color: theme.palette.text.secondary,
-            border: 1
+            border: 1,
+            width: 'max-content'
         },
     }),
 );
@@ -61,8 +64,8 @@ function QuestionSelect({selectedQuestion, setQuestionSelect, questions}: SetQue
                     </Select>
                 </Grid>
             </Grid>
-            <Grid item className={classes.paper} xs={6}>
-                {questions[selectedQuestion].text}
+            <Grid item className={classes.paper} xs={11}>
+                <QuestionView question_text={questions[selectedQuestion].text}/>
             </Grid>
         </Grid>
     )

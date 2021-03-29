@@ -31,7 +31,8 @@
     "process": true,
     "Buffer": true,
     "require": true,
-    "global": true
+    "global": true,
+    "JSX": true
   },
   "plugins": ["react", "prettier", "jsx-a11y", "jest"],
   "rules": {
