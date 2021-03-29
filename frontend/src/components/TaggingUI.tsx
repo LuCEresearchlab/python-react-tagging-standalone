@@ -123,7 +123,8 @@ function TaggingUI({dataset_id, questions, user_id}: Input) {
                                                     user_id={user_id}
                                                     enabled={true}
                                                     answer={answerExtended.answer}
-                                                    misconceptions_available={misconceptions_available}/></TableBody>
+                                                    misconceptions_available={misconceptions_available}/>
+                                            </TableBody>
                                         </Table>
                                     </TableContainer>
                                 </ListItem>

@@ -62,7 +62,9 @@ function MisconceptionTagComparer({answerGroup, user_id, available_misconception
                                                     {
                                                         answer_id: answer.answer_id,
                                                         data: answer.answer_text,
-                                                        user_id: answer.user_id
+                                                        user_id: answer.user_id,
+                                                        picked: answer.picked,
+                                                        matches_expected: answer.matches_expected
                                                     }}
                                                 misconceptions_available={available_misconceptions}/>
                                         </TableBody>
