@@ -4,7 +4,8 @@ from flaskr.endpoints import api
 from flask_cors import CORS
 from flaskr.exceptions.error import Error
 import logging
-logging.basicConfig(level=logging.INFO)
+
+logging.basicConfig(level=logging.INFO, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 
 def create_app(test_config=None):
@@ -12,7 +13,7 @@ def create_app(test_config=None):
 
     api.init_app(app)
     cache.init_app(app)
-    app.config['UPLOAD_FOLDER'] = './datasets'
+    app.config.from_pyfile('./config/env_config.py')
     CORS(app, resources={r'/*': {"origins": "http://localhost:8080"}})
 
     @app.errorhandler(Error)

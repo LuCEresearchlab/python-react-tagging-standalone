@@ -24,22 +24,30 @@ docker-compose up
 then connect to http://localhost:8080/
 
 To stop the containers
+
 ```
 docker-compose down
 ```
 
 In case there are issues due to dependencies try to rebuild the containers (will wipe tagged data) with
+
 ```
 docker-compose up --build  # rebuil
 ```
 
+Note: by default `SIMILARITY_CLUSTERING_STATE=False`, this means that fake clustering will be used, to have actual
+clustering change the value to `True` inside `.env`.
+
 ## Convert data from LUMI to required data format
+
 Create python local environment if not existing
+
 ```
 python3 -m venv venv
 ```
 
 Setup python local environment for conversion
+
 ```
 source venv/bin/activate
 cd scripts
