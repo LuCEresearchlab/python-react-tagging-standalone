@@ -17,6 +17,7 @@ import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import MisconceptionColorButton from "./MisconceptionColorButton";
 import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 import stringEquals from "../util/StringEquals";
+import TruthCircle from "./TruthCircle";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
 
@@ -195,17 +196,21 @@ function MisconceptionTagElement(
 
     return (
         <StyledTableRow onClick={tagging_time_handler}>
-            <StyledTableCell component="th" scope="row"><Highlightable
-                ranges={ranges}
-                enabled={enabled}
-                onTextHighlighted={(e: any) => {
-                    if (using_default_color()) return
+            <StyledTableCell component="th" scope="row" style={{width: "24px", paddingRight: 0}}>
+                <TruthCircle value={answer.picked}/>
+            </StyledTableCell>
+            <StyledTableCell component="th" scope="row">
+                <Highlightable
+                    ranges={ranges}
+                    enabled={enabled}
+                    onTextHighlighted={(e: any) => {
+                        if (using_default_color()) return
 
-                    const newRange = {start: e.start, end: e.end, text: answer.data, color: currentColor}
-                    const r = rangesCompressor(ranges, newRange)
+                        const newRange = {start: e.start, end: e.end, text: answer.data, color: currentColor}
+                        const r = rangesCompressor(ranges, newRange)
 
-                    setRanges([...r])
-                    post_answer(r, tags)
+                        setRanges([...r])
+                        post_answer(r, tags)
                 }}
                 text={answer.data}
                 highlightStyle={(range: HighlightRange) => {

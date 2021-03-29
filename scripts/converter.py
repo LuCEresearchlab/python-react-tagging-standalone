@@ -18,7 +18,7 @@ args = parser.parse_args()
 filepath = args.filepath
 quiz_file = args.quiz_file
 
-cols = ['question', 'option', 'isCorrect', 'explanation']
+cols = ['question', 'option', 'isCorrect', 'explanation', 'Mark']
 
 dataset = pd.read_excel(filepath, usecols=cols)
 # drop invalid columns
@@ -28,8 +28,11 @@ dataset = dataset.dropna(axis='rows', subset=['question', 'explanation'])
 dataset['question'] = dataset['question'].astype(np.int8)
 dataset['option'] = dataset['option'].astype(np.int8)
 
-dataset.rename(columns={'explanation': 'data'}, inplace=True)
+# reduce size
+dataset['isCorrect'] = dataset['isCorrect'].astype(np.bool)
+dataset['Mark'] = dataset['Mark'].astype(np.bool)
 
+dataset.rename(columns={'explanation': 'data'}, inplace=True)
 
 # create columns
 dataset['text'] = pd.Series(dtype=object)
@@ -86,7 +89,8 @@ for i, row in dataset.iterrows():
     answer = {
         'answer_id': i,
         'data': row['data'],
-        'isCorrect': row['isCorrect']  # not actually required but added as it might be used
+        'picked': row['isCorrect'],
+        'matches_expected': row['Mark']
     }
     output['questions'][row['question_option_index']]['answers'].append(answer)
 

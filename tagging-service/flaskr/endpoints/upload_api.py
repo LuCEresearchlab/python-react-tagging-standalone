@@ -19,7 +19,9 @@ DATASET_DESC = api.model('Dataset Description', {
 
 ANSWER = api.model('Answer', {
     'answer_id': fields.String(required=True, readonly=True, description='ID of the Answer'),
-    'data': fields.String(required=True, readonly=True, description='Text of the Answer')
+    'data': fields.String(required=True, readonly=True, description='Text of the Answer'),
+    'picked': fields.Boolean(required=True, readonly=True, description='Value picked'),
+    'matches_expected': fields.Boolean(required=True, readonly=True, description='Answer matches expected value')
 })
 
 QUESTION = api.model('Question', {
