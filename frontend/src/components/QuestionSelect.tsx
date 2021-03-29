@@ -2,6 +2,7 @@ import React from "react";
 import {Grid, Select} from "@material-ui/core";
 import {Question} from "../interfaces/Dataset";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import QuestionView from "./QuestionView";
 
 interface SetQuestionSelectFunction {
     setQuestionSelect(value: number): void,
@@ -62,7 +63,7 @@ function QuestionSelect({selectedQuestion, setQuestionSelect, questions}: SetQue
                 </Grid>
             </Grid>
             <Grid item className={classes.paper} xs={6}>
-                {questions[selectedQuestion].text}
+                <QuestionView question_text={questions[selectedQuestion].text}/>
             </Grid>
         </Grid>
     )
