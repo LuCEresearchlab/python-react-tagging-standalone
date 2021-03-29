@@ -7,7 +7,7 @@ import json
 import datetime
 import logging
 
-from flaskr.util.grouper_helper import fake_get_clusters
+from flaskr.util.grouper_helper import get_clusters
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ def load_dataset(dataset_id):
             for question in j['questions']:
                 answers = question['answers']
                 logger.debug("SORTING ANSWERS")
-                question['clustered_answers'] = fake_get_clusters(answers)
+                question['clustered_answers'] = get_clusters(answers)
             return j
     else:
         raise Error(f'File {file} not found at {file}', status_code=500)
