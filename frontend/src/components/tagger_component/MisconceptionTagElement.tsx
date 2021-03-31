@@ -1,25 +1,25 @@
 import React, {useState} from "react"
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-import {JSONLoader} from "../helpers/LoaderHelper";
+import {JSONLoader} from "../../helpers/LoaderHelper";
 import {Button} from "@material-ui/core";
-import {HighlightRange} from "../interfaces/HighlightRange";
-import {StyledTableCell, StyledTableRow} from "./styled/StyledTable";
-import {taggedAnswer} from "../interfaces/TaggedAnswer";
-import {Answer} from "../interfaces/Dataset";
+import {HighlightRange} from "../../interfaces/HighlightRange";
+import {StyledTableCell, StyledTableRow} from "../styled/StyledTable";
+import {taggedAnswer} from "../../interfaces/TaggedAnswer";
+import {Answer} from "../../interfaces/Dataset";
 
 // @ts-ignore
 import Highlightable from "highlightable";
 
-import {rangesCompressor} from "../util/RangeCompressor";
+import {rangesCompressor} from "../../util/RangeCompressor";
 import SingleTagSelector from "./SingleTagSelector";
 import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import MisconceptionColorButton from "./MisconceptionColorButton";
-import {MisconceptionElement} from "../interfaces/MisconceptionElement";
-import stringEquals from "../util/StringEquals";
+import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
+import stringEquals from "../../util/StringEquals";
 import TruthCircle from "./TruthCircle";
 
-const {TAGGING_SERVICE_URL} = require('../../config.json')
+const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

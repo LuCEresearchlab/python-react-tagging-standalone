@@ -1,15 +1,15 @@
 import React, {useState} from "react";
 import {useParams} from "react-router-dom";
 import {Container, Grid} from "@material-ui/core";
-import {Dataset, Question} from "../interfaces/Dataset";
-import {JSONLoader} from "../helpers/LoaderHelper";
-import QuestionSelect from "../components/QuestionSelect";
-import AnswersMerger from "../components/AnswersMerger";
+import {Dataset, Question} from "../../interfaces/Dataset";
+import {JSONLoader} from "../../helpers/LoaderHelper";
+import QuestionSelect from "../../components/question_component/QuestionSelect";
+import AnswersMerger from "../../components/diff_component/AnswersMerger";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
-import {MisconceptionElement} from "../interfaces/MisconceptionElement";
+import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
 
 
-const {TAGGING_SERVICE_URL} = require('../../config.json')
+const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 
 const useStyles = makeStyles(() =>
@@ -23,7 +23,7 @@ const useStyles = makeStyles(() =>
     }),
 );
 
-function MergeView() {
+function DiffView() {
 
     const classes = useStyles();
 
@@ -80,4 +80,4 @@ function MergeView() {
         )
 }
 
-export default MergeView
+export default DiffView

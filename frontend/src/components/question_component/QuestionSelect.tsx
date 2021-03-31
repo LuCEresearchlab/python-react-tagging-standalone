@@ -1,6 +1,6 @@
 import React from "react";
 import {Grid, Select} from "@material-ui/core";
-import {Question} from "../interfaces/Dataset";
+import {Question} from "../../interfaces/Dataset";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import QuestionView from "./QuestionView";
 

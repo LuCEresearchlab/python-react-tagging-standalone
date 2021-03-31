@@ -1,12 +1,12 @@
 import React from "react";
 import {Grid} from "@material-ui/core";
-import {useFetch} from "../helpers/LoaderHelper";
-import {taggedAnswer} from "../interfaces/TaggedAnswer";
+import {useFetch} from "../../helpers/LoaderHelper";
+import {taggedAnswer} from "../../interfaces/TaggedAnswer";
 import MisconceptionTagComparer from "./MisconceptionTagComparer";
-import {MisconceptionElement} from "../interfaces/MisconceptionElement";
+import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
 
 
-const {TAGGING_SERVICE_URL} = require('../../config.json')
+const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 interface Input {
     dataset_id: string,

@@ -1,7 +1,7 @@
 import React from "react";
 import {FiberManualRecord, FiberManualRecordOutlined} from "@material-ui/icons";
 import {Button} from "@material-ui/core";
-import stringEquals from "../util/StringEquals";
+import stringEquals from "../../util/StringEquals";
 
 interface Input {
     color: string,

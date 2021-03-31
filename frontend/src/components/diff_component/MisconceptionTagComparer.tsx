@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import {Collapse, List, ListItem, Paper, Table, TableBody, TableContainer} from "@material-ui/core";
-import {taggedAnswer} from "../interfaces/TaggedAnswer";
-import MisconceptionTagElement from "./MisconceptionTagElement";
-import {MisconceptionElement} from "../interfaces/MisconceptionElement";
-import stringEquals from "../util/StringEquals";
+import {taggedAnswer} from "../../interfaces/TaggedAnswer";
+import MisconceptionTagElement from "../tagger_component/MisconceptionTagElement";
+import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
+import stringEquals from "../../util/StringEquals";
 
 interface Input {
     answerGroup: taggedAnswer[],
