@@ -5,6 +5,7 @@ interface Input {
     question_text: string
 }
 
+// const re = /!\[(\d+px)\]\(([^\)]+)\)/.compile() // returns (size, src)
 
 function QuestionView({question_text}: Input) {
 
