@@ -3,7 +3,7 @@ import {Container} from "@material-ui/core";
 import {JSONLoader} from '../../helpers/LoaderHelper';
 import {useParams} from "react-router-dom";
 import {Dataset} from '../../interfaces/Dataset'
-import TaggingUI from '../../components/TaggingUI'
+import TaggingUI from '../../components/v2/TaggingUI'
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
