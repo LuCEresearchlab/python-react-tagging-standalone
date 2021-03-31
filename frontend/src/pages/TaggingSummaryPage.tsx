@@ -3,7 +3,7 @@ import {useHistory, useParams} from "react-router-dom";
 import {JSONLoader} from "../helpers/LoaderHelper";
 import {taggedAnswer} from "../interfaces/TaggedAnswer";
 import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from "@material-ui/core";
-import {StyledTableCell, StyledTableRow, useStyles} from "../components/StyledTable";
+import {StyledTableCell, StyledTableRow, useStyles} from "../components/styled/StyledTable";
 
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')

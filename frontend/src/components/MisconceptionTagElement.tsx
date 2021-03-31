@@ -3,7 +3,7 @@ import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {JSONLoader} from "../helpers/LoaderHelper";
 import {Button} from "@material-ui/core";
 import {HighlightRange} from "../interfaces/HighlightRange";
-import {StyledTableCell, StyledTableRow} from "./StyledTable";
+import {StyledTableCell, StyledTableRow} from "./styled/StyledTable";
 import {taggedAnswer} from "../interfaces/TaggedAnswer";
 import {Answer} from "../interfaces/Dataset";
 

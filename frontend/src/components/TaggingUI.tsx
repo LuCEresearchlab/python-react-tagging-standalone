@@ -3,7 +3,7 @@ import {Grid, List, ListItem, Paper, Table, TableBody, TableContainer} from "@ma
 import {Question, Answer} from "../interfaces/Dataset";
 import {JSONLoader} from "../helpers/LoaderHelper";
 import MisconceptionTagElement from "./MisconceptionTagElement";
-import {StyledPagination} from "./StyledPagination";
+import {StyledPagination} from "./styled/StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 import QuestionSelect from "./QuestionSelect";
