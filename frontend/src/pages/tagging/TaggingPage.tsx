@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import {Container} from "@material-ui/core";
-import {JSONLoader} from '../helpers/LoaderHelper';
+import {JSONLoader} from '../../helpers/LoaderHelper';
 import {useParams} from "react-router-dom";
-import {Dataset} from '../interfaces/Dataset'
-import TaggingUI from '../components/TaggingUI'
+import {Dataset} from '../../interfaces/Dataset'
+import TaggingUI from '../../components/TaggingUI'
 
-const {TAGGING_SERVICE_URL} = require('../../config.json')
+const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 function TaggingPage() {
     const [dataset, setDataset] = useState<Dataset | undefined>(undefined)

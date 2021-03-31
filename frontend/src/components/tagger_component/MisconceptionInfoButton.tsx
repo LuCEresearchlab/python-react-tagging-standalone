@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import HelpIcon from "@material-ui/icons/Help";
 import {Button, Popover} from "@material-ui/core";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
-import stringEquals from "../util/StringEquals";
+import stringEquals from "../../util/StringEquals";
 
 const useStyles = makeStyles(() =>
     createStyles({

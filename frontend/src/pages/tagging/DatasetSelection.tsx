@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {Table, TableBody, TableContainer, TableHead, TableRow, Paper, Button} from '@material-ui/core';
-import {JSONLoader} from '../helpers/LoaderHelper';
+import {JSONLoader} from '../../helpers/LoaderHelper';
 import {useHistory} from 'react-router-dom'
-import {StyledTableRow, StyledTableCell, useStyles} from "../components/StyledTable";
-import {downloadDatasetHelper} from "../helpers/DownloadHelper";
+import {StyledTableRow, StyledTableCell, useStyles} from "../../components/styled/StyledTable";
+import {downloadDatasetHelper} from "../../helpers/DownloadHelper";
 import {Assignment, AssignmentLate, CloudDownload} from "@material-ui/icons";
 
 
-const {TAGGING_SERVICE_URL} = require('../../config.json')
+const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 
 const redirect = (id: string, url: string, router: any) => {

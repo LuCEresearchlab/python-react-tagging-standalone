@@ -1,5 +1,5 @@
 import React from "react"
-import parseString from "../helpers/ParseString";
+import parseString from "../../helpers/ParseString";
 
 interface Input {
     question_text: string

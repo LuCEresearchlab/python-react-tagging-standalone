@@ -3,7 +3,7 @@ import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 
 
-const TAGGING_SERVICE_URL = require('../../config.json').TAGGING_SERVICE_URL
+const TAGGING_SERVICE_URL = require('../../../config.json').TAGGING_SERVICE_URL
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

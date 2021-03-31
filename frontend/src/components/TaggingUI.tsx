@@ -2,11 +2,11 @@ import React, {useState} from "react";
 import {Grid, List, ListItem, Paper, Table, TableBody, TableContainer} from "@material-ui/core";
 import {Question, Answer} from "../interfaces/Dataset";
 import {JSONLoader} from "../helpers/LoaderHelper";
-import MisconceptionTagElement from "./MisconceptionTagElement";
-import {StyledPagination} from "./StyledPagination";
+import MisconceptionTagElement from "./tagger_component/MisconceptionTagElement";
+import {StyledPagination} from "./styled/StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {MisconceptionElement} from "../interfaces/MisconceptionElement";
-import QuestionSelect from "./QuestionSelect";
+import QuestionSelect from "./question_component/QuestionSelect";
 import stringEquals from "../util/StringEquals";
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')

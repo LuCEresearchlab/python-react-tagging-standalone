@@ -1,14 +1,14 @@
 import React, {useState} from "react"
-import {extendedTaggedAnswer} from "../interfaces/TaggedAnswer";
+import {extendedTaggedAnswer} from "../../interfaces/TaggedAnswer";
 import {useParams} from "react-router-dom";
-import {JSONLoader} from "../helpers/LoaderHelper";
+import {JSONLoader} from "../../helpers/LoaderHelper";
 import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from "@material-ui/core";
-import {StyledTableCell, StyledTableRow, useStyles} from "../components/StyledTable";
+import {StyledTableCell, StyledTableRow, useStyles} from "../../components/styled/StyledTable";
 
 // @ts-ignore
 import Highlightable from "highlightable";
 
-const {TAGGING_SERVICE_URL} = require('../../config.json')
+const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 function TaggingDetailPage() {
 
