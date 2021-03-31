@@ -15,8 +15,8 @@ def _json_from_url(url):
 
 # https://stackoverflow.com/questions/41403936/converting-hsl-to-hex-in-python3
 def _hsv_to_rgb(h, s, v):
-    rgb = colorsys.hsv_to_rgb(int(h)/360, int(s)/100, int(v)/100)
-    return "#" + "".join("%02X" % round(i*255) for i in rgb)
+    rgb = colorsys.hsv_to_rgb(int(h) / 360, int(s) / 100, int(v) / 100)
+    return "#" + "".join("%02X" % round(i * 255) for i in rgb)
 
 
 def get_misconceptions():
@@ -30,7 +30,7 @@ def get_java_public_misconceptions():
     filtered = list(filter(lambda misc: misc['pl'] == 'Java' and misc['status'] == 'public', misconceptions))
 
     nr_misc = len(filtered) + 1
-    colors = [_hsv_to_rgb(h * 360 / nr_misc + 120, 100, 100) for h in range(0, nr_misc)]
+    colors = [_hsv_to_rgb(h * 360 / nr_misc + 120, 100, 40 + 20 * (h % 4)) for h in range(0, nr_misc)]
 
     clean = [{
         'name': misc['name'],

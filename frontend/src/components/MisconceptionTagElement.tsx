@@ -215,7 +215,7 @@ function MisconceptionTagElement(
                 text={answer.data}
                 highlightStyle={(range: HighlightRange) => {
                     return {
-                        backgroundColor: range.color
+                        backgroundColor: range.color + "C8",
                     }
                 }
                 }
