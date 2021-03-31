@@ -32,15 +32,13 @@ class TaggingClusterSession {
 
     setTags(tags: (string | null)[]): void {
         this.tags = tags
-        this.postAll()
     }
 
     setRangesList(rangesList: HighlightRange[][]): void {
         this.rangesList = rangesList
-        this.postAll()
     }
 
-    postAll(): void {
+    post(): void {
         this.cluster.forEach((answer, index) => {
             postAnswer(
                 this.dataset_id,

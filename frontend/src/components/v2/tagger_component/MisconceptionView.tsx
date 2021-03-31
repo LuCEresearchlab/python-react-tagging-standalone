@@ -12,21 +12,11 @@ import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import {StyledTableCell} from "../../styled/StyledTable";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
-import {HighlightRange} from "../../../interfaces/HighlightRange";
+import TaggingClusterSession from "../../../model/TaggingClusterSession";
 
 
 interface Input {
-    currentColor: string,
-
-    setCurrentColor(color: string): void,
-
-    tags: (string | null)[],
-
-    setTags(new_tags: (string | null)[]): void,
-
-    rangesList: HighlightRange[][],
-
-    setRangesList(new_ranges_list: HighlightRange[][]): void,
+    clusterTaggingSession: TaggingClusterSession
 
     misconceptionsAvailable: MisconceptionElement[],
 }
@@ -34,16 +24,18 @@ interface Input {
 function MisconceptionView(
     {
         misconceptionsAvailable,
-        currentColor,
-        setCurrentColor,
-        tags,
-        setTags,
-        rangesList,
-        setRangesList
+        clusterTaggingSession
     }: Input
 ) {
 
     const misconceptions_string_list: string[] = misconceptionsAvailable.map<string>(misc => misc.name)
+
+    const currentColor: string = clusterTaggingSession.currentColor
+    const tags = clusterTaggingSession.tags
+    const rangesList = clusterTaggingSession.rangesList
+
+
+    const setCurrentColor = (color: string) => clusterTaggingSession.setCurrentColor(color)
 
     return (
         <StyledTableCell align="right" className={classes.root}>
@@ -80,9 +72,10 @@ function MisconceptionView(
                             // handle specific case of NoMisconception, only possible in first tag
                             if (element != null && isNoMisconception(element))
                                 tmp_tags = ["NoMisconception"]
-                            setTags(tmp_tags)
-                            setRangesList(new_ranges_list)
-                            postAnswer(new_ranges, tmp_tags)
+
+                            clusterTaggingSession.setTags(tmp_tags)
+                            clusterTaggingSession.setRangesList(new_ranges_list)
+                            clusterTaggingSession.post()
                         }}
                         enabled={true}
                     />
@@ -129,9 +122,9 @@ function MisconceptionView(
                                                 const tmp_tags: (string | null)[] =
                                                     computeMiscList(tags, element, index)
 
-                                                setTags(tmp_tags)
-                                                setRangesList(new_ranges_list)
-                                                postAnswer(new_ranges, tmp_tags)
+                                                clusterTaggingSession.setTags(tmp_tags)
+                                                clusterTaggingSession.setRangesList(new_ranges_list)
+                                                clusterTaggingSession.post()
                                             }}
                                             enabled={true}
                                         />
