@@ -37,6 +37,31 @@ function MisconceptionView(
 
     const setCurrentColor = (color: string) => clusterTaggingSession.setCurrentColor(color)
 
+    const getNewRangesList = (element: (string | null), index: number) => {
+        let new_ranges_list = []
+        for (let ranges of rangesList)
+            new_ranges_list.push(highlightRangesColorUpdating(misconceptionsAvailable, tags, ranges, element, index))
+        return new_ranges_list
+    }
+
+
+    const setTagElementHandle1 = (element: (string | null), index: number) => {
+        let tmp_tags: (string | null)[] = computeMiscList(tags, element, index)
+        // handle specific case of NoMisconception, only possible in first tag
+        if (element != null && isNoMisconception(element))
+            tmp_tags = ["NoMisconception"]
+
+        clusterTaggingSession.setTags(tmp_tags)
+        clusterTaggingSession.setRangesList(getNewRangesList(element, index))
+        clusterTaggingSession.post()
+    }
+
+    const setTagElementHandle2 = (element: (string | null), index: number) => {
+        clusterTaggingSession.setTags(computeMiscList(tags, element, index))
+        clusterTaggingSession.setRangesList(getNewRangesList(element, index))
+        clusterTaggingSession.post()
+    }
+
     return (
         <StyledTableCell align="right" className={classes.root}>
             <>
@@ -54,29 +79,7 @@ function MisconceptionView(
                         }
                         handled_element={0}
                         tags={tags}
-                        setTagElement={(element: (string | null), index: number) => {
-                            let new_ranges_list = []
-                            for (let ranges of rangesList) {
-                                new_ranges_list.push(
-                                    highlightRangesColorUpdating(
-                                        misconceptionsAvailable,
-                                        tags,
-                                        ranges,
-                                        element,
-                                        index
-                                    )
-                                )
-                            }
-
-                            let tmp_tags: (string | null)[] = computeMiscList(tags, element, index)
-                            // handle specific case of NoMisconception, only possible in first tag
-                            if (element != null && isNoMisconception(element))
-                                tmp_tags = ["NoMisconception"]
-
-                            clusterTaggingSession.setTags(tmp_tags)
-                            clusterTaggingSession.setRangesList(new_ranges_list)
-                            clusterTaggingSession.post()
-                        }}
+                        setTagElement={setTagElementHandle1}
                         enabled={true}
                     />
                     <MisconceptionInfoButton
@@ -89,7 +92,6 @@ function MisconceptionView(
                     [...Array(Math.min(tags.length - 1, 4))]
                         .map((_, index) => {
                                 const handled_element = index + 1
-
 
                                 return (
                                     <div key={"tag-selector-" + handled_element} className={classes.divLine}>
@@ -105,27 +107,7 @@ function MisconceptionView(
                                             }
                                             handled_element={handled_element}
                                             tags={tags}
-                                            setTagElement={(element: (string | null), index: number) => {
-                                                let new_ranges_list = []
-                                                for (let ranges of rangesList) {
-                                                    new_ranges_list.push(
-                                                        highlightRangesColorUpdating(
-                                                            misconceptionsAvailable,
-                                                            tags,
-                                                            ranges,
-                                                            element,
-                                                            index
-                                                        )
-                                                    )
-                                                }
-
-                                                const tmp_tags: (string | null)[] =
-                                                    computeMiscList(tags, element, index)
-
-                                                clusterTaggingSession.setTags(tmp_tags)
-                                                clusterTaggingSession.setRangesList(new_ranges_list)
-                                                clusterTaggingSession.post()
-                                            }}
+                                            setTagElement={setTagElementHandle2}
                                             enabled={true}
                                         />
                                         <MisconceptionInfoButton
