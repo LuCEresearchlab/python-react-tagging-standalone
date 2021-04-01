@@ -58,6 +58,10 @@ class TaggingSession {
         return this.questions[this.currentQuestion]
     }
 
+    getTaggingClusterSession(): TaggingClusterSession {
+        return this.taggingClusterSession
+    }
+
     popAnswer(idx: number): boolean {
         if (0 <= idx && idx < this.clusters.length) {
             const cluster = this.clusters[this.currentCluster]
