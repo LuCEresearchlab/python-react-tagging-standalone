@@ -1,8 +1,7 @@
 import {HighlightRange} from "../interfaces/HighlightRange";
-import {TaggedAnswer} from "../interfaces/TaggedAnswer";
 
 
-const {TAGGING_SERVICE_URL} = require('../../../config.json')
+const {TAGGING_SERVICE_URL} = require('../../config.json')
 
 const post_answer_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer'
 

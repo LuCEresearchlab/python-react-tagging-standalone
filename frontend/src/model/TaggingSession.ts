@@ -33,12 +33,7 @@ class TaggingSession {
 
     nextQuestion(): boolean {
         const next_question_idx = this.currentQuestion + 1
-        if (next_question_idx < this.questions.length) {
-            this.currentQuestion = next_question_idx
-            this.taggingClusterSession = this._createTaggingClusterSession()
-            return true
-        }
-        return false
+        return this.setCurrentQuestion(next_question_idx)
     }
 
     nextCluster(): boolean {
@@ -48,6 +43,15 @@ class TaggingSession {
             this.taggingClusterSession = this._createTaggingClusterSession()
             return true
         } else return false
+    }
+
+    setCurrentQuestion(idx: number): boolean {
+        if (0 <= idx && idx < this.questions.length) {
+            this.currentQuestion = idx
+            this._createTaggingClusterSession()
+            return true
+        }
+        return false
     }
 
     getCluster(): Answer[] {

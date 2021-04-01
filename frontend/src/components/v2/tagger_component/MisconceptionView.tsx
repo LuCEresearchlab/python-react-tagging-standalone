@@ -13,7 +13,23 @@ import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import {StyledTableCell} from "../../styled/StyledTable";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import TaggingClusterSession from "../../../model/TaggingClusterSession";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            width: "min-content",
+            '& > * + *': {
+                marginTop: theme.spacing(3),
+            },
+            float: "right"
+        },
+        divLine: {
+            display: "inline-flex",
+        }
+    }),
+);
 
 interface Input {
     clusterTaggingSession: TaggingClusterSession
@@ -27,6 +43,8 @@ function MisconceptionView(
         clusterTaggingSession
     }: Input
 ) {
+
+    const classes = useStyles()
 
     const misconceptions_string_list: string[] = misconceptionsAvailable.map<string>(misc => misc.name)
 

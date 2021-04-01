@@ -4,11 +4,12 @@ import {JSONLoader} from '../../helpers/LoaderHelper';
 import {useParams} from "react-router-dom";
 import {Dataset} from '../../interfaces/Dataset'
 import TaggingUI from '../../components/v2/TaggingUI'
+import TaggingSession from "../../model/TaggingSession";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 function TaggingPage() {
-    const [dataset, setDataset] = useState<Dataset | undefined>(undefined)
+    const [taggingSession, setTaggingSession] = useState<TaggingSession | undefined>(undefined)
     const [loaded, setLoaded] = useState<boolean>(false)
 
     const {dataset_id, user_id}: { dataset_id: string, user_id: string } = useParams()
@@ -18,18 +19,15 @@ function TaggingPage() {
 
     if (!loaded) {
         JSONLoader(url, (data: Dataset) => {
-            setDataset(data)
+            setTaggingSession(new TaggingSession(data, user_id))
         })
         setLoaded(true)
     }
 
 
-    if (dataset != null) {
+    if (taggingSession != undefined) {
         return (
-            <TaggingUI
-                questions={dataset.questions}
-                dataset_id={dataset_id}
-                user_id={user_id}/>
+            <TaggingUI taggingSession={taggingSession}/>
         )
     } else {
         return (

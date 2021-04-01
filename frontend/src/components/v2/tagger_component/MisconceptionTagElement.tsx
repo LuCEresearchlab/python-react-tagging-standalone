@@ -153,6 +153,33 @@ function MisconceptionTagElement(
         return filtered_misconceptions
     }
 
+    const post = (url: string, data: any) => {
+        console.log('posting to ' + url)
+        console.log(data)
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        }).then((response: Response) => console.log(response.status));
+    }
+
+    const post_answer = (submitted_ranges: HighlightRange[], given_tags: (string | null)[]) => {
+        post(post_answer_url,
+            {
+                dataset_id: dataset_id,
+                question_id: question_id,
+                answer_id: answer.answer_id,
+                user_id: user_id,
+                tags: given_tags.filter(value => value != null),
+                tagging_time: (getMillis() - startTaggingTime),
+                highlighted_ranges: submitted_ranges,
+                answer_text: answer.data
+            }
+        )
+    }
+
 
     return (
         <StyledTableRow onClick={tagging_time_handler}>

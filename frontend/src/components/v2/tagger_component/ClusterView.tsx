@@ -1,6 +1,6 @@
 import React, {useState} from "react"
 import {Answer} from "../../../interfaces/Dataset";
-import {StyledTableCell, StyledTableRow} from "../../styled/StyledTable";
+import {StyledTableCell} from "../../styled/StyledTable";
 import {rangesCompressor} from "../../../util/RangeCompressor";
 import {HighlightRange} from "../../../interfaces/HighlightRange";
 import {Button} from "@material-ui/core";
