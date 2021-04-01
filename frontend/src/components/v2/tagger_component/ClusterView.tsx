@@ -5,25 +5,22 @@ import {rangesCompressor} from "../../../util/RangeCompressor";
 import {HighlightRange} from "../../../interfaces/HighlightRange";
 import {Button} from "@material-ui/core";
 
-import postAnswer from "../../../helpers/PostAnswer"
-import {isNoMisconception, isUsingDefaultColor, getMillis} from "../../../helpers/Util";
+import {isNoMisconception} from "../../../helpers/Util";
 
 // @ts-ignore
 import Highlightable from "highlightable";
 import {TaggedAnswer} from "../../../interfaces/TaggedAnswer";
 import {JSONLoader} from "../../../helpers/LoaderHelper";
+import TaggingClusterSession from "../../../model/TaggingClusterSession";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 interface Input {
     cluster: Answer[],
-    dataset_id: string,
-    question_id: string,
-    user_id: string,
-    currentColor: string,
+    taggingClusterSession: TaggingClusterSession
 }
 
-function ClusterView({cluster, dataset_id, question_id, user_id, currentColor}: Input) {
+function ClusterView({cluster, taggingClusterSession}: Input) {
 
     console.log("cluster", cluster)
 
@@ -31,10 +28,7 @@ function ClusterView({cluster, dataset_id, question_id, user_id, currentColor}: 
         cluster.map(answer =>
             <ClusterItem
                 answer={answer}
-                dataset_id={dataset_id}
-                question_id={question_id}
-                user_id={user_id}
-                currentColor={currentColor}
+                taggingClusterSession={taggingClusterSession}
             />
         )
     )
@@ -42,19 +36,17 @@ function ClusterView({cluster, dataset_id, question_id, user_id, currentColor}: 
 
 interface ClusterItemInput {
     answer: Answer,
-    dataset_id: string,
-    question_id: string,
-    user_id: string,
-    currentColor: string
+    taggingClusterSession: TaggingClusterSession
 }
 
-function ClusterItem({answer, dataset_id, question_id, user_id, currentColor}: ClusterItemInput) {
-    const get_selected_misc_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + '/question/'
-        + question_id + '/answer/' + answer.answer_id + '/user/' + user_id
+function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
 
-    const [tags, setTags] = useState<(string | null)[]>([])
-    const [ranges, setRanges] = useState<HighlightRange[]>([])
-    const [startTaggingTime] = useState<number>(getMillis())
+
+    const get_selected_misc_url = TAGGING_SERVICE_URL +
+        '/datasets/tagged-answer/dataset/' + taggingClusterSession.dataset_id +
+        '/question/' + taggingClusterSession.question_id +
+        '/answer/' + answer.answer_id +
+        '/user/' + taggingClusterSession.user_id
 
     const [loaded, setLoaded] = useState<boolean>(false)
 
@@ -70,41 +62,39 @@ function ClusterItem({answer, dataset_id, question_id, user_id, currentColor}: C
                         [...previousTaggedAnswer.tags, null]  // append null to allow inserting
 
 
-                setTags(previous_tags)
-                setRanges(previousTaggedAnswer.highlighted_ranges == null ? [] : previousTaggedAnswer.highlighted_ranges)
+                const loaded_ranges = previousTaggedAnswer.highlighted_ranges == null ?
+                    [] :
+                    previousTaggedAnswer.highlighted_ranges
+
+                taggingClusterSession.setTags(previous_tags)
+                taggingClusterSession.setRanges(answer, loaded_ranges)
             } else {  // has never been tagged
-                setTags([null])
-                setRanges([])
+                taggingClusterSession.setTags([null])
+                taggingClusterSession.setRanges(answer, [])
             }
             setLoaded(true)
         })
     }
 
-    const answer_id: string = answer.answer_id
-    const data: string = answer.data
-
+    const ranges: HighlightRange[] = taggingClusterSession.getRanges(answer)
 
     return (
         <StyledTableCell component="th" scope="row">
             <Highlightable
                 ranges={ranges}
                 onTextHighlighted={(e: any) => {
-                    if (isUsingDefaultColor(currentColor)) return
+                    if (taggingClusterSession.isUsingDefaultColor()) return
 
-                    const newRange = {start: e.start, end: e.end, text: answer.data, color: currentColor}
+                    const newRange = {
+                        start: e.start,
+                        end: e.end,
+                        text: answer.data,
+                        color: taggingClusterSession.currentColor
+                    }
                     const r = rangesCompressor(ranges, newRange)
 
-                    setRanges([...r])
-                    postAnswer(
-                        dataset_id,
-                        question_id,
-                        answer_id,
-                        user_id,
-                        data,
-                        startTaggingTime,
-                        r,
-                        tags
-                    )
+                    taggingClusterSession.setRanges(answer, [...r])
+                    taggingClusterSession.post()
                 }}
                 text={answer.data}
                 highlightStyle={(range: HighlightRange) => {
@@ -115,17 +105,8 @@ function ClusterItem({answer, dataset_id, question_id, user_id, currentColor}: C
                 }
             />
             <Button onClick={() => {
-                setRanges([])
-                postAnswer(
-                    dataset_id,
-                    question_id,
-                    answer_id,
-                    user_id,
-                    data,
-                    startTaggingTime,
-                    [],
-                    tags
-                )
+                taggingClusterSession.setRanges(answer, [])
+                taggingClusterSession.post()
             }}>Clear
             </Button>
         </StyledTableCell>

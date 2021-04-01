@@ -2,6 +2,8 @@ import {getMillis, NO_COLOR} from "../helpers/Util";
 import {HighlightRange} from "../interfaces/HighlightRange";
 import {Answer} from "../interfaces/Dataset";
 import postAnswer from "../helpers/PostAnswer";
+import {isUsingDefaultColor as isUsingDefaultColorUtil} from "../helpers/Util";
+import stringEquals from "../util/StringEquals";
 
 class TaggingClusterSession {
 
@@ -38,6 +40,18 @@ class TaggingClusterSession {
         this.rangesList = rangesList
     }
 
+    setRanges(answer: Answer, ranges: HighlightRange[]): void {
+        const idx = this.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
+        if (idx === -1) return
+        this.rangesList[idx] = ranges
+    }
+
+    getRanges(answer: Answer): HighlightRange[] {
+        const idx = this.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
+        if (idx === -1) return []
+        return this.rangesList[idx]
+    }
+
     post(): void {
         this.cluster.forEach((answer, index) => {
             postAnswer(
@@ -50,6 +64,10 @@ class TaggingClusterSession {
                 this.rangesList[index],
                 this.tags)
         })
+    }
+
+    isUsingDefaultColor(): boolean {
+        return isUsingDefaultColorUtil(this.currentColor)
     }
 
 }
