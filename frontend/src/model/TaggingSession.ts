@@ -61,6 +61,8 @@ class TaggingSession {
     setCurrentQuestion(idx: number): boolean {
         if (0 <= idx && idx < this.questions.length) {
             this.currentQuestion = idx
+            this.currentCluster = 0
+            this.clusters = this.questions[idx].clustered_answers
             this._createTaggingClusterSession()
             return true
         }

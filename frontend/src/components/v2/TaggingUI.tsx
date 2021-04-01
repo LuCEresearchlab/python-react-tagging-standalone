@@ -76,7 +76,7 @@ function TaggingUI({taggingSession, my_key}: Input) {
                     <ClusterView
                         key={"ClusterView|" + my_key}
                         cluster={taggingSession.getCluster()}
-                        taggingClusterSession={taggingSession.taggingClusterSession}
+                        taggingClusterSession={taggingSession.getTaggingClusterSession()}
                         my_key={my_key}
                     />
                 </Grid>
@@ -84,7 +84,7 @@ function TaggingUI({taggingSession, my_key}: Input) {
                     <TagView
                         key={"TagView|" + my_key}
                         misconceptionsAvailable={misconceptions_available}
-                        taggingClusterSession={taggingSession.taggingClusterSession}
+                        taggingClusterSession={taggingSession.getTaggingClusterSession()}
                         my_key={my_key}
                     />
                     {/*<List key={'list|answers|' + taggingSession.currentQuestion}>*/}
