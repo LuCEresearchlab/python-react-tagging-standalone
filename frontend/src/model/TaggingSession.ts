@@ -24,18 +24,24 @@ class TaggingSession {
         this.clusters = this.questions[0].clustered_answers
 
         this.updateKey = updateKey
-        this.taggingClusterSession = this._createTaggingClusterSession()
-    }
-
-    _createTaggingClusterSession(): TaggingClusterSession {
-        this.updateKey(getMillis())
-        return new TaggingClusterSession(
+        this.taggingClusterSession = new TaggingClusterSession(
             this.dataset.dataset_id,
             this.questions[this.currentQuestion].question_id,
             this.user_id,
             this.clusters[this.currentCluster],
             this.updateKey
         )
+    }
+
+    _createTaggingClusterSession(): void {
+        this.taggingClusterSession = new TaggingClusterSession(
+            this.dataset.dataset_id,
+            this.questions[this.currentQuestion].question_id,
+            this.user_id,
+            this.clusters[this.currentCluster],
+            this.updateKey
+        )
+        this.updateKey(getMillis())
     }
 
     nextQuestion(): boolean {
@@ -47,7 +53,7 @@ class TaggingSession {
         const next_cluster_idx = this.currentCluster + 1
         if (next_cluster_idx < this.clusters.length) {
             this.currentCluster = next_cluster_idx
-            this.taggingClusterSession = this._createTaggingClusterSession()
+            this._createTaggingClusterSession()
             return true
         } else return false
     }
@@ -55,6 +61,15 @@ class TaggingSession {
     setCurrentQuestion(idx: number): boolean {
         if (0 <= idx && idx < this.questions.length) {
             this.currentQuestion = idx
+            this._createTaggingClusterSession()
+            return true
+        }
+        return false
+    }
+
+    setCurrentCluster(idx: number): boolean {
+        if (0 <= idx && idx < this.clusters.length) {
+            this.currentCluster = idx
             this._createTaggingClusterSession()
             return true
         }
@@ -75,11 +90,14 @@ class TaggingSession {
 
     popAnswer(idx: number): boolean {
         if (0 <= idx && idx < this.clusters.length) {
+            // store current value
+            this.taggingClusterSession.post()
+
             const cluster = this.clusters[this.currentCluster]
             const popped: Answer[] = cluster.slice(idx, idx + 1)
             const reduced_cluster: Answer[] = cluster.slice(0, idx).concat(cluster.slice(idx + 1))
             this.clusters[this.currentCluster] = [...reduced_cluster].concat(popped)
-            this.taggingClusterSession = this._createTaggingClusterSession()
+            this._createTaggingClusterSession()
             return true
         }
         return false

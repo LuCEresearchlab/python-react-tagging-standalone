@@ -13,7 +13,7 @@ import {TaggedAnswer} from "../../../interfaces/TaggedAnswer";
 import {JSONLoader} from "../../../helpers/LoaderHelper";
 import TaggingClusterSession from "../../../model/TaggingClusterSession";
 
-const {TAGGING_SERVICE_URL} = require('../../../config.json')
+const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
 interface Input {
     cluster: Answer[],
@@ -26,21 +26,27 @@ function ClusterView({cluster, taggingClusterSession, my_key}: Input) {
     console.log("cluster", cluster)
 
     return (
-        cluster.map(answer =>
-            <ClusterItem
-                answer={answer}
-                taggingClusterSession={taggingClusterSession}
-            />
-        )
+        <div>
+            {
+                cluster.map((answer: Answer, idx: number) =>
+                    <ClusterItem
+                        key={"ClusterItem|Answer|" + answer.answer_id + my_key}
+                        answer={answer}
+                        taggingClusterSession={taggingClusterSession}
+                        idx={idx}
+                    />
+                )}
+        </div>
     )
 }
 
 interface ClusterItemInput {
     answer: Answer,
-    taggingClusterSession: TaggingClusterSession
+    taggingClusterSession: TaggingClusterSession,
+    idx: number
 }
 
-function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
+function ClusterItem({answer, taggingClusterSession, idx}: ClusterItemInput) {
 
 
     const get_selected_misc_url = TAGGING_SERVICE_URL +
@@ -67,10 +73,10 @@ function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
                     [] :
                     previousTaggedAnswer.highlighted_ranges
 
-                taggingClusterSession.setTags(previous_tags)
+                if (idx == 0) taggingClusterSession.setTags(previous_tags)
                 taggingClusterSession.setRanges(answer, loaded_ranges)
             } else {  // has never been tagged
-                taggingClusterSession.setTags([null])
+                if (idx == 0) taggingClusterSession.setTags([null])
                 taggingClusterSession.setRanges(answer, [])
             }
             setLoaded(true)

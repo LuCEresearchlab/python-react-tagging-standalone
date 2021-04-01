@@ -24,8 +24,8 @@ class TaggingClusterSession {
         this.user_id = user_id
         this.currentColor = NO_COLOR
         this.cluster = cluster
-        this.tags = []
-        this.rangesList = []
+        this.tags = [null]
+        this.rangesList = [...Array(cluster.length)].map(() => [])
         this.startTaggingTime = getMillis()
         this.updateKey = updateKey
     }

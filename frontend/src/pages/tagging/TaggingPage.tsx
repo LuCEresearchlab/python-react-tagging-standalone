@@ -29,7 +29,7 @@ function TaggingPage() {
 
     if (taggingSession != undefined) {
         return (
-            <TaggingUI key={"taggingUI|" + key} my_key={key} taggingSession={taggingSession}/>
+            <TaggingUI my_key={key} taggingSession={taggingSession}/>
         )
     } else {
         return (
