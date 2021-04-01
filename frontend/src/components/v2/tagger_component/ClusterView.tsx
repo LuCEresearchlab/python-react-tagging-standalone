@@ -85,7 +85,9 @@ function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
         <StyledTableCell component="th" scope="row">
             <Highlightable
                 ranges={ranges}
+                enabled={true}
                 onTextHighlighted={(e: any) => {
+                    console.log("highlighted")
                     if (taggingClusterSession.isUsingDefaultColor()) return
 
                     const newRange = {
