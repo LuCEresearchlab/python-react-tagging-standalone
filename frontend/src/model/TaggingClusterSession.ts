@@ -16,7 +16,9 @@ class TaggingClusterSession {
     rangesList: HighlightRange[][]
     startTaggingTime: number
 
-    constructor(dataset_id: string, question_id: string, user_id: string, cluster: Answer[]) {
+    updateKey: Function
+
+    constructor(dataset_id: string, question_id: string, user_id: string, cluster: Answer[], updateKey: Function) {
         this.dataset_id = dataset_id
         this.question_id = question_id
         this.user_id = user_id
@@ -25,25 +27,30 @@ class TaggingClusterSession {
         this.tags = []
         this.rangesList = []
         this.startTaggingTime = getMillis()
+        this.updateKey = updateKey
     }
 
 
     setCurrentColor(color: string): void {
         this.currentColor = color
+        this.updateKey(getMillis())
     }
 
     setTags(tags: (string | null)[]): void {
         this.tags = tags
+        this.updateKey(getMillis())
     }
 
     setRangesList(rangesList: HighlightRange[][]): void {
         this.rangesList = rangesList
+        this.updateKey(getMillis())
     }
 
     setRanges(answer: Answer, ranges: HighlightRange[]): void {
         const idx = this.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
         if (idx === -1) return
         this.rangesList[idx] = ranges
+        this.updateKey(getMillis())
     }
 
     getRanges(answer: Answer): HighlightRange[] {

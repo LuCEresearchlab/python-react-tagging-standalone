@@ -1,5 +1,6 @@
 import {Answer, Dataset, Question} from "../interfaces/Dataset";
 import TaggingClusterSession from "./TaggingClusterSession";
+import {getMillis} from "../helpers/Util";
 
 class TaggingSession {
     dataset: Dataset
@@ -9,9 +10,11 @@ class TaggingSession {
     currentCluster: number
     taggingClusterSession: TaggingClusterSession
     user_id: string
+    updateKey: Function
 
+    // add function call to change key if needed
 
-    constructor(dataset: Dataset, user_id: string) {
+    constructor(dataset: Dataset, user_id: string, updateKey: Function) {
         this.dataset = dataset
         this.user_id = user_id
 
@@ -19,15 +22,19 @@ class TaggingSession {
         this.currentQuestion = 0
         this.currentCluster = 0
         this.clusters = this.questions[0].clustered_answers
+
+        this.updateKey = updateKey
         this.taggingClusterSession = this._createTaggingClusterSession()
     }
 
     _createTaggingClusterSession(): TaggingClusterSession {
+        this.updateKey(getMillis())
         return new TaggingClusterSession(
             this.dataset.dataset_id,
             this.questions[this.currentQuestion].question_id,
             this.user_id,
-            this.clusters[this.currentCluster]
+            this.clusters[this.currentCluster],
+            this.updateKey
         )
     }
 

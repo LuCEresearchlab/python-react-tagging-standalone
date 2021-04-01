@@ -32,9 +32,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Input {
-    clusterTaggingSession: TaggingClusterSession
-
-    misconceptionsAvailable: MisconceptionElement[],
+    clusterTaggingSession: TaggingClusterSession,
+    misconceptionsAvailable: MisconceptionElement[]
 }
 
 function MisconceptionView(
@@ -49,7 +48,7 @@ function MisconceptionView(
     const misconceptions_string_list: string[] = misconceptionsAvailable.map<string>(misc => misc.name)
 
     const currentColor: string = clusterTaggingSession.currentColor
-    const tags = clusterTaggingSession.tags
+    const tags = [null]//clusterTaggingSession.tags
     const rangesList = clusterTaggingSession.rangesList
 
 

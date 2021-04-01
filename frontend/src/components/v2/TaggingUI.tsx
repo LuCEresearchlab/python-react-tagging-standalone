@@ -12,6 +12,7 @@ import TagView from "./tagger_component/TagView";
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 interface Input {
+    my_key: number,
     taggingSession: TaggingSession
 }
 
@@ -27,7 +28,7 @@ const useStyles = makeStyles(() =>
     }),
 );
 
-function TaggingUI({taggingSession}: Input) {
+function TaggingUI({taggingSession, my_key}: Input) {
     const classes = useStyles()
 
     const get_available_url = TAGGING_SERVICE_URL + '/progmiscon_api/misconceptions'
@@ -62,13 +63,17 @@ function TaggingUI({taggingSession}: Input) {
         <Grid container direction={'row'} className={classes.root} spacing={10}>
             <Grid item xs={6}>
                 <QuestionSelect
+                    key={"QuestionSelect|" + my_key}
                     questions={taggingSession.questions}
                     selectedQuestion={taggingSession.currentQuestion}
                     setQuestionSelect={selectedChange}/>
             </Grid>
             <Grid item xs={6}>
                 <TagView
+                    key={"TagView|" + my_key}
                     misconceptionsAvailable={misconceptions_available}
+                    taggingClusterSession={taggingSession.taggingClusterSession}
+                    my_key={my_key}
                 />
                 {/*<List key={'list|answers|' + taggingSession.currentQuestion}>*/}
                 {/*    {*/}
@@ -94,6 +99,7 @@ function TaggingUI({taggingSession}: Input) {
                 {/*    }*/}
                 {/*</List>*/}
                 <StyledPagination
+                    key={"StyledPagination|" + my_key}
                     count={total_clusters}
                     page={page}
                     onChange={paginationChange}

@@ -17,10 +17,11 @@ const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 interface Input {
     cluster: Answer[],
-    taggingClusterSession: TaggingClusterSession
+    taggingClusterSession: TaggingClusterSession,
+    my_key: number
 }
 
-function ClusterView({cluster, taggingClusterSession}: Input) {
+function ClusterView({cluster, taggingClusterSession, my_key}: Input) {
 
     console.log("cluster", cluster)
 

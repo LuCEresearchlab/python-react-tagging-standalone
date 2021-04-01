@@ -14,12 +14,14 @@ function TaggingPage() {
 
     const {dataset_id, user_id}: { dataset_id: string, user_id: string } = useParams()
 
+    const [key, setKey] = useState<number>(0)
+
     const url: string = TAGGING_SERVICE_URL + '/datasets/get-dataset/dataset/' + dataset_id
 
 
     if (!loaded) {
         JSONLoader(url, (data: Dataset) => {
-            setTaggingSession(new TaggingSession(data, user_id))
+            setTaggingSession(new TaggingSession(data, user_id, setKey))
         })
         setLoaded(true)
     }
@@ -27,7 +29,7 @@ function TaggingPage() {
 
     if (taggingSession != undefined) {
         return (
-            <TaggingUI taggingSession={taggingSession}/>
+            <TaggingUI key={"taggingUI|" + key} my_key={key} taggingSession={taggingSession}/>
         )
     } else {
         return (
