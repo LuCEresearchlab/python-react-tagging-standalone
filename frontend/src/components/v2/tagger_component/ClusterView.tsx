@@ -28,12 +28,11 @@ function ClusterView({cluster, taggingClusterSession, my_key}: Input) {
     return (
         <div>
             {
-                cluster.map((answer: Answer, idx: number) =>
+                cluster.map((answer: Answer) =>
                     <ClusterItem
                         key={"ClusterItem|Answer|" + answer.answer_id + my_key}
                         answer={answer}
                         taggingClusterSession={taggingClusterSession}
-                        idx={idx}
                     />
                 )}
         </div>
@@ -42,11 +41,10 @@ function ClusterView({cluster, taggingClusterSession, my_key}: Input) {
 
 interface ClusterItemInput {
     answer: Answer,
-    taggingClusterSession: TaggingClusterSession,
-    idx: number
+    taggingClusterSession: TaggingClusterSession
 }
 
-function ClusterItem({answer, taggingClusterSession, idx}: ClusterItemInput) {
+function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
 
 
     const get_selected_misc_url = TAGGING_SERVICE_URL +
@@ -73,11 +71,9 @@ function ClusterItem({answer, taggingClusterSession, idx}: ClusterItemInput) {
                     [] :
                     previousTaggedAnswer.highlighted_ranges
 
-                if (idx == 0) taggingClusterSession.setTags(previous_tags)
-                taggingClusterSession.setRanges(answer, loaded_ranges)
+                taggingClusterSession.setTagsAndRangesNoRender(previous_tags, answer, loaded_ranges)
             } else {  // has never been tagged
-                if (idx == 0) taggingClusterSession.setTags([null])
-                taggingClusterSession.setRanges(answer, [])
+                taggingClusterSession.setTagsAndRangesNoRender([null], answer, [])
             }
             setLoaded(true)
         })

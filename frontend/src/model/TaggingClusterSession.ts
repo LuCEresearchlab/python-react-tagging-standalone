@@ -53,6 +53,13 @@ class TaggingClusterSession {
         this.updateKey(getMillis())
     }
 
+    setTagsAndRangesNoRender(tags: (string | null)[], answer: Answer, ranges: HighlightRange[]) {
+        this.tags = tags
+        const idx = this.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
+        if (idx === -1) return
+        this.rangesList[idx] = ranges
+    }
+
     getRanges(answer: Answer): HighlightRange[] {
         const idx = this.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
         if (idx === -1) return []
