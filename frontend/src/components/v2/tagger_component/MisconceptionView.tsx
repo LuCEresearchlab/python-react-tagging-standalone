@@ -48,7 +48,7 @@ function MisconceptionView(
     const misconceptions_string_list: string[] = misconceptionsAvailable.map<string>(misc => misc.name)
 
     const currentColor: string = clusterTaggingSession.currentColor
-    const tags = [null]//clusterTaggingSession.tags
+    const tags = clusterTaggingSession.tags
     const rangesList = clusterTaggingSession.rangesList
 
 
