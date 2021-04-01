@@ -91,16 +91,16 @@ function MisconceptionView(
                 {
                     [...Array(Math.min(tags.length - 1, 4))]
                         .map((_, index) => {
-                                const handled_element = index + 1
+                            const handled_element = index + 1
 
-                                return (
-                                    <div key={"tag-selector-" + handled_element} className={classes.divLine}>
-                                        <MisconceptionColorButton
-                                            color={(() => getColor(misconceptionsAvailable, tags[handled_element]))()}
-                                            current_color={currentColor}
-                                            setColor={setCurrentColor}
-                                            enabled={true}
-                                        />
+                            return (
+                                <div key={"tag-selector-" + handled_element} className={classes.divLine}>
+                                    <MisconceptionColorButton
+                                        color={(() => getColor(misconceptionsAvailable, tags[handled_element]))()}
+                                        current_color={currentColor}
+                                        setColor={setCurrentColor}
+                                        enabled={true}
+                                    />
                                         <SingleTagSelector
                                             misconceptions_available={
                                                 filteredMisconceptions(tags, misconceptions_string_list, handled_element)
