@@ -59,6 +59,7 @@ class TaggingSession {
     }
 
     setCurrentQuestion(idx: number): boolean {
+        if (idx === this.currentQuestion) return false
         if (0 <= idx && idx < this.questions.length) {
             this.currentQuestion = idx
             this.currentCluster = 0
@@ -70,6 +71,7 @@ class TaggingSession {
     }
 
     setCurrentCluster(idx: number): boolean {
+        if (idx === this.currentCluster) return false
         if (0 <= idx && idx < this.clusters.length) {
             this.currentCluster = idx
             this._createTaggingClusterSession()

@@ -23,8 +23,6 @@ interface Input {
 
 function ClusterView({cluster, taggingClusterSession, my_key}: Input) {
 
-    console.log("cluster", cluster)
-
     return (
         <div>
             {
@@ -71,9 +69,9 @@ function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
                     [] :
                     previousTaggedAnswer.highlighted_ranges
 
-                taggingClusterSession.setTagsAndRangesNoRender(previous_tags, answer, loaded_ranges)
+                taggingClusterSession.setTagsAndRanges(previous_tags, answer, loaded_ranges)
             } else {  // has never been tagged
-                taggingClusterSession.setTagsAndRangesNoRender([null], answer, [])
+                taggingClusterSession.setTagsAndRanges([null], answer, [])
             }
             setLoaded(true)
         })
@@ -87,7 +85,6 @@ function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
                 ranges={ranges}
                 enabled={true}
                 onTextHighlighted={(e: any) => {
-                    console.log("highlighted")
                     if (taggingClusterSession.isUsingDefaultColor()) return
 
                     const newRange = {

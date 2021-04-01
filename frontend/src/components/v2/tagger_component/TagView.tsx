@@ -11,7 +11,6 @@ interface Input {
 
 function TagView({misconceptionsAvailable, taggingClusterSession, my_key}: Input) {
 
-    console.log(misconceptionsAvailable)
 
     return (
         <MisconceptionView

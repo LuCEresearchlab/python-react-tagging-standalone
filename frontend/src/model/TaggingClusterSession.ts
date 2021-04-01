@@ -4,6 +4,7 @@ import {Answer} from "../interfaces/Dataset";
 import postAnswer from "../helpers/PostAnswer";
 import {isUsingDefaultColor as isUsingDefaultColorUtil} from "../helpers/Util";
 import stringEquals from "../util/StringEquals";
+import arrayEquals from "../util/ArrayEquals";
 
 class TaggingClusterSession {
 
@@ -30,34 +31,45 @@ class TaggingClusterSession {
         this.updateKey = updateKey
     }
 
+    _render() {
+        this.updateKey(getMillis())
+    }
+
 
     setCurrentColor(color: string): void {
+        if (stringEquals(color, this.currentColor)) return
         this.currentColor = color
-        this.updateKey(getMillis())
+        this._render()
     }
 
     setTags(tags: (string | null)[]): void {
+        if (arrayEquals(tags, this.tags)) return
         this.tags = tags
-        this.updateKey(getMillis())
+        this._render()
     }
 
     setRangesList(rangesList: HighlightRange[][]): void {
+        if (arrayEquals(rangesList, this.tags)) return
         this.rangesList = rangesList
-        this.updateKey(getMillis())
+        this._render()
     }
 
     setRanges(answer: Answer, ranges: HighlightRange[]): void {
         const idx = this.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
         if (idx === -1) return
         this.rangesList[idx] = ranges
-        this.updateKey(getMillis())
+        this._render()
     }
 
-    setTagsAndRangesNoRender(tags: (string | null)[], answer: Answer, ranges: HighlightRange[]) {
-        this.tags = tags
+    setTagsAndRanges(tags: (string | null)[], answer: Answer, ranges: HighlightRange[]) {
         const idx = this.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
         if (idx === -1) return
+
+        if (arrayEquals(tags, this.tags) && arrayEquals(this.rangesList[idx], ranges)) return
+
+        this.tags = tags
         this.rangesList[idx] = ranges
+        this._render()
     }
 
     getRanges(answer: Answer): HighlightRange[] {
