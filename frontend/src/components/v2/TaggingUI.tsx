@@ -10,6 +10,8 @@ import TaggingSession from "../../model/TaggingSession";
 import TagView from "./tagger_component/TagView";
 import ClusterView from "./tagger_component/ClusterView";
 
+import {LIGHT_GREY} from "../../util/Colors"
+
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 interface Input {
@@ -32,7 +34,9 @@ const useStyles = makeStyles(() =>
             position: 'sticky',
             top: '100px',
             flexGrow: 1,
-            minHeight: '500px'
+            minHeight: '500px',
+            padding: '1em',
+            paddingBottom: 0
         },
     }),
 );
@@ -79,7 +83,8 @@ function TaggingUI({taggingSession, my_key}: Input) {
                     setQuestionSelect={selectedChange}/>
             </Grid>
             <Grid item xs={8}>
-                <Grid container direction={'row'} className={classes.taggingMiscBlock} spacing={2} component={Paper}>
+                <Grid container direction={'row'} className={classes.taggingMiscBlock} spacing={2} component={Paper}
+                      style={{backgroundColor: LIGHT_GREY}}>
                     <Grid item xs={6}>
                         <ClusterView
                             key={"ClusterView|" + my_key}

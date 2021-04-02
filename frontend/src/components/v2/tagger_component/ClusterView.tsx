@@ -2,9 +2,10 @@ import React, {useEffect, useState} from "react"
 import {Answer} from "../../../interfaces/Dataset";
 import {rangesCompressor} from "../../../util/RangeCompressor";
 import {HighlightRange} from "../../../interfaces/HighlightRange";
-import {Button} from "@material-ui/core";
+import {Button, Paper} from "@material-ui/core";
 
 import {isNoMisconception} from "../../../helpers/Util";
+import {GREY} from "../../../util/Colors"
 
 // @ts-ignore
 import Highlightable from "highlightable";
@@ -87,7 +88,7 @@ function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
     if (!loaded) return <div>Loading...</div>
 
     return (
-        <div>
+        <Paper style={{padding: '1em', backgroundColor: GREY}}>
             <Highlightable
                 ranges={ranges}
                 enabled={true}
@@ -118,7 +119,7 @@ function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
                 taggingClusterSession.post()
             }}>Clear
             </Button>
-        </div>
+        </Paper>
     )
 }
 
