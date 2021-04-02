@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Grid} from "@material-ui/core";
+import {Grid, Paper} from "@material-ui/core";
 import {Question} from "../../interfaces/Dataset";
 import {JSONLoader} from "../../helpers/LoaderHelper";
 import {StyledPagination} from "../styled/StyledPagination";
@@ -25,6 +25,14 @@ const useStyles = makeStyles(() =>
             position: 'sticky',
             top: '100px',
             flexGrow: 1
+        },
+        taggingMiscBlock: {
+            width: '100%',
+            justifyContent: 'center',
+            position: 'sticky',
+            top: '100px',
+            flexGrow: 1,
+            minHeight: '500px'
         },
     }),
 );
@@ -71,7 +79,7 @@ function TaggingUI({taggingSession, my_key}: Input) {
                     setQuestionSelect={selectedChange}/>
             </Grid>
             <Grid item xs={8}>
-                <Grid container direction={'row'} className={classes.root} spacing={2}>
+                <Grid container direction={'row'} className={classes.taggingMiscBlock} spacing={2} component={Paper}>
                     <Grid item xs={6}>
                         <ClusterView
                             key={"ClusterView|" + my_key}
@@ -87,37 +95,14 @@ function TaggingUI({taggingSession, my_key}: Input) {
                             taggingClusterSession={taggingSession.getTaggingClusterSession()}
                             my_key={my_key}
                         />
-                        {/*<List key={'list|answers|' + taggingSession.currentQuestion}>*/}
-                        {/*    {*/}
-                        {/*        taggingSession.getCluster()*/}
-                        {/*            .map((answer: Answer) =>*/}
-                        {/*                <ListItem key={answer.answer_id + '|' + answer.user_id}>*/}
-                        {/*                    <TableContainer component={Paper}>*/}
-                        {/*                        <Table aria-label="customized table">*/}
-                        {/*                            <TableBody>*/}
-                        {/*                                <MisconceptionTagElement*/}
-                        {/*                                    key={taggingSession.dataset.dataset_id + "|" + current_question.question_id + "|" + answer.answer_id}*/}
-                        {/*                                    dataset_id={taggingSession.dataset.dataset_id}*/}
-                        {/*                                    question_id={current_question.question_id}*/}
-                        {/*                                    user_id={taggingSession.user_id}*/}
-                        {/*                                    enabled={true}*/}
-                        {/*                                    answer={answer}*/}
-                        {/*                                    misconceptions_available={misconceptions_available}/>*/}
-                        {/*                            </TableBody>*/}
-                        {/*                        </Table>*/}
-                        {/*                    </TableContainer>*/}
-                        {/*                </ListItem>*/}
-                        {/*            )*/}
-                        {/*    }*/}
-                        {/*</List>*/}
-                        <StyledPagination
-                            key={"StyledPagination|" + my_key}
-                            count={total_clusters}
-                            page={page}
-                            onChange={paginationChange}
-                            siblingCount={5}
-                        />
                     </Grid>
+                    <StyledPagination
+                        key={"StyledPagination|" + my_key}
+                        count={total_clusters}
+                        page={page}
+                        onChange={paginationChange}
+                        siblingCount={5}
+                    />
                 </Grid>
             </Grid>
         </Grid>

@@ -1,6 +1,5 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import {Answer} from "../../../interfaces/Dataset";
-import {StyledTableCell} from "../../styled/StyledTable";
 import {rangesCompressor} from "../../../util/RangeCompressor";
 import {HighlightRange} from "../../../interfaces/HighlightRange";
 import {Button} from "@material-ui/core";
@@ -53,7 +52,8 @@ function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
 
     const [loaded, setLoaded] = useState<boolean>(false)
 
-    if (!loaded) {
+    useEffect(() => {
+        let isMounted = true; // note this flag denote mount status
         JSONLoader(get_selected_misc_url, (prev_tagged_answers: TaggedAnswer[]) => {
             // has existing value
             if (prev_tagged_answers.length > 0) {
@@ -73,14 +73,21 @@ function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
             } else {  // has never been tagged
                 taggingClusterSession.setTagsAndRanges([null], answer, [])
             }
-            setLoaded(true)
         })
-    }
+        if (isMounted) {
+            setLoaded(true)
+        }
+        return () => {
+            isMounted = false
+        } // use effect cleanup to set flag false, if unmounted
+    });
 
     const ranges: HighlightRange[] = taggingClusterSession.getRanges(answer)
 
+    if (!loaded) return <div>Loading...</div>
+
     return (
-        <StyledTableCell component="th" scope="row">
+        <div>
             <Highlightable
                 ranges={ranges}
                 enabled={true}
@@ -111,7 +118,7 @@ function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
                 taggingClusterSession.post()
             }}>Clear
             </Button>
-        </StyledTableCell>
+        </div>
     )
 }
 

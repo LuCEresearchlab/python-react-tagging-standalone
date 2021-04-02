@@ -10,7 +10,6 @@ import {
 } from "../../../helpers/Util";
 import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import MisconceptionNoteButton from "./MisconceptionNoteButton";
-import {StyledTableCell} from "../../styled/StyledTable";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import TaggingClusterSession from "../../../model/TaggingClusterSession";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
@@ -80,7 +79,7 @@ function MisconceptionView(
     }
 
     return (
-        <StyledTableCell align="right" className={classes.root}>
+        <div className={classes.root}>
             <>
                 <div className={classes.divLine}>
                     <MisconceptionColorButton
@@ -127,17 +126,17 @@ function MisconceptionView(
                                             setTagElement={setTagElementHandle2}
                                             enabled={true}
                                         />
-                                        <MisconceptionInfoButton
-                                            tags={tags}
-                                            handled_element={handled_element}
-                                        />
-                                        <MisconceptionNoteButton/>
-                                    </div>)
+                                    <MisconceptionInfoButton
+                                        tags={tags}
+                                        handled_element={handled_element}
+                                    />
+                                    <MisconceptionNoteButton/>
+                                </div>)
                             }
                         )
                 }
             </>
-        </StyledTableCell>
+        </div>
     )
 }
 
