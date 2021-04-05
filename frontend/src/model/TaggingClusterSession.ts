@@ -1,4 +1,4 @@
-import {getMillis, NO_COLOR} from "../helpers/Util";
+import {getMillis, isNoMisconception, NO_COLOR} from "../helpers/Util";
 import {HighlightRange} from "../interfaces/HighlightRange";
 import {Answer} from "../interfaces/Dataset";
 import postAnswer from "../helpers/PostAnswer";
@@ -47,14 +47,13 @@ class TaggingClusterSession {
         if (this.history.length === MAX_HISTORY_SIZE) return // max size reached
         tags
             .filter(elem => elem != null)
-            .filter(tag => !stringEquals(tag, "NoMisconception"))
+            .filter(tag => !isNoMisconception(tag))
             .forEach(value => {
                 const c1: boolean = this.history.length < MAX_HISTORY_SIZE
-                const c2: boolean = this.history.findIndex((elem) => stringEquals(elem, value)) === -1
+                const c2: boolean = this.history.findIndex((elem: string) => stringEquals(elem, value)) === -1
                 if (c1 && c2 && typeof value === "string") { // typescript bad typechecking
                     this.history.push(value)
                 }
-
             })
     }
 

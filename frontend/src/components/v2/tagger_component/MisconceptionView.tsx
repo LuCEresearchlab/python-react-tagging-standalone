@@ -5,8 +5,7 @@ import {
     computeMiscList,
     filteredMisconceptions,
     getColor,
-    highlightRangesColorUpdating,
-    isNoMisconception
+    highlightRangesColorUpdating, isNoMisconception
 } from "../../../helpers/Util";
 import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import MisconceptionNoteButton from "./MisconceptionNoteButton";
@@ -54,6 +53,7 @@ function MisconceptionView(
     const setCurrentColor = (color: string) => clusterTaggingSession.setCurrentColor(color)
 
     const getNewRangesList = (element: (string | null), index: number) => {
+        if (isNoMisconception(element)) return [[]]
         let new_ranges_list = []
         for (let ranges of rangesList)
             new_ranges_list.push(highlightRangesColorUpdating(misconceptionsAvailable, tags, ranges, element, index))
@@ -61,18 +61,9 @@ function MisconceptionView(
     }
 
 
-    const setTagElementHandle1 = (element: (string | null), index: number) => {
-        let tmp_tags: (string | null)[] = computeMiscList(tags, element, index)
-        // handle specific case of NoMisconception, only possible in first tag
-        if (element != null && isNoMisconception(element))
-            tmp_tags = ["NoMisconception"]
-
-        clusterTaggingSession.setTags(tmp_tags)
-        clusterTaggingSession.setRangesList(getNewRangesList(element, index))
-        clusterTaggingSession.post()
-    }
-
-    const setTagElementHandle2 = (element: (string | null), index: number) => {
+    const setTagElementHandle = (element: (string | null), index: number) => {
+        console.log("misc list", computeMiscList(tags, element, index))
+        console.log("ranges list", getNewRangesList(element, index))
         clusterTaggingSession.setTags(computeMiscList(tags, element, index))
         clusterTaggingSession.setRangesList(getNewRangesList(element, index))
         clusterTaggingSession.post()
@@ -95,7 +86,7 @@ function MisconceptionView(
                         }
                         handled_element={0}
                         tags={tags}
-                        setTagElement={setTagElementHandle1}
+                        setTagElement={setTagElementHandle}
                         enabled={true}
                     />
                     <MisconceptionInfoButton
@@ -123,7 +114,7 @@ function MisconceptionView(
                                             }
                                             handled_element={handled_element}
                                             tags={tags}
-                                            setTagElement={setTagElementHandle2}
+                                            setTagElement={setTagElementHandle}
                                             enabled={true}
                                         />
                                     <MisconceptionInfoButton

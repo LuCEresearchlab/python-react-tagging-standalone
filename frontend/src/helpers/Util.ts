@@ -50,6 +50,7 @@ function filteredMisconceptions(tags: (string | null)[], misconceptions: string[
 
 // computes updates for the whole misconception list to handle common functionality of increase/decrease of size
 function computeMiscList(tags: (string | null)[], element: (string | null), index: number): (string | null)[] {
+    if (isNoMisconception(element)) return ["NoMisconception"]
     let tmp_tags: (string | null)[] = [...tags]
     tmp_tags.splice(index, 1, element)
     if (tmp_tags.length == (index + 1) && element != null)
