@@ -5,12 +5,17 @@ import {getMillis} from "../helpers/Util";
 class TaggingSession {
     dataset: Dataset
     questions: Question[]
+    user_id: string
+
+    updateKey: Function
+
     currentQuestion: number
     clusters: Answer[][]
     currentCluster: number
     taggingClusterSession: TaggingClusterSession
-    user_id: string
-    updateKey: Function
+
+
+    history: string[][]
 
     // add function call to change key if needed
 
@@ -24,13 +29,18 @@ class TaggingSession {
         this.clusters = this.questions[0].clustered_answers
 
         this.updateKey = updateKey
+        // initialize history
+        this.history = [...Array(this.questions.length)].map(() => [])
+
         this.taggingClusterSession = new TaggingClusterSession(
             this.dataset.dataset_id,
             this.questions[this.currentQuestion].question_id,
             this.user_id,
             this.clusters[this.currentCluster],
-            this.updateKey
+            this.updateKey,
+            this.history[this.currentQuestion]
         )
+
     }
 
     _createTaggingClusterSession(): void {
@@ -39,7 +49,8 @@ class TaggingSession {
             this.questions[this.currentQuestion].question_id,
             this.user_id,
             this.clusters[this.currentCluster],
-            this.updateKey
+            this.updateKey,
+            this.history[this.currentQuestion]
         )
         this.updateKey(getMillis())
     }

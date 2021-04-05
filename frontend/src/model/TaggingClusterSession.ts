@@ -6,20 +6,26 @@ import {isUsingDefaultColor as isUsingDefaultColorUtil} from "../helpers/Util";
 import stringEquals from "../util/StringEquals";
 import arrayEquals from "../util/ArrayEquals";
 
+const MAX_HISTORY_SIZE: number = 4
+
 class TaggingClusterSession {
 
     dataset_id: string
     question_id: string
     user_id: string
-    cluster: Answer[]
-    currentColor: string
-    tags: (string | null)[]
-    rangesList: HighlightRange[][]
     startTaggingTime: number
 
     updateKey: Function
 
-    constructor(dataset_id: string, question_id: string, user_id: string, cluster: Answer[], updateKey: Function) {
+    cluster: Answer[]
+    currentColor: string
+    tags: (string | null)[]
+    rangesList: HighlightRange[][]
+
+    history: string[]
+
+    constructor(dataset_id: string, question_id: string, user_id: string, cluster: Answer[], updateKey: Function,
+                history: string[]) {
         this.dataset_id = dataset_id
         this.question_id = question_id
         this.user_id = user_id
@@ -29,10 +35,29 @@ class TaggingClusterSession {
         this.rangesList = [...Array(cluster.length)].map(() => [])
         this.startTaggingTime = getMillis()
         this.updateKey = updateKey
+        this.history = history
     }
 
-    _render() {
+    _render(): void {
         this.updateKey(getMillis())
+    }
+
+    _history_add_if_missing(tags: (string | null)[]): void {
+        console.log("history", this.history, " to add ", tags)
+        if (tags == null || tags.length === 0) return
+        if (this.history.length === MAX_HISTORY_SIZE) return // max size reached
+        tags
+            .filter(elem => elem != null)
+            .filter(tag => !stringEquals(tag, "NoMisconception"))
+            .forEach(value => {
+                const c1: boolean = this.history.length < MAX_HISTORY_SIZE
+                const c2: boolean = this.history.findIndex((elem) => stringEquals(elem, value)) === -1
+                if (c1 && c2 && typeof value === "string") { // typescript bad typechecking
+                    this.history.push(value)
+                }
+
+            })
+        console.log("history", this.history)
     }
 
 
@@ -45,6 +70,7 @@ class TaggingClusterSession {
     setTags(tags: (string | null)[]): void {
         if (arrayEquals(tags, this.tags)) return
         this.tags = tags
+        this._history_add_if_missing(tags)
         this._render()
     }
 
@@ -68,6 +94,7 @@ class TaggingClusterSession {
         if (arrayEquals(tags, this.tags) && arrayEquals(this.rangesList[idx], ranges)) return
 
         this.tags = tags
+        this._history_add_if_missing(tags)
         this.rangesList[idx] = ranges
         this._render()
     }
