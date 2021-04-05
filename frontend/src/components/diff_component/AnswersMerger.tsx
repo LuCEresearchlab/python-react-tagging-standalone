@@ -4,6 +4,7 @@ import {useFetch} from "../../helpers/LoaderHelper";
 import {TaggedAnswer} from "../../interfaces/TaggedAnswer";
 import MisconceptionTagComparer from "./MisconceptionTagComparer";
 import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
+import stringEquals from "../../util/StringEquals";
 
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
@@ -27,13 +28,18 @@ function AnswersMerger({dataset_id, question_id, user_id, available_misconceptio
     const answers: TaggedAnswer[] = response.response == undefined ? [] : response.response
         .filter(answer => answer.question_id == question_id) // only keep needed answers
 
+
     const groupedAnswers = answers
         .reduce((map: Map<string, TaggedAnswer[]>, currentValue: TaggedAnswer) => {
             if (!map.has(currentValue.answer_id)) {
                 map.set(currentValue.answer_id, [currentValue])
             } else {
-                // @ts-ignore
-                map.get(currentValue.answer_id).push(currentValue)
+                const group = map.get(currentValue.answer_id)
+                if (group != undefined) {
+                    if (stringEquals(user_id, currentValue.user_id)) // put current user in first position
+                        map.set(currentValue.answer_id, [currentValue, ...group])
+                    else group.push(currentValue)
+                }
             }
             return map
         }, new Map<string, TaggedAnswer[]>())
