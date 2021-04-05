@@ -43,7 +43,6 @@ class TaggingClusterSession {
     }
 
     _history_add_if_missing(tags: (string | null)[]): void {
-        console.log("history", this.history, " to add ", tags)
         if (tags == null || tags.length === 0) return
         if (this.history.length === MAX_HISTORY_SIZE) return // max size reached
         tags
@@ -57,7 +56,6 @@ class TaggingClusterSession {
                 }
 
             })
-        console.log("history", this.history)
     }
 
 
