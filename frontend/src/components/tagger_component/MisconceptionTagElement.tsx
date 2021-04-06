@@ -18,6 +18,7 @@ import MisconceptionColorButton from "./MisconceptionColorButton";
 import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
 import stringEquals from "../../util/StringEquals";
 import TruthCircle from "./TruthCircle";
+import NoMisconception from "../../util/NoMisconception";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
@@ -65,7 +66,7 @@ function get_millis() {
 }
 
 function _is_no_misconception(tag: (string | null)): boolean {
-    return tag != null && stringEquals("NoMisconception", tag)
+    return tag != null && stringEquals(NoMisconception, tag)
 }
 
 const NO_COLOR: string = "#000000"
@@ -255,7 +256,7 @@ function MisconceptionTagElement(
                                         let tmp_tags: (string | null)[] = compute_misc_list(tags, element, index)
                                         // handle specific case of NoMisconception, only possible in first tag
                                         if (element != null && _is_no_misconception(element))
-                                            tmp_tags = ["NoMisconception"]
+                                            tmp_tags = [NoMisconception]
                                         setTags(tmp_tags)
                                         setRanges(new_ranges)
                                         post_answer(new_ranges, tmp_tags)

@@ -3,8 +3,6 @@ import {Answer} from "../../../interfaces/Dataset";
 import {rangesCompressor} from "../../../util/RangeCompressor";
 import {HighlightRange} from "../../../interfaces/HighlightRange";
 import {Button, Paper} from "@material-ui/core";
-
-import {isNoMisconception} from "../../../helpers/Util";
 import {GREY} from "../../../util/Colors"
 
 // @ts-ignore
@@ -60,19 +58,18 @@ function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
             if (prev_tagged_answers.length > 0) {
                 const previousTaggedAnswer: TaggedAnswer = prev_tagged_answers[0]
                 const previous_tags = previousTaggedAnswer.tags == null || previousTaggedAnswer.tags.length == 0 ?
-                    [null] :
-                    isNoMisconception(previousTaggedAnswer.tags[0]) ?
-                        previousTaggedAnswer.tags :
-                        [...previousTaggedAnswer.tags, null]  // append null to allow inserting
-
+                    [] :
+                    previousTaggedAnswer.tags
 
                 const loaded_ranges = previousTaggedAnswer.highlighted_ranges == null ?
                     [] :
                     previousTaggedAnswer.highlighted_ranges
 
-                taggingClusterSession.setTagsAndRanges(previous_tags, answer, loaded_ranges)
+                const formatted_tags = taggingClusterSession.loadedTagsFormatAndSet(previous_tags)
+
+                taggingClusterSession.setTagsAndRanges(formatted_tags, answer, loaded_ranges)
             } else {  // has never been tagged
-                taggingClusterSession.setTagsAndRanges([null], answer, [])
+                taggingClusterSession.setRanges(answer, [])
             }
         })
         if (isMounted) {

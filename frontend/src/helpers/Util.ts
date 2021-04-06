@@ -1,6 +1,8 @@
 import stringEquals from "../util/StringEquals";
 import {HighlightRange} from "../interfaces/HighlightRange";
 import {MisconceptionElement} from "../interfaces/MisconceptionElement";
+import NoMisconception from "../util/NoMisconception";
+import {newNoMiscTagList, PRE_DYNAMIC_SIZE} from "../model/TaggingClusterSession";
 
 const NO_COLOR: string = "#000000"
 
@@ -9,7 +11,7 @@ function isUsingDefaultColor(currentColor: string): boolean {
 }
 
 function isNoMisconception(tag: (string | null)): boolean {
-    return tag != null && stringEquals("NoMisconception", tag)
+    return tag != null && stringEquals(NoMisconception, tag)
 }
 
 function getMillis(): number {
@@ -50,7 +52,12 @@ function filteredMisconceptions(tags: (string | null)[], misconceptions: string[
 
 // computes updates for the whole misconception list to handle common functionality of increase/decrease of size
 function computeMiscList(tags: (string | null)[], element: (string | null), index: number): (string | null)[] {
-    if (isNoMisconception(element)) return ["NoMisconception"]
+    if (isNoMisconception(element)) return newNoMiscTagList()
+    if (isNoMisconception(tags[0])) {
+        const new_tags: (string | null)[] = newNoMiscTagList()
+        new_tags[PRE_DYNAMIC_SIZE] = element
+        return new_tags
+    }
     let tmp_tags: (string | null)[] = [...tags]
     tmp_tags.splice(index, 1, element)
     if (tmp_tags.length == (index + 1) && element != null)

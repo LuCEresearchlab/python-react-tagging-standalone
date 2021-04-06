@@ -3,6 +3,7 @@ import HelpIcon from "@material-ui/icons/Help";
 import {Button, Popover} from "@material-ui/core";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import stringEquals from "../../../util/StringEquals";
+import NoMisconception from "../../../util/NoMisconception";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -24,7 +25,7 @@ function MisconceptionInfoButton({tags, handled_element}: Input) {
     const tag: (string | null) = tags[handled_element]
 
     const should_display = () => {
-        return tags != null && tag != null && !stringEquals(tag, "NoMisconception")
+        return tags != null && tag != null && !stringEquals(tag, NoMisconception)
     }
 
     // popup stuff

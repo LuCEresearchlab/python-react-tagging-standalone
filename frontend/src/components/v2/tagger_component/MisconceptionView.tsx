@@ -10,18 +10,16 @@ import {
 import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
-import TaggingClusterSession from "../../../model/TaggingClusterSession";
+import TaggingClusterSession, {PRE_DYNAMIC_SIZE} from "../../../model/TaggingClusterSession";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            width: "min-content",
             '& > * + *': {
                 marginTop: theme.spacing(3),
-            },
-            float: "right"
+            }
         },
         divLine: {
             display: "inline-flex",
@@ -62,19 +60,20 @@ function MisconceptionView(
 
 
     const setTagElementHandle = (element: (string | null), index: number) => {
-        console.log("misc list", computeMiscList(tags, element, index))
-        console.log("ranges list", getNewRangesList(element, index))
         clusterTaggingSession.setTags(computeMiscList(tags, element, index))
         clusterTaggingSession.setRangesList(getNewRangesList(element, index))
         clusterTaggingSession.post()
     }
+
+    console.log("tags", tags)
+    console.log("c1", tags.length - PRE_DYNAMIC_SIZE - 1)
 
     return (
         <div className={classes.root}>
             <>
                 <div className={classes.divLine}>
                     <MisconceptionColorButton
-                        color={getColor(misconceptionsAvailable, tags[0])}
+                        color={getColor(misconceptionsAvailable, tags[PRE_DYNAMIC_SIZE])}
                         current_color={currentColor}
                         setColor={setCurrentColor}
                         enabled={true}
@@ -82,23 +81,23 @@ function MisconceptionView(
                     <SingleTagSelector
                         key={"tag-selector-0"}
                         misconceptions_available={
-                            filteredMisconceptions(tags, misconceptions_string_list, 0)
+                            filteredMisconceptions(tags, misconceptions_string_list, PRE_DYNAMIC_SIZE)
                         }
-                        handled_element={0}
+                        handled_element={PRE_DYNAMIC_SIZE}
                         tags={tags}
                         setTagElement={setTagElementHandle}
                         enabled={true}
                     />
                     <MisconceptionInfoButton
                         tags={tags}
-                        handled_element={0}
+                        handled_element={PRE_DYNAMIC_SIZE}
                     />
                     <MisconceptionNoteButton/>
                 </div>
                 {
-                    [...Array(Math.min(tags.length - 1, 4))]
+                    [...Array(Math.max(tags.length - PRE_DYNAMIC_SIZE - 1, 0))]
                         .map((_, index) => {
-                            const handled_element = index + 1
+                            const handled_element = PRE_DYNAMIC_SIZE + index + 1
 
                             return (
                                 <div key={"tag-selector-" + handled_element} className={classes.divLine}>

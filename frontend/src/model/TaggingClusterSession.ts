@@ -5,8 +5,20 @@ import postAnswer from "../helpers/PostAnswer";
 import {isUsingDefaultColor as isUsingDefaultColorUtil} from "../helpers/Util";
 import stringEquals from "../util/StringEquals";
 import arrayEquals from "../util/ArrayEquals";
+import NoMisconception from "../util/NoMisconception";
 
 const MAX_HISTORY_SIZE: number = 4
+export const PRE_DYNAMIC_SIZE: number = MAX_HISTORY_SIZE
+
+export function newNoMiscTagList(): (string | null)[] {
+    const list = initEmptyTagsList()
+    list[0] = NoMisconception
+    return list
+}
+
+export function initEmptyTagsList(): (string | null)[] {
+    return [...Array(PRE_DYNAMIC_SIZE + 1)].map(() => null)
+}
 
 class TaggingClusterSession {
 
@@ -31,11 +43,13 @@ class TaggingClusterSession {
         this.user_id = user_id
         this.currentColor = NO_COLOR
         this.cluster = cluster
-        this.tags = [null]
+        this.tags = initEmptyTagsList()
         this.rangesList = [...Array(cluster.length)].map(() => [])
         this.startTaggingTime = getMillis()
         this.updateKey = updateKey
         this.history = history
+        console.log(PRE_DYNAMIC_SIZE)
+        console.log(this.tags)
     }
 
     _render(): void {
@@ -57,6 +71,22 @@ class TaggingClusterSession {
             })
     }
 
+    loadedTagsFormatAndSet(tags: (string | null)[]) {
+        const initialized_list: (string | null)[] = initEmptyTagsList()
+        if (isNoMisconception(tags[0])) initialized_list[0] = NoMisconception
+        else {
+            tags
+                .filter(tag => tag != null)
+                .forEach(tag => {
+                        const index: number = this.history.findIndex(elem => stringEquals(elem, tag))
+                        if (index === -1) return
+                        initialized_list[index + 1] = tag
+                    }
+                )
+        }
+        return initialized_list
+    }
+
 
     setCurrentColor(color: string): void {
         if (stringEquals(color, this.currentColor)) return
@@ -66,8 +96,8 @@ class TaggingClusterSession {
 
     setTags(tags: (string | null)[]): void {
         if (arrayEquals(tags, this.tags)) return
-        this.tags = tags
         this._history_add_if_missing(tags)
+        this.tags = this.loadedTagsFormatAndSet(tags)
         this._render()
     }
 
@@ -90,8 +120,9 @@ class TaggingClusterSession {
 
         if (arrayEquals(tags, this.tags) && arrayEquals(this.rangesList[idx], ranges)) return
 
-        this.tags = tags
         this._history_add_if_missing(tags)
+        this.tags = this.loadedTagsFormatAndSet(tags)
+
         this.rangesList[idx] = ranges
         this._render()
     }
@@ -100,6 +131,10 @@ class TaggingClusterSession {
         const idx = this.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
         if (idx === -1) return []
         return this.rangesList[idx]
+    }
+
+    getHistory(): string[] {
+        return this.history.filter(tag => tag != null)
     }
 
     post(): void {
