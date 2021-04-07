@@ -43,28 +43,30 @@ function StaticSelectorView({misconceptionsAvailable, taggingClusterSession, mis
                 current_color={taggingClusterSession.currentColor}
                 setColor={(color: string) => taggingClusterSession.setCurrentColor(color)}
             />
-            <Button onClick={(e) => {
-                e.preventDefault()
-                let new_tags = [...taggingClusterSession.tags]
+            <Button
+                type={"button"}
+                onClick={(e) => {
+                    e.preventDefault()
+                    let new_tags = [...taggingClusterSession.tags]
 
 
-                taggingClusterSession.setRangesList(getNewRangesList(misconception, handledIndex))
+                    taggingClusterSession.setRangesList(getNewRangesList(misconception, handledIndex))
 
-                if (isNoMisconception(misconception) && isSelected()) // deselecting NoMisconception
-                    new_tags = initEmptyTagsList()
-                else
-                    new_tags[handledIndex] = isSelected() ? null : misconception
+                    if (isNoMisconception(misconception) && isSelected()) // deselecting NoMisconception
+                        new_tags = initEmptyTagsList()
+                    else
+                        new_tags[handledIndex] = isSelected() ? null : misconception
 
-                if (isSelected() &&
-                    stringEquals(getColor(misconceptionsAvailable, misconception), taggingClusterSession.currentColor))
-                    taggingClusterSession.setCurrentColor(NO_COLOR)
+                    if (isSelected() &&
+                        stringEquals(getColor(misconceptionsAvailable, misconception), taggingClusterSession.currentColor))
+                        taggingClusterSession.setCurrentColor(NO_COLOR)
 
-                console.log("isSelected", isSelected(), " color ", taggingClusterSession.currentColor)
-                taggingClusterSession.setTags(new_tags)
-                taggingClusterSession.post()
+                    console.log("isSelected", isSelected(), " color ", taggingClusterSession.currentColor)
+                    taggingClusterSession.setTags(new_tags)
+                    taggingClusterSession.post()
 
 
-            }} style={{backgroundColor: (isSelected() ? DARK_GREY : GREY)}}>
+                }} style={{backgroundColor: (isSelected() ? DARK_GREY : GREY), textTransform: "none"}}>
                 {misconception}
             </Button>
             <MisconceptionInfoButton
