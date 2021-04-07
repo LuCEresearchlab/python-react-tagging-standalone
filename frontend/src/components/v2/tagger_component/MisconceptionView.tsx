@@ -60,6 +60,9 @@ function MisconceptionView(
 
 
     const setTagElementHandle = (element: (string | null), index: number) => {
+        console.log("index", index)
+        console.log("current tags", tags)
+        console.log("future tags", computeMiscList(tags, element, index))
         clusterTaggingSession.setTags(computeMiscList(tags, element, index))
         clusterTaggingSession.setRangesList(getNewRangesList(element, index))
         clusterTaggingSession.post()
@@ -97,7 +100,7 @@ function MisconceptionView(
                 {
                     [...Array(Math.max(tags.length - PRE_DYNAMIC_SIZE - 1, 0))]
                         .map((_, index) => {
-                            const handled_element = PRE_DYNAMIC_SIZE + index + 1
+                            const handled_element = PRE_DYNAMIC_SIZE + index + 3
 
                             return (
                                 <div key={"tag-selector-" + handled_element} className={classes.divLine}>

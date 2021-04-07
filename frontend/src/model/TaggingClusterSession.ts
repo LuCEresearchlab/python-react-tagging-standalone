@@ -87,6 +87,11 @@ class TaggingClusterSession {
                     }
                 )
         }
+        while (
+            initialized_list.length <= MAX_HISTORY_SIZE + 1 ||
+            initialized_list[initialized_list.length - 1] != null)
+            initialized_list.push(null)
+
         return initialized_list
     }
 
@@ -126,11 +131,12 @@ class TaggingClusterSession {
 
         if (arrayFilteredNotNullEquals(this.loadedTagsFormatAndSet(tags), this.tags) && arrayEquals(this.rangesList[idx], ranges)) return
         console.log("setTagsAndRanges")
-        console.log(tags)
-        console.log(this.tags)
+        console.log("input", tags)
 
         this._history_add_if_missing(tags)
         this.tags = this.loadedTagsFormatAndSet(tags)
+
+        console.log("setting to", this.tags)
 
         this.rangesList[idx] = ranges
         this._render()
