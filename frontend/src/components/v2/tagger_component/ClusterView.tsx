@@ -65,9 +65,7 @@ function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
                     [] :
                     previousTaggedAnswer.highlighted_ranges
 
-                const formatted_tags = taggingClusterSession.loadedTagsFormatAndSet(previous_tags)
-
-                taggingClusterSession.setTagsAndRanges(formatted_tags, answer, loaded_ranges)
+                taggingClusterSession.setTagsAndRanges(previous_tags, answer, loaded_ranges)
             } else {  // has never been tagged
                 taggingClusterSession.setRanges(answer, [])
             }

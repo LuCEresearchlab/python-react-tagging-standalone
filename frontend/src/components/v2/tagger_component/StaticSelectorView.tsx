@@ -39,7 +39,7 @@ function StaticSelectorView({misconceptionsAvailable, taggingClusterSession, mis
             <MisconceptionColorButton
                 key={"MisconceptionColorButton|" + misconception}
                 color={getColor(misconceptionsAvailable, misconception)}
-                enabled={true}
+                enabled={isSelected()}
                 current_color={taggingClusterSession.currentColor}
                 setColor={(color: string) => taggingClusterSession.setCurrentColor(color)}
             />

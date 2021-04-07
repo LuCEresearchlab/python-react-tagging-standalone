@@ -4,7 +4,7 @@ import {Answer} from "../interfaces/Dataset";
 import postAnswer from "../helpers/PostAnswer";
 import {isUsingDefaultColor as isUsingDefaultColorUtil} from "../helpers/Util";
 import stringEquals from "../util/StringEquals";
-import arrayEquals from "../util/ArrayEquals";
+import {arrayFilteredNotNullEquals, arrayEquals} from "../util/ArrayEquals";
 import NoMisconception from "../util/NoMisconception";
 
 const MAX_HISTORY_SIZE: number = 4
@@ -79,8 +79,11 @@ class TaggingClusterSession {
                 .filter(tag => tag != null)
                 .forEach(tag => {
                         const index: number = this.history.findIndex(elem => stringEquals(elem, tag))
-                        if (index === -1) return
-                        initialized_list[index + 1] = tag
+                        if (index === -1) {
+                            initialized_list.push(tag) // append tag
+                            return
+                        }
+                        initialized_list[index + 1] = tag // skip pos 0 (reserved for NoMisconception)
                     }
                 )
         }
@@ -95,14 +98,16 @@ class TaggingClusterSession {
     }
 
     setTags(tags: (string | null)[]): void {
-        if (arrayEquals(tags, this.tags)) return
+        if (arrayFilteredNotNullEquals(this.loadedTagsFormatAndSet(tags), this.tags)) return
+        console.log("setTags")
         this._history_add_if_missing(tags)
         this.tags = this.loadedTagsFormatAndSet(tags)
         this._render()
     }
 
     setRangesList(rangesList: HighlightRange[][]): void {
-        if (arrayEquals(rangesList, this.tags)) return
+        if (arrayFilteredNotNullEquals(rangesList, this.tags)) return
+        console.log("setRangesList")
         this.rangesList = rangesList
         this._render()
     }
@@ -110,6 +115,7 @@ class TaggingClusterSession {
     setRanges(answer: Answer, ranges: HighlightRange[]): void {
         const idx = this.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
         if (idx === -1) return
+        console.log("setRanges")
         this.rangesList[idx] = ranges
         this._render()
     }
@@ -118,7 +124,10 @@ class TaggingClusterSession {
         const idx = this.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
         if (idx === -1) return
 
-        if (arrayEquals(tags, this.tags) && arrayEquals(this.rangesList[idx], ranges)) return
+        if (arrayFilteredNotNullEquals(this.loadedTagsFormatAndSet(tags), this.tags) && arrayEquals(this.rangesList[idx], ranges)) return
+        console.log("setTagsAndRanges")
+        console.log(tags)
+        console.log(this.tags)
 
         this._history_add_if_missing(tags)
         this.tags = this.loadedTagsFormatAndSet(tags)
