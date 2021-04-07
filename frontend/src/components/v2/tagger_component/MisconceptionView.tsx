@@ -12,6 +12,7 @@ import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import TaggingClusterSession, {PRE_DYNAMIC_SIZE} from "../../../model/TaggingClusterSession";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import KeyIndication from "./KeyIndication";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -71,6 +72,7 @@ function MisconceptionView(
         <div className={classes.root}>
             <>
                 <div className={classes.divLine}>
+                    <KeyIndication displayKey={"1"}/>
                     <MisconceptionColorButton
                         color={getColor(misconceptionsAvailable, tags[FIRST_DYNAMIC_INDEX])}
                         current_color={currentColor}
@@ -100,6 +102,7 @@ function MisconceptionView(
 
                             return (
                                 <div key={"tag-selector-" + handled_element} className={classes.divLine}>
+                                    <KeyIndication displayKey={"" + (handled_element - PRE_DYNAMIC_SIZE)}/>
                                     <MisconceptionColorButton
                                         color={(() => getColor(misconceptionsAvailable, tags[handled_element]))()}
                                         current_color={currentColor}

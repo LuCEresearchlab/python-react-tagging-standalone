@@ -10,6 +10,7 @@ import Highlightable from "highlightable";
 import {TaggedAnswer} from "../../../interfaces/TaggedAnswer";
 import {JSONLoader} from "../../../helpers/LoaderHelper";
 import TaggingClusterSession from "../../../model/TaggingClusterSession";
+import KeyIndication from "./KeyIndication";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
@@ -24,11 +25,12 @@ function ClusterView({cluster, taggingClusterSession, my_key}: Input) {
     return (
         <div>
             {
-                cluster.map((answer: Answer) =>
+                cluster.map((answer: Answer, index: number) =>
                     <ClusterItem
                         key={"ClusterItem|Answer|" + answer.answer_id + my_key}
                         answer={answer}
                         taggingClusterSession={taggingClusterSession}
+                        displayKey={index + 1}
                     />
                 )}
         </div>
@@ -37,10 +39,11 @@ function ClusterView({cluster, taggingClusterSession, my_key}: Input) {
 
 interface ClusterItemInput {
     answer: Answer,
-    taggingClusterSession: TaggingClusterSession
+    taggingClusterSession: TaggingClusterSession,
+    displayKey: number
 }
 
-function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
+function ClusterItem({answer, taggingClusterSession, displayKey}: ClusterItemInput) {
 
 
     const get_selected_misc_url = TAGGING_SERVICE_URL +
@@ -83,7 +86,8 @@ function ClusterItem({answer, taggingClusterSession}: ClusterItemInput) {
     if (!loaded) return <div>Loading...</div>
 
     return (
-        <Paper style={{padding: '1em', backgroundColor: GREY}}>
+        <Paper style={{padding: '1em', backgroundColor: GREY, display: 'flex', flexDirection: 'row'}}>
+            <KeyIndication displayKey={"" + displayKey}/>
             <Highlightable
                 ranges={ranges}
                 enabled={true}

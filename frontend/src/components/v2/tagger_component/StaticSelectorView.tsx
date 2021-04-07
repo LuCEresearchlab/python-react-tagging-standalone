@@ -7,6 +7,7 @@ import {Button} from "@material-ui/core";
 import stringEquals from "../../../util/StringEquals";
 import {GREY, DARK_GREY} from "../../../util/Colors";
 import MisconceptionInfoButton from "./MisconceptionInfoButton";
+import KeyIndication from "./KeyIndication";
 
 
 interface Input {
@@ -36,6 +37,9 @@ function StaticSelectorView({misconceptionsAvailable, taggingClusterSession, mis
 
     return (
         <>
+            <KeyIndication
+                displayKey={"" + (handledIndex + 1)}
+            />
             <MisconceptionColorButton
                 key={"MisconceptionColorButton|" + misconception}
                 color={getColor(misconceptionsAvailable, misconception)}
@@ -58,15 +62,19 @@ function StaticSelectorView({misconceptionsAvailable, taggingClusterSession, mis
                         new_tags[handledIndex] = isSelected() ? null : misconception
 
                     if (isSelected() &&
-                        stringEquals(getColor(misconceptionsAvailable, misconception), taggingClusterSession.currentColor))
+                        stringEquals(
+                            getColor(misconceptionsAvailable, misconception),
+                            taggingClusterSession.currentColor
+                        )
+                    )
                         taggingClusterSession.setCurrentColor(NO_COLOR)
 
-                    console.log("isSelected", isSelected(), " color ", taggingClusterSession.currentColor)
                     taggingClusterSession.setTags(new_tags)
                     taggingClusterSession.post()
 
 
-                }} style={{backgroundColor: (isSelected() ? DARK_GREY : GREY), textTransform: "none"}}>
+                }}
+                style={{backgroundColor: (isSelected() ? DARK_GREY : GREY), textTransform: "none"}}>
                 {misconception}
             </Button>
             <MisconceptionInfoButton
