@@ -60,23 +60,19 @@ function MisconceptionView(
 
 
     const setTagElementHandle = (element: (string | null), index: number) => {
-        console.log("index", index)
-        console.log("current tags", tags)
-        console.log("future tags", computeMiscList(tags, element, index))
         clusterTaggingSession.setTags(computeMiscList(tags, element, index))
         clusterTaggingSession.setRangesList(getNewRangesList(element, index))
         clusterTaggingSession.post()
     }
 
-    console.log("tags", tags)
-    console.log("c1", tags.length - PRE_DYNAMIC_SIZE - 1)
+    const FIRST_DYNAMIC_INDEX: number = PRE_DYNAMIC_SIZE + 1
 
     return (
         <div className={classes.root}>
             <>
                 <div className={classes.divLine}>
                     <MisconceptionColorButton
-                        color={getColor(misconceptionsAvailable, tags[PRE_DYNAMIC_SIZE])}
+                        color={getColor(misconceptionsAvailable, tags[FIRST_DYNAMIC_INDEX])}
                         current_color={currentColor}
                         setColor={setCurrentColor}
                         enabled={true}
@@ -84,23 +80,23 @@ function MisconceptionView(
                     <SingleTagSelector
                         key={"tag-selector-0"}
                         misconceptions_available={
-                            filteredMisconceptions(tags, misconceptions_string_list, PRE_DYNAMIC_SIZE)
+                            filteredMisconceptions(tags, misconceptions_string_list, FIRST_DYNAMIC_INDEX)
                         }
-                        handled_element={PRE_DYNAMIC_SIZE}
+                        handled_element={FIRST_DYNAMIC_INDEX}
                         tags={tags}
                         setTagElement={setTagElementHandle}
                         enabled={true}
                     />
                     <MisconceptionInfoButton
                         tags={tags}
-                        handled_element={PRE_DYNAMIC_SIZE}
+                        handled_element={FIRST_DYNAMIC_INDEX}
                     />
                     <MisconceptionNoteButton/>
                 </div>
                 {
-                    [...Array(Math.max(tags.length - PRE_DYNAMIC_SIZE - 1, 0))]
+                    [...Array(Math.max(tags.length - PRE_DYNAMIC_SIZE - 2, 0))]
                         .map((_, index) => {
-                            const handled_element = PRE_DYNAMIC_SIZE + index + 3
+                            const handled_element = PRE_DYNAMIC_SIZE + index + 2 // +2 = NoMisc and default add above
 
                             return (
                                 <div key={"tag-selector-" + handled_element} className={classes.divLine}>
@@ -110,7 +106,7 @@ function MisconceptionView(
                                         setColor={setCurrentColor}
                                         enabled={true}
                                     />
-                                        <SingleTagSelector
+                                    <SingleTagSelector
                                             misconceptions_available={
                                                 filteredMisconceptions(tags, misconceptions_string_list, handled_element)
                                             }
