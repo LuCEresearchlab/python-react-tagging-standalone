@@ -10,17 +10,16 @@ import NoMisconception from "../../../util/NoMisconception";
 
 interface Input {
     misconceptionsAvailable: MisconceptionElement[],
-    taggingClusterSession: TaggingClusterSession,
-    my_key: number
+    taggingClusterSession: TaggingClusterSession
 }
 
-function TagView({misconceptionsAvailable, taggingClusterSession, my_key}: Input) {
+function TagView({misconceptionsAvailable, taggingClusterSession}: Input) {
 
 
     return (
         <Paper style={{padding: '1em', backgroundColor: GREY}}>
             <Table>
-                <TableBody key={"tagView|table|" + my_key}>
+                <TableBody>
                     <TableRow>
                         <TableCell>
                             <StaticSelectorView
@@ -33,7 +32,6 @@ function TagView({misconceptionsAvailable, taggingClusterSession, my_key}: Input
                     </TableRow>
                     <TableRow style={{display: "flex", flexDirection: "column"}}>
                         <HistoryView
-                            my_key={my_key}
                             misconceptionsAvailable={misconceptionsAvailable}
                             taggingClusterSession={taggingClusterSession}
                         />

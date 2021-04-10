@@ -16,18 +16,17 @@ const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
 interface Input {
     cluster: Answer[],
-    taggingClusterSession: TaggingClusterSession,
-    my_key: number
+    taggingClusterSession: TaggingClusterSession
 }
 
-function ClusterView({cluster, taggingClusterSession, my_key}: Input) {
+function ClusterView({cluster, taggingClusterSession}: Input) {
 
     return (
         <div>
             {
                 cluster.map((answer: Answer, index: number) =>
                     <ClusterItem
-                        key={"ClusterItem|Answer|" + answer.answer_id + my_key}
+                        key={"ClusterItem|Answer|" + answer.answer_id}
                         answer={answer}
                         taggingClusterSession={taggingClusterSession}
                         displayKey={index + 1}

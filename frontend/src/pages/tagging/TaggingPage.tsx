@@ -13,19 +13,15 @@ function TaggingPage() {
 
     const {dataset_id, user_id}: { dataset_id: string, user_id: string } = useParams()
 
-    const [key, setKey] = useState<number>(0)
-
     const {data, isLoading} = useFetch<Dataset>(`${TAGGING_SERVICE_URL}/datasets/get-dataset/dataset/${dataset_id}`)
 
 
-    if (!isLoading) {
-        setTaggingSession(new TaggingSession(data, user_id, setKey))
-    }
+    if (!isLoading && taggingSession == undefined) setTaggingSession(new TaggingSession(data, user_id))
 
 
     if (taggingSession != undefined) {
         return (
-            <TaggingUI my_key={key} taggingSession={taggingSession}/>
+            <TaggingUI taggingSession={taggingSession}/>
         )
     } else {
         return (

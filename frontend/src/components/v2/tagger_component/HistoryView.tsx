@@ -6,11 +6,10 @@ import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 
 interface Input {
     taggingClusterSession: TaggingClusterSession,
-    misconceptionsAvailable: MisconceptionElement[],
-    my_key: number
+    misconceptionsAvailable: MisconceptionElement[]
 }
 
-function HistoryView({taggingClusterSession, misconceptionsAvailable, my_key}: Input) {
+function HistoryView({taggingClusterSession, misconceptionsAvailable}: Input) {
 
     const history = taggingClusterSession.getHistory()
     const historyPart1 = history.slice(0, history.length - 1)
@@ -22,7 +21,7 @@ function HistoryView({taggingClusterSession, misconceptionsAvailable, my_key}: I
                 historyPart1.length === 0 ?
                     <></> :
                     historyPart1.map((tag: string, index: number) =>
-                        <TableCell key={"static|selector|view|" + tag + my_key} style={{borderBottom: "none"}}>
+                        <TableCell key={"static|selector|view|" + tag} style={{borderBottom: "none"}}>
                             <StaticSelectorView
                                 misconceptionsAvailable={misconceptionsAvailable}
                                 taggingClusterSession={taggingClusterSession}
@@ -34,8 +33,8 @@ function HistoryView({taggingClusterSession, misconceptionsAvailable, my_key}: I
             }
             {
                 historyPart2.length === 0 ?
-                    <TableCell key={"static|selector|view|last" + my_key}>Empty History</TableCell> :
-                    <TableCell key={"static|selector|view|last" + my_key}>
+                    <TableCell key={"static|selector|view|last"}>Empty History</TableCell> :
+                    <TableCell key={"static|selector|view|last" + historyPart2[0]}>
                         <StaticSelectorView
                             misconceptionsAvailable={misconceptionsAvailable}
                             taggingClusterSession={taggingClusterSession}

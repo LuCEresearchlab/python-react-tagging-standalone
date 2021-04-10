@@ -1,13 +1,10 @@
 import {Answer, Dataset, Question} from "../interfaces/Dataset";
 import TaggingClusterSession from "./TaggingClusterSession";
-import {getMillis} from "../helpers/Util";
 
 class TaggingSession {
     dataset: Dataset
     questions: Question[]
     user_id: string
-
-    updateKey: Function
 
     currentQuestion: number
     clusters: Answer[][]
@@ -19,7 +16,7 @@ class TaggingSession {
 
     // add function call to change key if needed
 
-    constructor(dataset: Dataset, user_id: string, updateKey: Function) {
+    constructor(dataset: Dataset, user_id: string) {
         this.dataset = dataset
         this.user_id = user_id
 
@@ -28,7 +25,6 @@ class TaggingSession {
         this.currentCluster = 0
         this.clusters = this.questions[0].clustered_answers
 
-        this.updateKey = updateKey
         // initialize history
         this.history = [...Array(this.questions.length)].map(() => [])
 
@@ -37,7 +33,6 @@ class TaggingSession {
             this.questions[this.currentQuestion].question_id,
             this.user_id,
             this.clusters[this.currentCluster],
-            this.updateKey,
             this.history[this.currentQuestion]
         )
 
@@ -49,10 +44,8 @@ class TaggingSession {
             this.questions[this.currentQuestion].question_id,
             this.user_id,
             this.clusters[this.currentCluster],
-            this.updateKey,
             this.history[this.currentQuestion]
         )
-        this.updateKey(getMillis())
     }
 
     nextQuestion(): boolean {

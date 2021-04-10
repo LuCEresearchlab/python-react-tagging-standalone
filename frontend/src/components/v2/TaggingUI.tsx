@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Grid, Paper} from "@material-ui/core";
 import {Question} from "../../interfaces/Dataset";
-import {JSONLoader} from "../../helpers/LoaderHelper";
+import {useFetch} from "../../helpers/LoaderHelper";
 import {StyledPagination} from "../styled/StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
@@ -15,7 +15,6 @@ import {LIGHT_GREY} from "../../util/Colors"
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 interface Input {
-    my_key: number,
     taggingSession: TaggingSession
 }
 
@@ -41,13 +40,11 @@ const useStyles = makeStyles(() =>
     }),
 );
 
-function TaggingUI({taggingSession, my_key}: Input) {
+function TaggingUI({taggingSession}: Input) {
     const classes = useStyles()
 
     const get_available_url = TAGGING_SERVICE_URL + '/progmiscon_api/misconceptions'
 
-    const [misconceptions_available, setMisconceptionsAvailable] = useState<MisconceptionElement[]>([])
-    const [loaded, setLoaded] = useState<boolean>(false)
     const [page, setPage] = useState<number>(1)
 
 
@@ -64,20 +61,15 @@ function TaggingUI({taggingSession, my_key}: Input) {
         setPage(1)  // fix page selected on question change
     }
 
-    if (!loaded) {  // load once per dataset
-        JSONLoader(get_available_url, (avail_misconceptions: []) => {
-            setMisconceptionsAvailable(
-                avail_misconceptions
-            )
-            setLoaded(true)
-        })
-    }
+    const {data, isLoading} = useFetch<MisconceptionElement[]>(get_available_url)
+
+
+    if (isLoading) return (<>Loading...</>)
 
     return (
         <Grid container direction={'row'} className={classes.root} spacing={10}>
             <Grid item xs={4}>
                 <QuestionSelect
-                    key={"QuestionSelect|" + my_key}
                     questions={taggingSession.questions}
                     selectedQuestion={taggingSession.currentQuestion}
                     setQuestionSelect={selectedChange}/>
@@ -87,22 +79,17 @@ function TaggingUI({taggingSession, my_key}: Input) {
                       style={{backgroundColor: LIGHT_GREY}}>
                     <Grid item xs={6}>
                         <ClusterView
-                            key={"ClusterView|" + my_key}
                             cluster={taggingSession.getCluster()}
                             taggingClusterSession={taggingSession.getTaggingClusterSession()}
-                            my_key={my_key}
                         />
                     </Grid>
                     <Grid item xs={6}>
                         <TagView
-                            key={"TagView|" + my_key}
-                            misconceptionsAvailable={misconceptions_available}
+                            misconceptionsAvailable={data}
                             taggingClusterSession={taggingSession.getTaggingClusterSession()}
-                            my_key={my_key}
                         />
                     </Grid>
                     <StyledPagination
-                        key={"StyledPagination|" + my_key}
                         count={total_clusters}
                         page={page}
                         onChange={paginationChange}

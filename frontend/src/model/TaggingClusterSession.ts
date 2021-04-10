@@ -27,8 +27,6 @@ class TaggingClusterSession {
     user_id: string
     startTaggingTime: number
 
-    updateKey: Function
-
     cluster: Answer[]
     currentColor: string
     tags: (string | null)[]
@@ -36,8 +34,7 @@ class TaggingClusterSession {
 
     history: string[]
 
-    constructor(dataset_id: string, question_id: string, user_id: string, cluster: Answer[], updateKey: Function,
-                history: string[]) {
+    constructor(dataset_id: string, question_id: string, user_id: string, cluster: Answer[], history: string[]) {
         this.dataset_id = dataset_id
         this.question_id = question_id
         this.user_id = user_id
@@ -46,15 +43,9 @@ class TaggingClusterSession {
         this.tags = initEmptyTagsList()
         this.rangesList = [...Array(cluster.length)].map(() => [])
         this.startTaggingTime = getMillis()
-        this.updateKey = updateKey
         this.history = history
-        console.log(PRE_DYNAMIC_SIZE)
-        console.log(this.tags)
     }
 
-    _render(): void {
-        this.updateKey(getMillis())
-    }
 
     _history_add_if_missing(tags: (string | null)[]): void {
         if (tags == null || tags.length === 0) return
@@ -99,7 +90,6 @@ class TaggingClusterSession {
     setCurrentColor(color: string): void {
         if (stringEquals(color, this.currentColor)) return
         this.currentColor = color
-        this._render()
     }
 
     setTags(tags: (string | null)[]): void {
@@ -107,14 +97,12 @@ class TaggingClusterSession {
         console.log("setTags")
         this._history_add_if_missing(tags)
         this.tags = this.loadedTagsFormatAndSet(tags)
-        this._render()
     }
 
     setRangesList(rangesList: HighlightRange[][]): void {
         if (arrayFilteredNotNullEquals(rangesList, this.tags)) return
         console.log("setRangesList")
         this.rangesList = rangesList
-        this._render()
     }
 
     setRanges(answer: Answer, ranges: HighlightRange[]): void {
@@ -122,7 +110,6 @@ class TaggingClusterSession {
         if (idx === -1) return
         console.log("setRanges")
         this.rangesList[idx] = ranges
-        this._render()
     }
 
     setTagsAndRanges(tags: (string | null)[], answer: Answer, ranges: HighlightRange[]) {
@@ -139,7 +126,6 @@ class TaggingClusterSession {
         console.log("setting to", this.tags)
 
         this.rangesList[idx] = ranges
-        this._render()
     }
 
     getRanges(answer: Answer): HighlightRange[] {

@@ -14,7 +14,7 @@ interface useFetchInterface<T> {
 }
 
 export function useFetch<T>(url: string): useFetchInterface<T> {
-    const [state, setState] = useState<{ data: any, isLoading: boolean }>({data: null, isLoading: true});
+    const [state, setState] = useState<{ data: any, isLoading: boolean }>({data: undefined, isLoading: true});
     const isMounted = useRef<boolean>(true);
 
     useEffect(() => {
@@ -27,10 +27,7 @@ export function useFetch<T>(url: string): useFetchInterface<T> {
         fetch(url)
             .then(response => response.json())
             .then(json => {
-                if (isMounted.current) {
-                    console.log({...state, data: json, isLoading: false})
-                    setState({...state, data: json, isLoading: false})
-                }
+                if (isMounted.current) setState({data: json, isLoading: false})
             })
     }, [url, setState]);
     return state;
