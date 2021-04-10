@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 export function JSONLoader(url: string, next: Function): void {
     fetch(url)
@@ -8,31 +8,23 @@ export function JSONLoader(url: string, next: Function): void {
         })
 }
 
-// https://www.digitalocean.com/community/tutorials/creating-a-custom-usefetch-react-hook
-export function useFetch<T>(url: string) {
-    const [response, setResponse] = useState<T | undefined>(undefined);
-    const [error, setError] = useState(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+export function useFetch(url: string): { data: any, isLoading: boolean } {
+    const [state, setState] = useState<any>({data: null, isLoading: true});
+    const isMounted = useRef<boolean>(true);
+
     useEffect(() => {
-        // https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component
-        let isMounted = true; // note this flag denote mount status
-        const fetchData = async () => {
-            if(isMounted) setIsLoading(true);
-            try {
-                const res = await fetch(url);
-                const json: T = await res.json();
-                if(isMounted) {
-                    setResponse(json);
-                    setIsLoading(false)
-                }
-            } catch (error) {
-                if(isMounted) {
-                    setError(error);
-                }
-            }
-        };
-        fetchData()
-        return () => { isMounted = false }; // use effect cleanup to set flag false, if unmounted
-    }, []);
-    return {response, error, isLoading};
-};
+        return () => {
+            isMounted.current = false
+        }
+    }, [])
+
+    useEffect(() => {
+        setState({...state, data: state.data, loading: true})
+        fetch(url)
+            .then(response => response.json())
+            .then(json => {
+                if (isMounted.current) setState({...state, data: json, loading: false})
+            })
+    }, [url, setState]);
+    return state;
+}
