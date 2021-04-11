@@ -1,17 +1,19 @@
 import React from "react"
-import TaggingClusterSession from "../../../model/TaggingClusterSession";
+import {TaggingClusterSessionWithMethods} from "../../../model/TaggingClusterSession";
 import {TableCell} from "@material-ui/core";
 import StaticSelectorView from "./StaticSelectorView";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
+import {GettersTaggingSession} from "../../../model/TaggingSession";
 
 interface Input {
-    taggingClusterSession: TaggingClusterSession,
-    misconceptionsAvailable: MisconceptionElement[]
+    taggingClusterSession: TaggingClusterSessionWithMethods,
+    misconceptionsAvailable: MisconceptionElement[],
+    getters: GettersTaggingSession
 }
 
-function HistoryView({taggingClusterSession, misconceptionsAvailable}: Input) {
+function HistoryView({taggingClusterSession, misconceptionsAvailable, getters}: Input) {
 
-    const history = taggingClusterSession.getHistory()
+    const history = getters.getHistory()
     const historyPart1 = history.slice(0, history.length - 1)
     const historyPart2 = history.slice(history.length - 1)
 
@@ -24,7 +26,7 @@ function HistoryView({taggingClusterSession, misconceptionsAvailable}: Input) {
                         <TableCell key={"static|selector|view|" + tag} style={{borderBottom: "none"}}>
                             <StaticSelectorView
                                 misconceptionsAvailable={misconceptionsAvailable}
-                                taggingClusterSession={taggingClusterSession}
+                                taggingClusterSessionWithMethods={taggingClusterSession}
                                 misconception={tag}
                                 handledIndex={index + 1}
                             />
@@ -37,7 +39,7 @@ function HistoryView({taggingClusterSession, misconceptionsAvailable}: Input) {
                     <TableCell key={"static|selector|view|last" + historyPart2[0]}>
                         <StaticSelectorView
                             misconceptionsAvailable={misconceptionsAvailable}
-                            taggingClusterSession={taggingClusterSession}
+                            taggingClusterSessionWithMethods={taggingClusterSession}
                             misconception={historyPart2[0]}
                             handledIndex={history.length}
                         />

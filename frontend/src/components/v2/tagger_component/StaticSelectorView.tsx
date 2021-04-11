@@ -1,5 +1,8 @@
 import React from "react"
-import TaggingClusterSession, {initEmptyTagsList} from "../../../model/TaggingClusterSession";
+import {
+    initEmptyTagsList,
+    TaggingClusterSessionWithMethods
+} from "../../../model/TaggingClusterSession";
 import MisconceptionColorButton from "./MisconceptionColorButton";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import {getColor, highlightRangesColorUpdating, isNoMisconception, NO_COLOR} from "../../../helpers/Util";
@@ -8,16 +11,30 @@ import stringEquals from "../../../util/StringEquals";
 import {GREY, DARK_GREY} from "../../../util/Colors";
 import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import KeyIndication from "./KeyIndication";
+import {
+    clusterSessionPost,
+    setCurrentColor,
+    setRangesList,
+    setTags
+} from "../../../model/TaggingClusterSessionDispatch";
 
 
 interface Input {
     misconceptionsAvailable: MisconceptionElement[],
-    taggingClusterSession: TaggingClusterSession,
+    taggingClusterSessionWithMethods: TaggingClusterSessionWithMethods,
     misconception: string,
     handledIndex: number
 }
 
-function StaticSelectorView({misconceptionsAvailable, taggingClusterSession, misconception, handledIndex}: Input) {
+function StaticSelectorView({
+                                misconceptionsAvailable,
+                                taggingClusterSessionWithMethods,
+                                misconception,
+                                handledIndex
+                            }: Input) {
+
+    const taggingClusterSession = taggingClusterSessionWithMethods.clusterSession
+    const dispatch = taggingClusterSessionWithMethods.clusterSessionDispatch
 
     const isSelected = () => taggingClusterSession.tags.findIndex(tag => stringEquals(tag, misconception)) !== -1
 
@@ -45,7 +62,7 @@ function StaticSelectorView({misconceptionsAvailable, taggingClusterSession, mis
                 color={getColor(misconceptionsAvailable, misconception)}
                 enabled={isSelected()}
                 current_color={taggingClusterSession.currentColor}
-                setColor={(color: string) => taggingClusterSession.setCurrentColor(color)}
+                setColor={(color: string) => dispatch(setCurrentColor(color))}
             />
             <Button
                 type={"button"}
@@ -54,7 +71,7 @@ function StaticSelectorView({misconceptionsAvailable, taggingClusterSession, mis
                     let new_tags = [...taggingClusterSession.tags]
 
 
-                    taggingClusterSession.setRangesList(getNewRangesList(misconception, handledIndex))
+                    dispatch(setRangesList(getNewRangesList(misconception, handledIndex)))
 
                     if (isNoMisconception(misconception) && isSelected()) // deselecting NoMisconception
                         new_tags = initEmptyTagsList()
@@ -67,10 +84,11 @@ function StaticSelectorView({misconceptionsAvailable, taggingClusterSession, mis
                             taggingClusterSession.currentColor
                         )
                     )
-                        taggingClusterSession.setCurrentColor(NO_COLOR)
 
-                    taggingClusterSession.setTags(new_tags)
-                    taggingClusterSession.post()
+                        dispatch(setCurrentColor(NO_COLOR))
+
+                    dispatch(setTags(new_tags))
+                    dispatch(clusterSessionPost())
 
 
                 }}

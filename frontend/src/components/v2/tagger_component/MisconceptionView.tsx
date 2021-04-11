@@ -10,9 +10,13 @@ import {
 import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
-import TaggingClusterSession, {PRE_DYNAMIC_SIZE} from "../../../model/TaggingClusterSession";
+import {
+    PRE_DYNAMIC_SIZE,
+    TaggingClusterSessionWithMethods
+} from "../../../model/TaggingClusterSession";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import KeyIndication from "./KeyIndication";
+import {clusterSessionPost, setRangesList, setTags} from "../../../model/TaggingClusterSessionDispatch";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -29,14 +33,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Input {
-    clusterTaggingSession: TaggingClusterSession,
+    taggingClusterSessionWithMethods: TaggingClusterSessionWithMethods,
     misconceptionsAvailable: MisconceptionElement[]
 }
 
 function MisconceptionView(
     {
         misconceptionsAvailable,
-        clusterTaggingSession
+        taggingClusterSessionWithMethods
     }: Input
 ) {
 
@@ -44,12 +48,15 @@ function MisconceptionView(
 
     const misconceptions_string_list: string[] = misconceptionsAvailable.map<string>(misc => misc.name)
 
+    const clusterTaggingSession = taggingClusterSessionWithMethods.clusterSession
+    const dispatch = taggingClusterSessionWithMethods.clusterSessionDispatch
+
     const currentColor: string = clusterTaggingSession.currentColor
     const tags = clusterTaggingSession.tags
     const rangesList = clusterTaggingSession.rangesList
 
 
-    const setCurrentColor = (color: string) => clusterTaggingSession.setCurrentColor(color)
+    const setCurrentColor: any = (color: string) => dispatch(setCurrentColor(color))
 
     const getNewRangesList = (element: (string | null), index: number) => {
         if (isNoMisconception(element)) return [[]]
@@ -61,9 +68,9 @@ function MisconceptionView(
 
 
     const setTagElementHandle = (element: (string | null), index: number) => {
-        clusterTaggingSession.setTags(computeMiscList(tags, element, index))
-        clusterTaggingSession.setRangesList(getNewRangesList(element, index))
-        clusterTaggingSession.post()
+        dispatch(setTags(computeMiscList(tags, element, index)))
+        dispatch(setRangesList(getNewRangesList(element, index)))
+        dispatch(clusterSessionPost())
     }
 
     const FIRST_DYNAMIC_INDEX: number = PRE_DYNAMIC_SIZE + 1

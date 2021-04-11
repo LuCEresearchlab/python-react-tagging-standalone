@@ -6,16 +6,20 @@ import {StyledPagination} from "../styled/StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
 import QuestionSelect from "../question_component/QuestionSelect";
-import TaggingSession from "../../model/TaggingSession";
+import {TaggingSessionWithMethods} from "../../model/TaggingSession";
 import TagView from "./tagger_component/TagView";
 import ClusterView from "./tagger_component/ClusterView";
 
 import {LIGHT_GREY} from "../../util/Colors"
+import {setCurrentCluster, setCurrentQuestion} from "../../model/TaggingSessionDispatch";
+import {
+    TaggingClusterSessionWithMethods
+} from "../../model/TaggingClusterSession";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 interface Input {
-    taggingSession: TaggingSession
+    taggingSession: TaggingSessionWithMethods
 }
 
 const useStyles = makeStyles(() =>
@@ -48,16 +52,16 @@ function TaggingUI({taggingSession}: Input) {
     const [page, setPage] = useState<number>(1)
 
 
-    const current_question: Question = taggingSession.getQuestion()
+    const current_question: Question = taggingSession.getters.getQuestion()
     const total_clusters = current_question.clustered_answers.length
 
     const paginationChange = (event: any, value: number) => {
-        taggingSession.setCurrentCluster(value - 1)
+        taggingSession.dispatch(setCurrentCluster(value - 1))
         setPage(value);
     };
 
     const selectedChange = (value: number) => {
-        taggingSession.setCurrentQuestion(value)
+        taggingSession.dispatch(setCurrentQuestion(value))
         setPage(1)  // fix page selected on question change
     }
 
@@ -66,12 +70,17 @@ function TaggingUI({taggingSession}: Input) {
 
     if (isLoading) return (<>Loading...</>)
 
+    const taggingClusterSession: TaggingClusterSessionWithMethods = {
+        clusterSession: taggingSession.clusterSession,
+        clusterSessionDispatch: taggingSession.clusterSessionDispatch
+    }
+
     return (
         <Grid container direction={'row'} className={classes.root} spacing={10}>
             <Grid item xs={4}>
                 <QuestionSelect
-                    questions={taggingSession.questions}
-                    selectedQuestion={taggingSession.currentQuestion}
+                    questions={taggingSession.state.questions}
+                    selectedQuestion={taggingSession.state.currentQuestion}
                     setQuestionSelect={selectedChange}/>
             </Grid>
             <Grid item xs={8}>
@@ -79,14 +88,15 @@ function TaggingUI({taggingSession}: Input) {
                       style={{backgroundColor: LIGHT_GREY}}>
                     <Grid item xs={6}>
                         <ClusterView
-                            cluster={taggingSession.getCluster()}
-                            taggingClusterSession={taggingSession.getTaggingClusterSession()}
+                            taggingClusterSession={taggingClusterSession}
+                            getters={taggingSession.getters}
                         />
                     </Grid>
                     <Grid item xs={6}>
                         <TagView
                             misconceptionsAvailable={data}
-                            taggingClusterSession={taggingSession.getTaggingClusterSession()}
+                            taggingClusterSession={taggingClusterSession}
+                            getters={taggingSession.getters}
                         />
                     </Grid>
                     <StyledPagination
