@@ -6,7 +6,7 @@ import {isUsingDefaultColor as isUsingDefaultColorUtil} from "../helpers/Util";
 import stringEquals from "../util/StringEquals";
 import {arrayFilteredNotNullEquals, arrayEquals} from "../util/ArrayEquals";
 import NoMisconception from "../util/NoMisconception";
-import React, {useReducer} from "react";
+import {Dispatch, ReducerAction, ReducerState, useReducer} from "react";
 
 const MAX_HISTORY_SIZE: number = 4
 export const PRE_DYNAMIC_SIZE: number = MAX_HISTORY_SIZE
@@ -24,11 +24,6 @@ export enum TaggingClusterSessionActions {
 export interface TaggingClusterSessionDispatch {
     type: TaggingClusterSessionActions,
     payload: any
-}
-
-export interface TaggingClusterSessionWithMethods {
-    clusterSession: TaggingClusterSession,
-    clusterSessionDispatch: React.Dispatch<TaggingClusterSessionDispatch>
 }
 
 export function newNoMiscTagList(): (string | null)[] {
@@ -66,6 +61,7 @@ function loadedTagsFormatAndSet(state: TaggingClusterSession, tags: (string | nu
 }
 
 function _history_add_if_missing(state: TaggingClusterSession, tags: (string | null)[]): void {
+    console.log("_history_add_if_missing")
     if (tags == null || tags.length === 0) return
     if (state.history.length === MAX_HISTORY_SIZE) return // max size reached
     tags
@@ -167,7 +163,7 @@ function setTagsAndRanges(state: TaggingClusterSession,
                                   ranges: HighlightRange[]
                               }): TaggingClusterSession {
 
-    console.log("setTagsAndRanges current", state)
+    console.log("setTagsAndRanges")
 
     const answer: Answer = payload.answer
     const tags: (string | null)[] = payload.tags
@@ -186,11 +182,8 @@ function setTagsAndRanges(state: TaggingClusterSession,
     const new_ranges = [...state.rangesList]
     new_ranges[idx] = ranges
 
-    console.log("setTagsAndRanges to", {
-        ...state,
-        rangesList: new_ranges,
-        tags: new_tags
-    })
+    console.log(state.tags)
+
     return {
         ...state,
         rangesList: new_ranges,
@@ -246,40 +239,30 @@ const initial_state: any = {
     history: []
 }
 
-function useTaggingClusterSession() {
-
+function useTaggingClusterSession(): [
+    ReducerState<(state: TaggingClusterSession, action: TaggingClusterSessionDispatch) => (TaggingClusterSession)>,
+    Dispatch<ReducerAction<(state: TaggingClusterSession, action: TaggingClusterSessionDispatch)
+        => (TaggingClusterSession)>>] {
 
     const [state, dispatch] = useReducer(reducer, initial_state)
 
-    function getRanges(answer: Answer): HighlightRange[] {
-        if (arrayEquals(state.cluster, [])) return []
-        const idx = state.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
-        if (idx === -1) return []
-        return state.rangesList[idx]
-    }
+    return [state, dispatch]
+}
 
-    function getHistory(): string[] {
-        if (arrayEquals(state.history, [])) return []
-        return state.history.filter(tag => tag != null)
-    }
+export function getRanges(state: TaggingClusterSession, answer: Answer): HighlightRange[] {
+    if (arrayEquals(state.cluster, [])) return []
+    const idx = state.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
+    if (idx === -1) return []
+    return state.rangesList[idx]
+}
 
-    function isUsingDefaultColor(): boolean {
-        return isUsingDefaultColorUtil(state.currentColor)
-    }
+export function getHistory(state: TaggingClusterSession): string[] {
+    if (arrayEquals(state.history, [])) return []
+    return state.history.filter(tag => tag != null)
+}
 
-    const getters: {
-        getRanges: (answer: Answer) => HighlightRange[],
-        getHistory: () => string[],
-        isUsingDefaultColor: () => boolean
-    } = {
-        getRanges,
-        getHistory,
-        isUsingDefaultColor
-    }
-
-    console.log("useTaggingClusterSession", state)
-
-    return {clusterSession: state, clusterSessionDispatch: dispatch, ClusterSessionGetters: getters}
+export function isUsingDefaultColor(state: TaggingClusterSession): boolean {
+    return isUsingDefaultColorUtil(state.currentColor)
 }
 
 export default useTaggingClusterSession

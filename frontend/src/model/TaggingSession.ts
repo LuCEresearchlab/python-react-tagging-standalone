@@ -1,10 +1,8 @@
 import {Answer, Dataset, Question} from "../interfaces/Dataset";
-import {TaggingClusterSession, TaggingClusterSessionDispatch} from "./TaggingClusterSession";
-import React, {useReducer} from "react";
-import useTaggingClusterSession from "./TaggingClusterSession";
+import {TaggingClusterSessionDispatch} from "./TaggingClusterSession";
+import React, {Dispatch, ReducerAction, ReducerState, useReducer} from "react";
 import {clusterSessionPost, initClusterSession} from "./TaggingClusterSessionDispatch";
 import {NO_COLOR} from "../helpers/Util";
-import {HighlightRange} from "../interfaces/HighlightRange";
 
 export interface TaggingSession {
     isLoading: Boolean;
@@ -19,22 +17,6 @@ export interface TaggingSession {
     history: string[][]
 }
 
-export interface GettersTaggingSession {
-    getRanges: (answer: Answer) => HighlightRange[],
-    getHistory: () => string[],
-    isUsingDefaultColor: () => boolean,
-    getCluster: () => Answer[],
-    getQuestion: () => Question
-}
-
-export interface TaggingSessionWithMethods {
-    state: TaggingSession,
-    clusterSession: TaggingClusterSession,
-    dispatch: React.Dispatch<TaggingSessionDispatch>,
-    clusterSessionDispatch: React.Dispatch<TaggingClusterSessionDispatch>,
-    getters: GettersTaggingSession
-}
-
 
 export enum TaggingSessionActions {
     INIT,
@@ -45,7 +27,7 @@ export enum TaggingSessionActions {
     POP_ANSWER
 }
 
-interface TaggingSessionDispatch {
+export interface TaggingSessionDispatch {
     type: TaggingSessionActions,
     payload: any
 }
@@ -55,20 +37,9 @@ function initState(dataset: (Dataset | null), user_id: string,
                    dispatcher: React.Dispatch<TaggingClusterSessionDispatch>): any {
     if (dataset == null) return {isLoading: true, user_id}
 
+
     const questions: Question[] = dataset.questions
     const history = [...Array(questions.length)].map(() => [])
-
-    let c = {
-        dataset_id: dataset.dataset_id,
-        question_id: questions[0].question_id,
-        user_id,
-        currentColor: NO_COLOR,
-        clusters: questions[0].clustered_answers[0],
-        tags: [],
-        history: history[0]
-    }
-
-    console.log("initState", c)
 
     dispatcher(initClusterSession(
         dataset.dataset_id,
@@ -93,7 +64,6 @@ function initState(dataset: (Dataset | null), user_id: string,
 
 function _createTaggingClusterSession(state: TaggingSession,
                                       dispatcher: React.Dispatch<TaggingClusterSessionDispatch>): void {
-    console.log("_create", state)
     dispatcher(
         initClusterSession(
             state.dataset.dataset_id,
@@ -211,31 +181,28 @@ const wrapped_reducer = (dispatcher: React.Dispatch<TaggingClusterSessionDispatc
     return (state: TaggingSession, action: TaggingSessionDispatch) => reducer(dispatcher, state, action)
 }
 
-function useTaggingSession(dataset: (Dataset | null), user_id: string): TaggingSessionWithMethods {
+function useTaggingSession(dataset: (Dataset | null), user_id: string,
+                           clusterSessionDispatch: React.Dispatch<TaggingClusterSessionDispatch>):
+    [ReducerState<(state: TaggingSession, action: TaggingSessionDispatch) => any>,
+        Dispatch<ReducerAction<(state: TaggingSession, action: TaggingSessionDispatch) => any>>] {
 
-
-    const {clusterSession, clusterSessionDispatch, ClusterSessionGetters} = useTaggingClusterSession()
 
     const [state, dispatch] = useReducer(wrapped_reducer(clusterSessionDispatch),
         initState(null, user_id, clusterSessionDispatch))
 
 
-    function getCluster(): Answer[] {
-        return state.clusters[state.currentCluster]
-    }
-
-    function getQuestion(): Question {
-        return state.questions[state.currentQuestion]
-    }
-
-
-    const getters = {
-        getCluster, getQuestion,
-        ...ClusterSessionGetters
-    }
-
-    return {state, clusterSession, dispatch, clusterSessionDispatch, getters}
+    return [state, dispatch]
 }
+
+
+export function getCluster(state: TaggingSession): Answer[] {
+    return state.clusters[state.currentCluster]
+}
+
+export function getQuestion(state: TaggingSession): Question {
+    return state.questions[state.currentQuestion]
+}
+
 
 export default useTaggingSession
 

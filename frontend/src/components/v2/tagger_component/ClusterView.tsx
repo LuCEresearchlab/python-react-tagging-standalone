@@ -9,29 +9,34 @@ import {GREY} from "../../../util/Colors"
 import Highlightable from "highlightable";
 import {TaggedAnswer} from "../../../interfaces/TaggedAnswer";
 import {useFetch} from "../../../helpers/LoaderHelper";
-import {TaggingClusterSessionWithMethods} from "../../../model/TaggingClusterSession";
+import {
+    getRanges, isUsingDefaultColor,
+    TaggingClusterSession,
+    TaggingClusterSessionDispatch
+} from "../../../model/TaggingClusterSession";
 import KeyIndication from "./KeyIndication";
 import {clusterSessionPost, setRanges, setTagsAndRanges} from "../../../model/TaggingClusterSessionDispatch";
-import {GettersTaggingSession} from "../../../model/TaggingSession";
+import {getCluster, TaggingSession} from "../../../model/TaggingSession";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
 interface Input {
-    taggingClusterSession: TaggingClusterSessionWithMethods,
-    getters: GettersTaggingSession
+    taggingSession: TaggingSession,
+    taggingClusterSession: TaggingClusterSession,
+    dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>
 }
 
-function ClusterView({taggingClusterSession, getters}: Input) {
+function ClusterView({taggingSession, taggingClusterSession, dispatchTaggingClusterSession}: Input) {
 
     return (
         <div>
             {
-                getters.getCluster().map((answer: Answer, index: number) =>
+                getCluster(taggingSession).map((answer: Answer, index: number) =>
                     <ClusterItem
                         key={"ClusterItem|Answer|" + answer.answer_id}
                         answer={answer}
-                        taggingClusterSessionWithMethods={taggingClusterSession}
-                        getters={getters}
+                        taggingClusterSession={taggingClusterSession}
+                        dispatchTaggingClusterSession={dispatchTaggingClusterSession}
                         displayKey={index + 1}
                     />
                 )}
@@ -41,15 +46,12 @@ function ClusterView({taggingClusterSession, getters}: Input) {
 
 interface ClusterItemInput {
     answer: Answer,
-    taggingClusterSessionWithMethods: TaggingClusterSessionWithMethods,
-    getters: GettersTaggingSession,
+    taggingClusterSession: TaggingClusterSession,
+    dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>,
     displayKey: number
 }
 
-function ClusterItem({answer, taggingClusterSessionWithMethods, getters, displayKey}: ClusterItemInput) {
-
-    const taggingClusterSession = taggingClusterSessionWithMethods.clusterSession
-    const dispatch = taggingClusterSessionWithMethods.clusterSessionDispatch
+function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSession, displayKey}: ClusterItemInput) {
 
 
     const get_selected_misc_url = TAGGING_SERVICE_URL +
@@ -72,16 +74,16 @@ function ClusterItem({answer, taggingClusterSessionWithMethods, getters, display
                 [] :
                 previousTaggedAnswer.highlighted_ranges
 
-            dispatch(setTagsAndRanges(previous_tags, answer, loaded_ranges))
+            dispatchTaggingClusterSession(setTagsAndRanges(previous_tags, answer, loaded_ranges))
         } else {  // has never been tagged
-            dispatch(setRanges(answer, []))
+            dispatchTaggingClusterSession(setRanges(answer, []))
         }
     }, [isLoading, data])
 
-    const ranges: HighlightRange[] = getters.getRanges(answer)
+    const ranges: HighlightRange[] = getRanges(taggingClusterSession, answer)
 
     const onTextHighlighted = (e: any) => {
-        if (getters.isUsingDefaultColor()) return
+        if (isUsingDefaultColor(taggingClusterSession)) return
 
         const newRange = {
             start: e.start,
@@ -91,8 +93,8 @@ function ClusterItem({answer, taggingClusterSessionWithMethods, getters, display
         }
         const r = rangesCompressor(ranges, newRange)
 
-        dispatch(setRanges(answer, [...r]))
-        dispatch(clusterSessionPost())
+        dispatchTaggingClusterSession(setRanges(answer, [...r]))
+        dispatchTaggingClusterSession(clusterSessionPost())
     }
 
     const highlightStyle = (range: HighlightRange) => {
@@ -102,8 +104,8 @@ function ClusterItem({answer, taggingClusterSessionWithMethods, getters, display
     }
 
     const clear = () => {
-        dispatch(setRanges(answer, []))
-        dispatch(clusterSessionPost())
+        dispatchTaggingClusterSession(setRanges(answer, []))
+        dispatchTaggingClusterSession(clusterSessionPost())
     }
 
     if (isLoading) return <div>Loading...</div>

@@ -5,6 +5,7 @@ import {useParams} from "react-router-dom";
 import TaggingUI from '../../components/v2/TaggingUI'
 import {Dataset} from "../../interfaces/Dataset";
 import useTaggingSession, {TaggingSessionActions} from "../../model/TaggingSession";
+import useTaggingClusterSession from "../../model/TaggingClusterSession";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
@@ -13,7 +14,10 @@ function TaggingPage() {
     const {dataset_id, user_id}: { dataset_id: string, user_id: string } = useParams()
 
     const {data, isLoading} = useFetch<Dataset>(`${TAGGING_SERVICE_URL}/datasets/get-dataset/dataset/${dataset_id}`)
-    const taggingSession = useTaggingSession(null, user_id)
+
+    const [taggingClusterSession, dispatchTaggingClusterSession] = useTaggingClusterSession()
+    const [taggingSession, dispatchTaggingSession] =
+        useTaggingSession(null, user_id, dispatchTaggingClusterSession)
 
 
     if (isLoading) return (
@@ -22,13 +26,18 @@ function TaggingPage() {
         </Container>
     )
 
-    if (!isLoading && taggingSession.state.isLoading)
-        taggingSession.dispatch({type: TaggingSessionActions.INIT, payload: data})
+    if (!isLoading && taggingSession.isLoading) {
+        dispatchTaggingSession({type: TaggingSessionActions.INIT, payload: data})
+    }
 
 
     if (taggingSession != undefined) {
         return (
-            <TaggingUI taggingSession={taggingSession}/>
+            <TaggingUI taggingSession={taggingSession}
+                       dispatchTaggingSession={dispatchTaggingSession}
+                       taggingClusterSession={taggingClusterSession}
+                       dispatchTaggingClusterSession={dispatchTaggingClusterSession}
+            />
         )
     } else {
         return (

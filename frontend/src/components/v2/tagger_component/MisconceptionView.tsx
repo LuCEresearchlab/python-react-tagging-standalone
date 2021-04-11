@@ -12,7 +12,8 @@ import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import {
     PRE_DYNAMIC_SIZE,
-    TaggingClusterSessionWithMethods
+    TaggingClusterSession,
+    TaggingClusterSessionDispatch
 } from "../../../model/TaggingClusterSession";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import KeyIndication from "./KeyIndication";
@@ -33,14 +34,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Input {
-    taggingClusterSessionWithMethods: TaggingClusterSessionWithMethods,
+    taggingClusterSession: TaggingClusterSession,
+    dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>,
     misconceptionsAvailable: MisconceptionElement[]
 }
 
 function MisconceptionView(
     {
         misconceptionsAvailable,
-        taggingClusterSessionWithMethods
+        taggingClusterSession,
+        dispatchTaggingClusterSession
     }: Input
 ) {
 
@@ -48,15 +51,12 @@ function MisconceptionView(
 
     const misconceptions_string_list: string[] = misconceptionsAvailable.map<string>(misc => misc.name)
 
-    const clusterTaggingSession = taggingClusterSessionWithMethods.clusterSession
-    const dispatch = taggingClusterSessionWithMethods.clusterSessionDispatch
-
-    const currentColor: string = clusterTaggingSession.currentColor
-    const tags = clusterTaggingSession.tags
-    const rangesList = clusterTaggingSession.rangesList
+    const currentColor: string = taggingClusterSession.currentColor
+    const tags = taggingClusterSession.tags
+    const rangesList = taggingClusterSession.rangesList
 
 
-    const setCurrentColor: any = (color: string) => dispatch(setCurrentColor(color))
+    const setCurrentColor: any = (color: string) => dispatchTaggingClusterSession(setCurrentColor(color))
 
     const getNewRangesList = (element: (string | null), index: number) => {
         if (isNoMisconception(element)) return [[]]
@@ -68,9 +68,9 @@ function MisconceptionView(
 
 
     const setTagElementHandle = (element: (string | null), index: number) => {
-        dispatch(setTags(computeMiscList(tags, element, index)))
-        dispatch(setRangesList(getNewRangesList(element, index)))
-        dispatch(clusterSessionPost())
+        dispatchTaggingClusterSession(setTags(computeMiscList(tags, element, index)))
+        dispatchTaggingClusterSession(setRangesList(getNewRangesList(element, index)))
+        dispatchTaggingClusterSession(clusterSessionPost())
     }
 
     const FIRST_DYNAMIC_INDEX: number = PRE_DYNAMIC_SIZE + 1
