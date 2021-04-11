@@ -27,25 +27,25 @@ function TaggingPage() {
     )
 
     if (!isLoading && taggingSession.isLoading) {
+        console.log(taggingClusterSession)
         dispatchTaggingSession({type: TaggingSessionActions.INIT, payload: data})
     }
 
 
-    if (taggingSession != undefined) {
-        return (
-            <TaggingUI taggingSession={taggingSession}
-                       dispatchTaggingSession={dispatchTaggingSession}
-                       taggingClusterSession={taggingClusterSession}
-                       dispatchTaggingClusterSession={dispatchTaggingClusterSession}
-            />
-        )
-    } else {
+    if (isLoading || taggingSession == undefined && taggingClusterSession.user_id == null)
         return (
             <Container>
                 Loading...
             </Container>
         )
-    }
+
+    return (
+        <TaggingUI taggingSession={taggingSession}
+                   dispatchTaggingSession={dispatchTaggingSession}
+                   taggingClusterSession={taggingClusterSession}
+                   dispatchTaggingClusterSession={dispatchTaggingClusterSession}
+        />
+    )
 }
 
 export default TaggingPage

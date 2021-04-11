@@ -1,4 +1,4 @@
-import {getMillis, isNoMisconception, NO_COLOR} from "../helpers/Util";
+import {getMillis, isNoMisconception} from "../helpers/Util";
 import {HighlightRange} from "../interfaces/HighlightRange";
 import {Answer} from "../interfaces/Dataset";
 import postAnswer from "../helpers/PostAnswer";
@@ -230,8 +230,8 @@ function reducer(state: TaggingClusterSession, action: TaggingClusterSessionDisp
 const initial_state: any = {
     dataset_id: "dataset_id",
     question_id: "question_id",
-    user_id: "user_id",
-    currentColor: NO_COLOR,
+    user_id: null,
+    currentColor: null,
     cluster: [],
     tags: [],
     rangesList: [],
