@@ -80,8 +80,6 @@ function ClusterItem({answer, taggingClusterSessionWithMethods, getters, display
 
     const ranges: HighlightRange[] = getters.getRanges(answer)
 
-    const problem = displayKey == undefined || ranges == undefined || answer == undefined || answer.data == undefined
-
     const onTextHighlighted = (e: any) => {
         if (getters.isUsingDefaultColor()) return
 
@@ -106,10 +104,6 @@ function ClusterItem({answer, taggingClusterSessionWithMethods, getters, display
     const clear = () => {
         dispatch(setRanges(answer, []))
         dispatch(clusterSessionPost())
-    }
-
-    if (problem) {
-        console.log("problem")
     }
 
     if (isLoading) return <div>Loading...</div>
