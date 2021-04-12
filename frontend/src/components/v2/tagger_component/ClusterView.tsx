@@ -17,6 +17,7 @@ import {
 import KeyIndication from "./KeyIndication";
 import {clusterSessionPost, setRanges, setTagsAndRanges} from "../../../model/TaggingClusterSessionDispatch";
 import {getCluster, TaggingSession} from "../../../model/TaggingSession";
+import TruthCircle from "../../tagger_component/TruthCircle";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
@@ -114,6 +115,7 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
     return (
         <Paper style={{padding: '1em', backgroundColor: GREY, display: 'flex', flexDirection: 'row'}}>
             <KeyIndication displayKey={"" + displayKey}/>
+            <TruthCircle value={answer.picked}/>
             <Highlightable
                 ranges={ranges}
                 enabled={true}
