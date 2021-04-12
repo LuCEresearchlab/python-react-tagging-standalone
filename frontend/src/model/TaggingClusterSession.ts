@@ -10,6 +10,7 @@ import {Dispatch, ReducerAction, ReducerState, useReducer} from "react";
 
 const MAX_HISTORY_SIZE: number = 4
 export const PRE_DYNAMIC_SIZE: number = MAX_HISTORY_SIZE
+const MIN_LENGTH: number = 1 + PRE_DYNAMIC_SIZE + 1
 
 export enum TaggingClusterSessionActions {
     INIT,
@@ -53,7 +54,7 @@ function loadedTagsFormatAndSet(state: TaggingClusterSession, tags: (string | nu
             )
     }
     while (
-        initialized_list.length <= MAX_HISTORY_SIZE + 1 ||
+        initialized_list.length < MIN_LENGTH ||
         initialized_list[initialized_list.length - 1] != null)
         initialized_list.push(null)
 
@@ -61,9 +62,9 @@ function loadedTagsFormatAndSet(state: TaggingClusterSession, tags: (string | nu
 }
 
 function _history_add_if_missing(state: TaggingClusterSession, tags: (string | null)[]): void {
-    console.log("_history_add_if_missing")
-    if (tags == null || tags.length === 0) return
-    if (state.history.length === MAX_HISTORY_SIZE) return // max size reached
+
+    if (tags == null || tags.length === 0) return;
+    if (state.history.length === MAX_HISTORY_SIZE) return; // max size reached
     tags
         .filter(elem => elem != null)
         .filter(tag => !isNoMisconception(tag))
@@ -105,7 +106,7 @@ function init(state: TaggingClusterSession,
         user_id: payload.user_id,
         currentColor: payload.currentColor,
         cluster: payload.cluster,
-        tags: initEmptyTagsList(),
+        tags: [...initEmptyTagsList(), null],
         rangesList: [...Array(payload.cluster.length)].map(() => []),
         startTaggingTime: getMillis(),
         history: payload.history
@@ -122,10 +123,12 @@ function setCurrentColor(state: TaggingClusterSession, color: string): TaggingCl
 }
 
 function setTags(state: TaggingClusterSession, tags: (string | null)[]): TaggingClusterSession {
+
+    _history_add_if_missing(state, tags)
     const new_tags = loadedTagsFormatAndSet(state, tags)
+
     if (arrayFilteredNotNullEquals(new_tags, state.tags)) return state // no change
     console.log("setTags")
-    _history_add_if_missing(state, tags)
     return {
         ...state,
         tags: new_tags
@@ -173,12 +176,12 @@ function setTagsAndRanges(state: TaggingClusterSession,
     const idx = state.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
     if (idx === -1) return state
 
+    _history_add_if_missing(state, tags)
+
     const new_tags = loadedTagsFormatAndSet(state, tags)
 
     if (arrayFilteredNotNullEquals(new_tags, state.tags) &&
         arrayEquals(state.rangesList[idx], ranges)) return state
-
-    _history_add_if_missing(state, tags)
 
     const new_ranges = [...state.rangesList]
     new_ranges[idx] = ranges

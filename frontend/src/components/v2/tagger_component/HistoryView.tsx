@@ -16,6 +16,8 @@ function HistoryView({taggingClusterSession, dispatchTaggingClusterSession, misc
     const historyPart1 = history.slice(0, history.length - 1)
     const historyPart2 = history.slice(history.length - 1)
 
+    if (history.length === 0) return (<TableCell>Empty History</TableCell>)
+
     return (
         <>
             {

@@ -80,6 +80,8 @@ function MisconceptionView(
     }
 
     const FIRST_DYNAMIC_INDEX: number = PRE_DYNAMIC_SIZE + 1
+    console.log("first is", FIRST_DYNAMIC_INDEX)
+    console.log(tags)
 
     return (
         <div className={classes.root}>
@@ -113,7 +115,7 @@ function MisconceptionView(
                     [...Array(Math.max(tags.length - PRE_DYNAMIC_SIZE - 2, 0))]
                         .map((_, index) => {
                             const handled_element = PRE_DYNAMIC_SIZE + index + 2 // +2 = NoMisc and default add above
-
+                            console.log("handling", handled_element)
                             return (
                                 <div key={"tag-selector-" + handled_element} className={classes.divLine}>
                                     <KeyIndication displayKey={"" + (handled_element - PRE_DYNAMIC_SIZE)}/>

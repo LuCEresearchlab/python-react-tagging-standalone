@@ -75,6 +75,7 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
 
     if (isLoading) return (<>Loading...</>)
 
+    console.log(taggingClusterSession.tags)
 
     return (
         <Grid container direction={'row'} className={classes.root} spacing={10}>
