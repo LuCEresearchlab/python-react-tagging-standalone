@@ -1,7 +1,7 @@
 import {HighlightRange} from "./HighlightRange";
 import {Answer} from "./Dataset";
 
-export interface taggedAnswer extends Answer {
+export interface TaggedAnswer extends Answer {
     dataset_id: string,
     question_id: string,
     tags: string[],
@@ -10,6 +10,6 @@ export interface taggedAnswer extends Answer {
     highlighted_ranges: HighlightRange[]
 }
 
-export interface extendedTaggedAnswer extends taggedAnswer {
+export interface ExtendedTaggedAnswer extends TaggedAnswer {
     question_text: string
 }

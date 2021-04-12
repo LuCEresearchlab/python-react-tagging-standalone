@@ -4,7 +4,7 @@ import {JSONLoader} from "../../helpers/LoaderHelper";
 import {Button} from "@material-ui/core";
 import {HighlightRange} from "../../interfaces/HighlightRange";
 import {StyledTableCell, StyledTableRow} from "../styled/StyledTable";
-import {taggedAnswer} from "../../interfaces/TaggedAnswer";
+import {TaggedAnswer} from "../../interfaces/TaggedAnswer";
 import {Answer} from "../../interfaces/Dataset";
 
 // @ts-ignore
@@ -18,6 +18,7 @@ import MisconceptionColorButton from "./MisconceptionColorButton";
 import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
 import stringEquals from "../../util/StringEquals";
 import TruthCircle from "./TruthCircle";
+import NoMisconception from "../../util/NoMisconception";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
@@ -65,7 +66,7 @@ function get_millis() {
 }
 
 function _is_no_misconception(tag: (string | null)): boolean {
-    return tag != null && stringEquals("NoMisconception", tag)
+    return tag != null && stringEquals(NoMisconception, tag)
 }
 
 const NO_COLOR: string = "#000000"
@@ -99,10 +100,10 @@ function MisconceptionTagElement(
 
 
     if (!loaded) {
-        JSONLoader(get_selected_misc_url, (prev_tagged_answers: taggedAnswer[]) => {
+        JSONLoader(get_selected_misc_url, (prev_tagged_answers: TaggedAnswer[]) => {
             // has existing value
             if (prev_tagged_answers.length > 0) {
-                const previousTaggedAnswer: taggedAnswer = prev_tagged_answers[0]
+                const previousTaggedAnswer: TaggedAnswer = prev_tagged_answers[0]
                 const previous_tags = previousTaggedAnswer.tags == null || previousTaggedAnswer.tags.length == 0 ?
                     [null] :
                     _is_no_misconception(previousTaggedAnswer.tags[0]) || !enabled ?
@@ -239,7 +240,7 @@ function MisconceptionTagElement(
                                     enabled={enabled}
                                     current_color={currentColor}
                                     setColor={setCurrentColor}
-
+                                    staticColor={false}
                                 />
                                 <SingleTagSelector
                                     key={"tag-selector-0"}
@@ -255,7 +256,7 @@ function MisconceptionTagElement(
                                         let tmp_tags: (string | null)[] = compute_misc_list(tags, element, index)
                                         // handle specific case of NoMisconception, only possible in first tag
                                         if (element != null && _is_no_misconception(element))
-                                            tmp_tags = ["NoMisconception"]
+                                            tmp_tags = [NoMisconception]
                                         setTags(tmp_tags)
                                         setRanges(new_ranges)
                                         post_answer(new_ranges, tmp_tags)
@@ -280,6 +281,7 @@ function MisconceptionTagElement(
                                                     enabled={enabled}
                                                     current_color={currentColor}
                                                     setColor={setCurrentColor}
+                                                    staticColor={false}
                                                 />
                                                 <SingleTagSelector
                                                     misconceptions_available={

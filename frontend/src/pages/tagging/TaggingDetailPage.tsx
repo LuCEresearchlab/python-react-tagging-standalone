@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import {extendedTaggedAnswer} from "../../interfaces/TaggedAnswer";
+import {ExtendedTaggedAnswer} from "../../interfaces/TaggedAnswer";
 import {useParams} from "react-router-dom";
 import {JSONLoader} from "../../helpers/LoaderHelper";
 import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from "@material-ui/core";
@@ -18,11 +18,11 @@ function TaggingDetailPage() {
 
     const get_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + "/tag/" + tag
 
-    const [answers, setAnswers] = useState<extendedTaggedAnswer[]>([])
+    const [answers, setAnswers] = useState<ExtendedTaggedAnswer[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
 
     if (!loaded) {
-        JSONLoader(get_url, (data: extendedTaggedAnswer[]) => {
+        JSONLoader(get_url, (data: ExtendedTaggedAnswer[]) => {
             setLoaded(true)
             setAnswers(data)
         })
@@ -42,7 +42,7 @@ function TaggingDetailPage() {
                 <TableBody>
                     {
                         answers
-                            .sort((a: extendedTaggedAnswer, b: extendedTaggedAnswer) => a.user_id.localeCompare(b.user_id))  // sort same user
+                            .sort((a: ExtendedTaggedAnswer, b: ExtendedTaggedAnswer) => a.user_id.localeCompare(b.user_id))  // sort same user
                             .map(answer =>
                                 <StyledTableRow key={answer.answer_id + "|" + answer.user_id}>
                                     <StyledTableCell align={"left"}>{answer.question_text}</StyledTableCell>

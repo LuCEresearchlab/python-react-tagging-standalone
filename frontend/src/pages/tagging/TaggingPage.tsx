@@ -1,43 +1,51 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Container} from "@material-ui/core";
-import {JSONLoader} from '../../helpers/LoaderHelper';
+import {useFetch} from '../../helpers/LoaderHelper';
 import {useParams} from "react-router-dom";
-import {Dataset} from '../../interfaces/Dataset'
-import TaggingUI from '../../components/TaggingUI'
+import TaggingUI from '../../components/v2/TaggingUI'
+import {Dataset} from "../../interfaces/Dataset";
+import useTaggingSession, {TaggingSessionActions} from "../../model/TaggingSession";
+import useTaggingClusterSession from "../../model/TaggingClusterSession";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 function TaggingPage() {
-    const [dataset, setDataset] = useState<Dataset | undefined>(undefined)
-    const [loaded, setLoaded] = useState<boolean>(false)
 
     const {dataset_id, user_id}: { dataset_id: string, user_id: string } = useParams()
 
-    const url: string = TAGGING_SERVICE_URL + '/datasets/get-dataset/dataset/' + dataset_id
+    const {data, isLoading} = useFetch<Dataset>(`${TAGGING_SERVICE_URL}/datasets/get-dataset/dataset/${dataset_id}`)
+
+    const [taggingClusterSession, dispatchTaggingClusterSession] = useTaggingClusterSession()
+    const [taggingSession, dispatchTaggingSession] =
+        useTaggingSession(null, user_id, dispatchTaggingClusterSession)
 
 
-    if (!loaded) {
-        JSONLoader(url, (data: Dataset) => {
-            setDataset(data)
-        })
-        setLoaded(true)
+    if (isLoading) return (
+        <Container>
+            Loading...
+        </Container>
+    )
+
+    if (!isLoading && taggingSession.isLoading) {
+        console.log(taggingClusterSession)
+        dispatchTaggingSession({type: TaggingSessionActions.INIT, payload: data})
     }
 
 
-    if (dataset != null) {
-        return (
-            <TaggingUI
-                questions={dataset.questions}
-                dataset_id={dataset_id}
-                user_id={user_id}/>
-        )
-    } else {
+    if (isLoading || taggingSession == undefined && taggingClusterSession.user_id == null)
         return (
             <Container>
                 Loading...
             </Container>
         )
-    }
+
+    return (
+        <TaggingUI taggingSession={taggingSession}
+                   dispatchTaggingSession={dispatchTaggingSession}
+                   taggingClusterSession={taggingClusterSession}
+                   dispatchTaggingClusterSession={dispatchTaggingClusterSession}
+        />
+    )
 }
 
 export default TaggingPage

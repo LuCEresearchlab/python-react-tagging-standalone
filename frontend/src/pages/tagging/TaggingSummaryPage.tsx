@@ -1,7 +1,7 @@
 import React, {useState} from "react"
 import {useHistory, useParams} from "react-router-dom";
 import {JSONLoader} from "../../helpers/LoaderHelper";
-import {taggedAnswer} from "../../interfaces/TaggedAnswer";
+import {TaggedAnswer} from "../../interfaces/TaggedAnswer";
 import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from "@material-ui/core";
 import {StyledTableCell, StyledTableRow, useStyles} from "../../components/styled/StyledTable";
 
@@ -10,7 +10,7 @@ const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 interface Stats {
     count: number,
-    answers: taggedAnswer[]
+    answers: TaggedAnswer[]
 }
 
 /**
@@ -18,7 +18,7 @@ interface Stats {
  * Stats contain a count of how many answers contain the misconception, and a list of all answers with the misconception
  * @param data list of all tagged answers in the dataset
  */
-function computeStats(data: taggedAnswer[]): Map<string, Stats> {
+function computeStats(data: TaggedAnswer[]): Map<string, Stats> {
     const stats = new Map<string, Stats>()
     for (let taggedAnswer of data) {
         const tags: string[] = taggedAnswer.tags
@@ -51,7 +51,7 @@ function TaggingSummaryPage() {
     const get_url = TAGGING_SERVICE_URL + '/datasets/download/dataset/' + dataset_id
 
     if (!loaded) {
-        JSONLoader(get_url, (data: taggedAnswer[]) => {
+        JSONLoader(get_url, (data: TaggedAnswer[]) => {
             setLoaded(true)
             setStats(computeStats(data))
         })

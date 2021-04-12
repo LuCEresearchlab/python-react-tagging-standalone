@@ -1,27 +1,27 @@
 import React, {useState} from "react";
 import {Collapse, List, ListItem, Paper, Table, TableBody, TableContainer} from "@material-ui/core";
-import {taggedAnswer} from "../../interfaces/TaggedAnswer";
+import {TaggedAnswer} from "../../interfaces/TaggedAnswer";
 import MisconceptionTagElement from "../tagger_component/MisconceptionTagElement";
 import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
 import stringEquals from "../../util/StringEquals";
 
 interface Input {
-    answerGroup: taggedAnswer[],
+    answerGroup: TaggedAnswer[],
     user_id: string,
     available_misconceptions: MisconceptionElement[]
 }
 
-function _get_conflicts(answerGroup: taggedAnswer[], user_id: string): taggedAnswer[] {
+function _get_conflicts(answerGroup: TaggedAnswer[], user_id: string): TaggedAnswer[] {
     const has_my_answer: boolean = answerGroup.some(
-        (element: taggedAnswer) => stringEquals(element.user_id, user_id)
+        (element: TaggedAnswer) => stringEquals(element.user_id, user_id)
     )
     if (!has_my_answer || answerGroup.length === 1) // only tagged by user or not tagged by user
         return []
 
-    const my_answer: taggedAnswer = answerGroup[0]
+    const my_answer: TaggedAnswer = answerGroup[0]
     const other_answers = answerGroup.slice(1)
 
-    const conflicts: taggedAnswer[] = other_answers.filter(answer => {
+    const conflicts: TaggedAnswer[] = other_answers.filter(answer => {
         const shared_tags: string[] = answer.tags.filter(x => my_answer.tags.indexOf(x) !== -1)
         return shared_tags.length != my_answer.tags.length || shared_tags.length != answer.tags.length
     })
@@ -37,7 +37,7 @@ function MisconceptionTagComparer({answerGroup, user_id, available_misconception
         setOpen(!open);
     };
 
-    const conflicts: taggedAnswer[] = _get_conflicts(answerGroup, user_id)
+    const conflicts: TaggedAnswer[] = _get_conflicts(answerGroup, user_id)
 
     if (conflicts.length === 0)
         return <></>

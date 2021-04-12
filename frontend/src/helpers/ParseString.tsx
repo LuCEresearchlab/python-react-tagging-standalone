@@ -38,7 +38,7 @@ function parseString(text: string) {
             if (temp_string.indexOf("```") != -1) {
                 end = temp_string.indexOf("```")
                 tokens.push(
-                    <pre key={"text" + index} style={{overflow: "auto"}}>
+                    <pre key={"text" + index} style={{overflowWrap: "break-word", whiteSpace: "break-spaces"}}>
                         <code>
                             {temp_string.slice(0, end)}
                         </code>
@@ -48,7 +48,7 @@ function parseString(text: string) {
             } else if (temp_string.indexOf("![") != -1) {
                 end = temp_string.indexOf("![")
                 tokens.push(
-                    <pre key={"text" + index} style={{overflow: "auto"}}>
+                    <pre key={"text" + index} style={{overflowWrap: "break-word", whiteSpace: "break-spaces"}}>
                         <code>
                             {temp_string.slice(0, end)}
                         </code>
@@ -57,7 +57,7 @@ function parseString(text: string) {
                 temp_string = temp_string.slice(end)
             } else {
                 tokens.push(
-                    <pre key={"text" + index} style={{overflow: "auto"}}>
+                    <pre key={"text" + index} style={{overflowWrap: "break-word", whiteSpace: "break-spaces"}}>
                         <code>
                             {temp_string}
                         </code>
