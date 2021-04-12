@@ -80,8 +80,6 @@ function MisconceptionView(
     }
 
     const FIRST_DYNAMIC_INDEX: number = PRE_DYNAMIC_SIZE + 1
-    console.log("first is", FIRST_DYNAMIC_INDEX)
-    console.log(tags)
 
     return (
         <div className={classes.root}>

@@ -18,25 +18,7 @@ function MisconceptionColorButton({color, enabled, current_color, setColor, stat
 
     if (disabled) return (<Button disabled={true}/>)
 
-    if (staticColor) {
-        return (
-            <Button
-                title={"Select Misconception for highlighting"}
-                onClick={() => {
-                    setColor(color)
-                }}
-                disabled={disabled || !enabled}
-            >
-                {
-                    stringEquals(color, current_color) || !enabled ?
-                        <FiberManualRecordOutlined
-                            style={{color: color}}
-                        /> :
-                        <FiberManualRecord style={{color: color}}/>
-                }
-            </Button>
-        )
-    }
+    if (staticColor && !enabled) return (<Button disabled={true}/>)
 
     return (
         <Button
