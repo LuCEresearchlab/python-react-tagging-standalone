@@ -65,6 +65,7 @@ function StaticSelectorView({
             />
             <Button
                 type={"button"}
+                variant={'outlined'}
                 onClick={(e) => {
                     e.preventDefault()
                     let new_tags = [...taggingClusterSession.tags]
@@ -94,7 +95,7 @@ function StaticSelectorView({
                     {
                         backgroundColor: (isSelected() ? DARK_GREY : GREY),
                         textTransform: "none",
-                        width: '350px'
+                        width: '350px',
                     }
                 }>
                 {misconception}
