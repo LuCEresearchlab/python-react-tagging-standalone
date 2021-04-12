@@ -90,7 +90,13 @@ function StaticSelectorView({
 
 
                 }}
-                style={{backgroundColor: (isSelected() ? DARK_GREY : GREY), textTransform: "none"}}>
+                style={
+                    {
+                        backgroundColor: (isSelected() ? DARK_GREY : GREY),
+                        textTransform: "none",
+                        width: '350px'
+                    }
+                }>
                 {misconception}
             </Button>
             <MisconceptionInfoButton
