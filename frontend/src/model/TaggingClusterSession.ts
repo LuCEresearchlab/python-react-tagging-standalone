@@ -164,6 +164,7 @@ function setTagsAndRanges(state: TaggingClusterSession,
                               }): TaggingClusterSession {
 
     console.log("setTagsAndRanges")
+    // TODO: figure out what's wrong
 
     const answer: Answer = payload.answer
     const tags: (string | null)[] = payload.tags
@@ -181,8 +182,6 @@ function setTagsAndRanges(state: TaggingClusterSession,
 
     const new_ranges = [...state.rangesList]
     new_ranges[idx] = ranges
-
-    console.log(state.tags)
 
     return {
         ...state,

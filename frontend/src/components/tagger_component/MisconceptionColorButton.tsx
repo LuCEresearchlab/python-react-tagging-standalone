@@ -7,15 +7,36 @@ interface Input {
     color: string,
     enabled: boolean,
     current_color: string,
+    staticColor: boolean,
 
     setColor(c: string): void
 }
 
-function MisconceptionColorButton({color, enabled, current_color, setColor}: Input) {
+function MisconceptionColorButton({color, enabled, current_color, setColor, staticColor}: Input) {
 
     const disabled: boolean = stringEquals(color, "") || stringEquals(color, "#000000")
 
     if (disabled) return (<Button disabled={true}/>)
+
+    if (staticColor) {
+        return (
+            <Button
+                title={"Select Misconception for highlighting"}
+                onClick={() => {
+                    setColor(color)
+                }}
+                disabled={disabled || !enabled}
+            >
+                {
+                    stringEquals(color, current_color) || !enabled ?
+                        <FiberManualRecordOutlined
+                            style={{color: color}}
+                        /> :
+                        <FiberManualRecord style={{color: color}}/>
+                }
+            </Button>
+        )
+    }
 
     return (
         <Button

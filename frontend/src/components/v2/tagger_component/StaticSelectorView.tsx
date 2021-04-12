@@ -2,13 +2,11 @@ import React from "react"
 import {
     initEmptyTagsList, TaggingClusterSession, TaggingClusterSessionDispatch
 } from "../../../model/TaggingClusterSession";
-import MisconceptionColorButton from "./MisconceptionColorButton";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import {getColor, highlightRangesColorUpdating, isNoMisconception, NO_COLOR} from "../../../helpers/Util";
 import {Button} from "@material-ui/core";
 import stringEquals from "../../../util/StringEquals";
 import {GREY, DARK_GREY} from "../../../util/Colors";
-import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import KeyIndication from "./KeyIndication";
 import {
     clusterSessionPost,
@@ -16,6 +14,8 @@ import {
     setRangesList,
     setTags
 } from "../../../model/TaggingClusterSessionDispatch";
+import MisconceptionColorButton from "../../tagger_component/MisconceptionColorButton";
+import MisconceptionInfoButton from "../../tagger_component/MisconceptionInfoButton";
 
 
 interface Input {
@@ -61,6 +61,7 @@ function StaticSelectorView({
                 enabled={isSelected()}
                 current_color={taggingClusterSession.currentColor}
                 setColor={(color: string) => dispatchTaggingClusterSession(setCurrentColor(color))}
+                staticColor={true}
             />
             <Button
                 type={"button"}

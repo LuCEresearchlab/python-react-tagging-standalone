@@ -1,5 +1,4 @@
 import React from "react"
-import MisconceptionColorButton from "./MisconceptionColorButton";
 import SingleTagSelector from "./SingleTagSelector";
 import {
     computeMiscList,
@@ -7,7 +6,6 @@ import {
     getColor,
     highlightRangesColorUpdating, isNoMisconception
 } from "../../../helpers/Util";
-import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import {
@@ -17,7 +15,14 @@ import {
 } from "../../../model/TaggingClusterSession";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import KeyIndication from "./KeyIndication";
-import {clusterSessionPost, setRangesList, setTags} from "../../../model/TaggingClusterSessionDispatch";
+import {
+    clusterSessionPost,
+    setCurrentColor,
+    setRangesList,
+    setTags
+} from "../../../model/TaggingClusterSessionDispatch";
+import MisconceptionColorButton from "../../tagger_component/MisconceptionColorButton";
+import MisconceptionInfoButton from "../../tagger_component/MisconceptionInfoButton";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -56,7 +61,8 @@ function MisconceptionView(
     const rangesList = taggingClusterSession.rangesList
 
 
-    const setCurrentColor: any = (color: string) => dispatchTaggingClusterSession(setCurrentColor(color))
+    const set_current_color = (color: string) => dispatchTaggingClusterSession(setCurrentColor(color))
+
 
     const getNewRangesList = (element: (string | null), index: number) => {
         if (isNoMisconception(element)) return [[]]
@@ -83,8 +89,9 @@ function MisconceptionView(
                     <MisconceptionColorButton
                         color={getColor(misconceptionsAvailable, tags[FIRST_DYNAMIC_INDEX])}
                         current_color={currentColor}
-                        setColor={setCurrentColor}
+                        setColor={set_current_color}
                         enabled={true}
+                        staticColor={true}
                     />
                     <SingleTagSelector
                         key={"tag-selector-0"}
@@ -113,8 +120,9 @@ function MisconceptionView(
                                     <MisconceptionColorButton
                                         color={(() => getColor(misconceptionsAvailable, tags[handled_element]))()}
                                         current_color={currentColor}
-                                        setColor={setCurrentColor}
+                                        setColor={set_current_color}
                                         enabled={true}
+                                        staticColor={true}
                                     />
                                     <SingleTagSelector
                                             misconceptions_available={
