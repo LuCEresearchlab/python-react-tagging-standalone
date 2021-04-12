@@ -6,7 +6,6 @@ import {
     getColor,
     highlightRangesColorUpdating, isNoMisconception
 } from "../../../helpers/Util";
-import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import {
     PRE_DYNAMIC_SIZE,
@@ -23,6 +22,7 @@ import {
 } from "../../../model/TaggingClusterSessionDispatch";
 import MisconceptionColorButton from "../../tagger_component/MisconceptionColorButton";
 import MisconceptionInfoButton from "../../tagger_component/MisconceptionInfoButton";
+import MisconceptionNoteButton from "../../tagger_component/MisconceptionNoteButton";
 
 
 const useStyles = makeStyles((theme: Theme) =>
