@@ -1,5 +1,4 @@
 import React from "react"
-import MisconceptionColorButton from "./MisconceptionColorButton";
 import SingleTagSelector from "./SingleTagSelector";
 import {
     computeMiscList,
@@ -7,12 +6,23 @@ import {
     getColor,
     highlightRangesColorUpdating, isNoMisconception
 } from "../../../helpers/Util";
-import MisconceptionInfoButton from "./MisconceptionInfoButton";
-import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
-import TaggingClusterSession, {PRE_DYNAMIC_SIZE} from "../../../model/TaggingClusterSession";
+import {
+    PRE_DYNAMIC_SIZE,
+    TaggingClusterSession,
+    TaggingClusterSessionDispatch
+} from "../../../model/TaggingClusterSession";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import KeyIndication from "./KeyIndication";
+import {
+    clusterSessionPost,
+    setCurrentColor,
+    setRangesList,
+    setTags
+} from "../../../model/TaggingClusterSessionDispatch";
+import MisconceptionColorButton from "../../tagger_component/MisconceptionColorButton";
+import MisconceptionInfoButton from "../../tagger_component/MisconceptionInfoButton";
+import MisconceptionNoteButton from "../../tagger_component/MisconceptionNoteButton";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -29,14 +39,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Input {
-    clusterTaggingSession: TaggingClusterSession,
+    taggingClusterSession: TaggingClusterSession,
+    dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>,
     misconceptionsAvailable: MisconceptionElement[]
 }
 
 function MisconceptionView(
     {
         misconceptionsAvailable,
-        clusterTaggingSession
+        taggingClusterSession,
+        dispatchTaggingClusterSession
     }: Input
 ) {
 
@@ -44,12 +56,13 @@ function MisconceptionView(
 
     const misconceptions_string_list: string[] = misconceptionsAvailable.map<string>(misc => misc.name)
 
-    const currentColor: string = clusterTaggingSession.currentColor
-    const tags = clusterTaggingSession.tags
-    const rangesList = clusterTaggingSession.rangesList
+    const currentColor: string = taggingClusterSession.currentColor
+    const tags = taggingClusterSession.tags
+    const rangesList = taggingClusterSession.rangesList
 
 
-    const setCurrentColor = (color: string) => clusterTaggingSession.setCurrentColor(color)
+    const set_current_color = (color: string) => dispatchTaggingClusterSession(setCurrentColor(color))
+
 
     const getNewRangesList = (element: (string | null), index: number) => {
         if (isNoMisconception(element)) return [[]]
@@ -61,9 +74,9 @@ function MisconceptionView(
 
 
     const setTagElementHandle = (element: (string | null), index: number) => {
-        clusterTaggingSession.setTags(computeMiscList(tags, element, index))
-        clusterTaggingSession.setRangesList(getNewRangesList(element, index))
-        clusterTaggingSession.post()
+        dispatchTaggingClusterSession(setTags(computeMiscList(tags, element, index)))
+        dispatchTaggingClusterSession(setRangesList(getNewRangesList(element, index)))
+        dispatchTaggingClusterSession(clusterSessionPost())
     }
 
     const FIRST_DYNAMIC_INDEX: number = PRE_DYNAMIC_SIZE + 1
@@ -76,8 +89,9 @@ function MisconceptionView(
                     <MisconceptionColorButton
                         color={getColor(misconceptionsAvailable, tags[FIRST_DYNAMIC_INDEX])}
                         current_color={currentColor}
-                        setColor={setCurrentColor}
+                        setColor={set_current_color}
                         enabled={true}
+                        staticColor={true}
                     />
                     <SingleTagSelector
                         key={"tag-selector-0"}
@@ -99,15 +113,16 @@ function MisconceptionView(
                     [...Array(Math.max(tags.length - PRE_DYNAMIC_SIZE - 2, 0))]
                         .map((_, index) => {
                             const handled_element = PRE_DYNAMIC_SIZE + index + 2 // +2 = NoMisc and default add above
-
+                            console.log("handling", handled_element)
                             return (
                                 <div key={"tag-selector-" + handled_element} className={classes.divLine}>
                                     <KeyIndication displayKey={"" + (handled_element - PRE_DYNAMIC_SIZE)}/>
                                     <MisconceptionColorButton
                                         color={(() => getColor(misconceptionsAvailable, tags[handled_element]))()}
                                         current_color={currentColor}
-                                        setColor={setCurrentColor}
+                                        setColor={set_current_color}
                                         enabled={true}
+                                        staticColor={true}
                                     />
                                     <SingleTagSelector
                                             misconceptions_available={

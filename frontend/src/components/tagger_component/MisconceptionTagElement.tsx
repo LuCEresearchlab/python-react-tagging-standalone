@@ -240,7 +240,7 @@ function MisconceptionTagElement(
                                     enabled={enabled}
                                     current_color={currentColor}
                                     setColor={setCurrentColor}
-
+                                    staticColor={false}
                                 />
                                 <SingleTagSelector
                                     key={"tag-selector-0"}
@@ -281,6 +281,7 @@ function MisconceptionTagElement(
                                                     enabled={enabled}
                                                     current_color={currentColor}
                                                     setColor={setCurrentColor}
+                                                    staticColor={false}
                                                 />
                                                 <SingleTagSelector
                                                     misconceptions_available={

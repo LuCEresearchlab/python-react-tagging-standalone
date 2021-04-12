@@ -1,23 +1,38 @@
 import React from "react"
-import TaggingClusterSession, {initEmptyTagsList} from "../../../model/TaggingClusterSession";
-import MisconceptionColorButton from "./MisconceptionColorButton";
+import {
+    initEmptyTagsList, TaggingClusterSession, TaggingClusterSessionDispatch
+} from "../../../model/TaggingClusterSession";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import {getColor, highlightRangesColorUpdating, isNoMisconception, NO_COLOR} from "../../../helpers/Util";
 import {Button} from "@material-ui/core";
 import stringEquals from "../../../util/StringEquals";
 import {GREY, DARK_GREY} from "../../../util/Colors";
-import MisconceptionInfoButton from "./MisconceptionInfoButton";
 import KeyIndication from "./KeyIndication";
+import {
+    clusterSessionPost,
+    setCurrentColor,
+    setRangesList,
+    setTags
+} from "../../../model/TaggingClusterSessionDispatch";
+import MisconceptionColorButton from "../../tagger_component/MisconceptionColorButton";
+import MisconceptionInfoButton from "../../tagger_component/MisconceptionInfoButton";
 
 
 interface Input {
     misconceptionsAvailable: MisconceptionElement[],
     taggingClusterSession: TaggingClusterSession,
+    dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>,
     misconception: string,
     handledIndex: number
 }
 
-function StaticSelectorView({misconceptionsAvailable, taggingClusterSession, misconception, handledIndex}: Input) {
+function StaticSelectorView({
+                                misconceptionsAvailable,
+                                taggingClusterSession,
+                                dispatchTaggingClusterSession,
+                                misconception,
+                                handledIndex
+                            }: Input) {
 
     const isSelected = () => taggingClusterSession.tags.findIndex(tag => stringEquals(tag, misconception)) !== -1
 
@@ -45,16 +60,18 @@ function StaticSelectorView({misconceptionsAvailable, taggingClusterSession, mis
                 color={getColor(misconceptionsAvailable, misconception)}
                 enabled={isSelected()}
                 current_color={taggingClusterSession.currentColor}
-                setColor={(color: string) => taggingClusterSession.setCurrentColor(color)}
+                setColor={(color: string) => dispatchTaggingClusterSession(setCurrentColor(color))}
+                staticColor={true}
             />
             <Button
                 type={"button"}
+                variant={'outlined'}
                 onClick={(e) => {
                     e.preventDefault()
                     let new_tags = [...taggingClusterSession.tags]
 
 
-                    taggingClusterSession.setRangesList(getNewRangesList(misconception, handledIndex))
+                    dispatchTaggingClusterSession(setRangesList(getNewRangesList(misconception, handledIndex)))
 
                     if (isNoMisconception(misconception) && isSelected()) // deselecting NoMisconception
                         new_tags = initEmptyTagsList()
@@ -67,14 +84,20 @@ function StaticSelectorView({misconceptionsAvailable, taggingClusterSession, mis
                             taggingClusterSession.currentColor
                         )
                     )
-                        taggingClusterSession.setCurrentColor(NO_COLOR)
+                        dispatchTaggingClusterSession(setCurrentColor(NO_COLOR))
 
-                    taggingClusterSession.setTags(new_tags)
-                    taggingClusterSession.post()
+                    dispatchTaggingClusterSession(setTags(new_tags))
+                    dispatchTaggingClusterSession(clusterSessionPost())
 
 
                 }}
-                style={{backgroundColor: (isSelected() ? DARK_GREY : GREY), textTransform: "none"}}>
+                style={
+                    {
+                        backgroundColor: (isSelected() ? DARK_GREY : GREY),
+                        textTransform: "none",
+                        width: '350px',
+                    }
+                }>
                 {misconception}
             </Button>
             <MisconceptionInfoButton

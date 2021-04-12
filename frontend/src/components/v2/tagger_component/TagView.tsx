@@ -1,6 +1,9 @@
 import React from "react"
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
-import TaggingClusterSession from "../../../model/TaggingClusterSession";
+import {
+    TaggingClusterSession,
+    TaggingClusterSessionDispatch
+} from "../../../model/TaggingClusterSession";
 import MisconceptionView from "./MisconceptionView";
 import {Paper, Table, TableBody, TableCell, TableRow} from "@material-ui/core";
 import {GREY} from "../../../util/Colors";
@@ -11,21 +14,22 @@ import NoMisconception from "../../../util/NoMisconception";
 interface Input {
     misconceptionsAvailable: MisconceptionElement[],
     taggingClusterSession: TaggingClusterSession,
-    my_key: number
+    dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>
 }
 
-function TagView({misconceptionsAvailable, taggingClusterSession, my_key}: Input) {
+function TagView({misconceptionsAvailable, taggingClusterSession, dispatchTaggingClusterSession}: Input) {
 
 
     return (
         <Paper style={{padding: '1em', backgroundColor: GREY}}>
             <Table>
-                <TableBody key={"tagView|table|" + my_key}>
+                <TableBody>
                     <TableRow>
                         <TableCell>
                             <StaticSelectorView
                                 misconceptionsAvailable={misconceptionsAvailable}
                                 taggingClusterSession={taggingClusterSession}
+                                dispatchTaggingClusterSession={dispatchTaggingClusterSession}
                                 misconception={NoMisconception}
                                 handledIndex={0}
                             />
@@ -33,16 +37,17 @@ function TagView({misconceptionsAvailable, taggingClusterSession, my_key}: Input
                     </TableRow>
                     <TableRow style={{display: "flex", flexDirection: "column"}}>
                         <HistoryView
-                            my_key={my_key}
                             misconceptionsAvailable={misconceptionsAvailable}
                             taggingClusterSession={taggingClusterSession}
+                            dispatchTaggingClusterSession={dispatchTaggingClusterSession}
                         />
                     </TableRow>
                     <TableRow>
                         <TableCell style={{borderBottom: "none"}}>
                             <MisconceptionView
                                 misconceptionsAvailable={misconceptionsAvailable}
-                                clusterTaggingSession={taggingClusterSession}
+                                taggingClusterSession={taggingClusterSession}
+                                dispatchTaggingClusterSession={dispatchTaggingClusterSession}
                             />
                         </TableCell>
                     </TableRow>

@@ -18,15 +18,15 @@ interface Input {
 
 function AnswersMerger({dataset_id, question_id, user_id, available_misconceptions}: Input) {
 
-    const url = TAGGING_SERVICE_URL + '/datasets/tagged-answer/dataset/' + dataset_id + '/question/' + question_id
+    const {data, isLoading} = useFetch<TaggedAnswer[]>(
+        `${TAGGING_SERVICE_URL}/datasets/tagged-answer/dataset/${dataset_id}/question/${question_id}`
+    )
 
-    const response = useFetch<TaggedAnswer[]>(url)
 
+    if (isLoading) return (<Grid container>Loading...</Grid>)
 
-    if (response.isLoading) return (<Grid container>Loading...</Grid>)
-
-    const answers: TaggedAnswer[] = response.response == undefined ? [] : response.response
-        .filter(answer => answer.question_id == question_id) // only keep needed answers
+    const answers: TaggedAnswer[] = data == undefined ? [] : data
+        .filter((answer: TaggedAnswer) => answer.question_id == question_id) // only keep needed answers
 
 
     const groupedAnswers = answers

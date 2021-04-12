@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect} from "react"
 import {Answer} from "../../../interfaces/Dataset";
 import {rangesCompressor} from "../../../util/RangeCompressor";
 import {HighlightRange} from "../../../interfaces/HighlightRange";
@@ -8,28 +8,36 @@ import {GREY} from "../../../util/Colors"
 // @ts-ignore
 import Highlightable from "highlightable";
 import {TaggedAnswer} from "../../../interfaces/TaggedAnswer";
-import {JSONLoader} from "../../../helpers/LoaderHelper";
-import TaggingClusterSession from "../../../model/TaggingClusterSession";
+import {useFetch} from "../../../helpers/LoaderHelper";
+import {
+    getRanges, isUsingDefaultColor,
+    TaggingClusterSession,
+    TaggingClusterSessionDispatch
+} from "../../../model/TaggingClusterSession";
 import KeyIndication from "./KeyIndication";
+import {clusterSessionPost, setRanges, setTagsAndRanges} from "../../../model/TaggingClusterSessionDispatch";
+import {getCluster, TaggingSession} from "../../../model/TaggingSession";
+import TruthCircle from "../../tagger_component/TruthCircle";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
 interface Input {
-    cluster: Answer[],
+    taggingSession: TaggingSession,
     taggingClusterSession: TaggingClusterSession,
-    my_key: number
+    dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>
 }
 
-function ClusterView({cluster, taggingClusterSession, my_key}: Input) {
+function ClusterView({taggingSession, taggingClusterSession, dispatchTaggingClusterSession}: Input) {
 
     return (
         <div>
             {
-                cluster.map((answer: Answer, index: number) =>
+                getCluster(taggingSession).map((answer: Answer, index: number) =>
                     <ClusterItem
-                        key={"ClusterItem|Answer|" + answer.answer_id + my_key}
+                        key={"ClusterItem|Answer|" + answer.answer_id}
                         answer={answer}
                         taggingClusterSession={taggingClusterSession}
+                        dispatchTaggingClusterSession={dispatchTaggingClusterSession}
                         displayKey={index + 1}
                     />
                 )}
@@ -40,10 +48,11 @@ function ClusterView({cluster, taggingClusterSession, my_key}: Input) {
 interface ClusterItemInput {
     answer: Answer,
     taggingClusterSession: TaggingClusterSession,
+    dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>,
     displayKey: number
 }
 
-function ClusterItem({answer, taggingClusterSession, displayKey}: ClusterItemInput) {
+function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSession, displayKey}: ClusterItemInput) {
 
 
     const get_selected_misc_url = TAGGING_SERVICE_URL +
@@ -52,71 +61,69 @@ function ClusterItem({answer, taggingClusterSession, displayKey}: ClusterItemInp
         '/answer/' + answer.answer_id +
         '/user/' + taggingClusterSession.user_id
 
-    const [loaded, setLoaded] = useState<boolean>(false)
+    const {data, isLoading} = useFetch<TaggedAnswer[]>(get_selected_misc_url)
 
     useEffect(() => {
-        let isMounted = true; // note this flag denote mount status
-        JSONLoader(get_selected_misc_url, (prev_tagged_answers: TaggedAnswer[]) => {
-            // has existing value
-            if (prev_tagged_answers.length > 0) {
-                const previousTaggedAnswer: TaggedAnswer = prev_tagged_answers[0]
-                const previous_tags = previousTaggedAnswer.tags == null || previousTaggedAnswer.tags.length == 0 ?
-                    [] :
-                    previousTaggedAnswer.tags
+        if (isLoading) return
+        if (data.length > 0) {
+            const previousTaggedAnswer: TaggedAnswer = data[0]
+            const previous_tags = previousTaggedAnswer.tags == null || previousTaggedAnswer.tags.length == 0 ?
+                [] :
+                previousTaggedAnswer.tags
 
-                const loaded_ranges = previousTaggedAnswer.highlighted_ranges == null ?
-                    [] :
-                    previousTaggedAnswer.highlighted_ranges
+            const loaded_ranges = previousTaggedAnswer.highlighted_ranges == null ?
+                [] :
+                previousTaggedAnswer.highlighted_ranges
 
-                taggingClusterSession.setTagsAndRanges(previous_tags, answer, loaded_ranges)
-            } else {  // has never been tagged
-                taggingClusterSession.setRanges(answer, [])
-            }
-        })
-        if (isMounted) {
-            setLoaded(true)
+            dispatchTaggingClusterSession(setTagsAndRanges(previous_tags, answer, loaded_ranges))
+        } else {  // has never been tagged
+            dispatchTaggingClusterSession(setRanges(answer, []))
         }
-        return () => {
-            isMounted = false
-        } // use effect cleanup to set flag false, if unmounted
-    });
+    }, [isLoading, data])
 
-    const ranges: HighlightRange[] = taggingClusterSession.getRanges(answer)
+    const ranges: HighlightRange[] = getRanges(taggingClusterSession, answer)
 
-    if (!loaded) return <div>Loading...</div>
+    const onTextHighlighted = (e: any) => {
+        if (isUsingDefaultColor(taggingClusterSession)) return
+
+        const newRange = {
+            start: e.start,
+            end: e.end,
+            text: answer.data,
+            color: taggingClusterSession.currentColor
+        }
+        const r = rangesCompressor(ranges, newRange)
+
+        dispatchTaggingClusterSession(setRanges(answer, [...r]))
+        dispatchTaggingClusterSession(clusterSessionPost())
+    }
+
+    const highlightStyle = (range: HighlightRange) => {
+        return {
+            backgroundColor: range.color + "C8",
+        }
+    }
+
+    const clear = () => {
+        dispatchTaggingClusterSession(setRanges(answer, []))
+        dispatchTaggingClusterSession(clusterSessionPost())
+    }
+
+    if (isLoading) return <div>Loading...</div>
+
 
     return (
         <Paper style={{padding: '1em', backgroundColor: GREY, display: 'flex', flexDirection: 'row'}}>
             <KeyIndication displayKey={"" + displayKey}/>
+            <TruthCircle value={answer.picked}/>
             <Highlightable
                 ranges={ranges}
                 enabled={true}
-                onTextHighlighted={(e: any) => {
-                    if (taggingClusterSession.isUsingDefaultColor()) return
-
-                    const newRange = {
-                        start: e.start,
-                        end: e.end,
-                        text: answer.data,
-                        color: taggingClusterSession.currentColor
-                    }
-                    const r = rangesCompressor(ranges, newRange)
-
-                    taggingClusterSession.setRanges(answer, [...r])
-                    taggingClusterSession.post()
-                }}
+                onTextHighlighted={onTextHighlighted}
                 text={answer.data}
-                highlightStyle={(range: HighlightRange) => {
-                    return {
-                        backgroundColor: range.color + "C8",
-                    }
-                }
-                }
+                highlightStyle={highlightStyle}
             />
-            <Button onClick={() => {
-                taggingClusterSession.setRanges(answer, [])
-                taggingClusterSession.post()
-            }}>Clear
+            <Button onClick={clear}>Clear
             </Button>
         </Paper>
     )
