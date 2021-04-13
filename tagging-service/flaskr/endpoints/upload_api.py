@@ -26,8 +26,7 @@ ANSWER = api.model('Answer', {
 
 QUESTION = api.model('Question', {
     'question_id': fields.String(required=True, readonly=True, description='ID of the Question'),
-    'text': fields.String(required=True, readonly=True, description='Text of the Question'),
-    'clustered_answers': fields.List(fields.List(fields.Nested(ANSWER)))
+    'text': fields.String(required=True, readonly=True, description='Text of the Question')
 })
 
 DATASET = api.model('Dataset', {

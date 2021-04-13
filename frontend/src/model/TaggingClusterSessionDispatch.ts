@@ -20,7 +20,6 @@ const initClusterSession = (dataset_id: string,
                             question_id: string,
                             user_id: string,
                             currentColor: string,
-                            cluster: Answer[],
                             tags: (string | null)[],
                             history: string[]) =>
     basic(TaggingClusterSessionActions.INIT,
@@ -29,18 +28,23 @@ const initClusterSession = (dataset_id: string,
             question_id,
             user_id,
             currentColor,
-            cluster,
             tags,
             history
         })
+const setClusters = (clusters: Answer[][]) => basic(TaggingClusterSessionActions.SET_CLUSTERS, clusters)
+const setCurrentCluster = (idx: number) => basic(TaggingClusterSessionActions.SET_CURRENT_CLUSTER, idx)
+const popAnswer = (idx: number) => basic(TaggingClusterSessionActions.POP_ANSWER, idx)
 
 
 export {
     setCurrentColor,
+    setCurrentCluster,
+    setClusters,
     setTags,
     setRangesList,
     setRanges,
     setTagsAndRanges,
     clusterSessionPost,
-    initClusterSession
+    initClusterSession,
+    popAnswer
 }

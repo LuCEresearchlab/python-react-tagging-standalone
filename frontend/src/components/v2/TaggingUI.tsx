@@ -1,6 +1,5 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Grid, Paper} from "@material-ui/core";
-import {Question} from "../../interfaces/Dataset";
 import {useFetch} from "../../helpers/LoaderHelper";
 import {StyledPagination} from "../styled/StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
@@ -10,11 +9,12 @@ import TagView from "./tagger_component/TagView";
 import ClusterView from "./tagger_component/ClusterView";
 
 import {LIGHT_GREY} from "../../util/Colors"
-import {setCurrentCluster, setCurrentQuestion} from "../../model/TaggingSessionDispatch";
+import {setCurrentQuestion} from "../../model/TaggingSessionDispatch";
 import {
     TaggingClusterSession, TaggingClusterSessionDispatch,
 } from "../../model/TaggingClusterSession";
-import {getQuestion, TaggingSession, TaggingSessionDispatch} from "../../model/TaggingSession";
+import {TaggingSession, TaggingSessionDispatch} from "../../model/TaggingSession";
+import {setClusters, setCurrentCluster} from "../../model/TaggingClusterSessionDispatch";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
@@ -57,11 +57,8 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
     const [page, setPage] = useState<number>(1)
 
 
-    const current_question: Question = getQuestion(taggingSession)
-    const total_clusters = current_question.clustered_answers.length
-
     const paginationChange = (event: any, value: number) => {
-        dispatchTaggingSession(setCurrentCluster(value - 1))
+        dispatchTaggingClusterSession(setCurrentCluster(value - 1))
         setPage(value);
     };
 
@@ -70,10 +67,25 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
         setPage(1)  // fix page selected on question change
     }
 
+    const clusterFetch = useFetch<any>(
+        `${TAGGING_SERVICE_URL}/datasets/clusters/dataset/${taggingClusterSession.dataset_id
+        }/question/${taggingClusterSession.question_id
+        }/user/${taggingClusterSession.user_id}`)
+
+    const clustersData = clusterFetch.data
+    const isLoadingClusters = clusterFetch.isLoading
+
+
+    const total_clusters = taggingClusterSession.clusters.length
+
+    useEffect(() => {
+        if (!isLoadingClusters) dispatchTaggingClusterSession(setClusters(clustersData.clusters))
+    }, [clustersData, isLoadingClusters])
+
     const {data, isLoading} = useFetch<MisconceptionElement[]>(get_available_url)
 
 
-    if (isLoading) return (<>Loading...</>)
+    if (isLoading || isLoadingClusters) return (<>Loading...</>)
 
     return (
         <Grid container direction={'row'} className={classes.root} spacing={10}>
@@ -88,7 +100,6 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
                       style={{backgroundColor: LIGHT_GREY}}>
                     <Grid item xs={6}>
                         <ClusterView
-                            taggingSession={taggingSession}
                             taggingClusterSession={taggingClusterSession}
                             dispatchTaggingClusterSession={dispatchTaggingClusterSession}
                         />

@@ -1,7 +1,7 @@
 import {getMillis, isNoMisconception} from "../helpers/Util";
 import {HighlightRange} from "../interfaces/HighlightRange";
 import {Answer} from "../interfaces/Dataset";
-import postAnswer from "../helpers/PostAnswer";
+import {postHelper, postClusters} from "../helpers/PostHelper";
 import {isUsingDefaultColor as isUsingDefaultColorUtil} from "../helpers/Util";
 import stringEquals from "../util/StringEquals";
 import {arrayFilteredNotNullEquals, arrayEquals} from "../util/ArrayEquals";
@@ -15,10 +15,14 @@ const MIN_LENGTH: number = 1 + PRE_DYNAMIC_SIZE + 1
 export enum TaggingClusterSessionActions {
     INIT,
     SET_CURRENT_COLOR,
+    SET_CURRENT_CLUSTER,
+    SET_CLUSTERS,
     SET_TAGS,
     SET_RANGES_LIST,
     SET_RANGES,
     SET_TAGS_AND_RANGES,
+    NEXT_CLUSTER,
+    POP_ANSWER,
     POST
 }
 
@@ -82,7 +86,8 @@ export interface TaggingClusterSession {
     question_id: string,
     user_id: string,
     currentColor: string,
-    cluster: Answer[],
+    clusters: Answer[][],
+    currentCluster: number,
     tags: (string | null)[],
     rangesList: HighlightRange[][],
     startTaggingTime: number,
@@ -96,18 +101,19 @@ function init(state: TaggingClusterSession,
                   question_id: string,
                   user_id: string,
                   currentColor: string,
-                  cluster: Answer[],
                   tags: (string | null)[],
                   history: string[]
               }) {
     return {
+        ...state,
         dataset_id: payload.dataset_id,
         question_id: payload.question_id,
         user_id: payload.user_id,
         currentColor: payload.currentColor,
-        cluster: payload.cluster,
+        clusters: [],
+        currentCluster: 0,
         tags: [...initEmptyTagsList(), null],
-        rangesList: [...Array(payload.cluster.length)].map(() => []),
+        rangesList: [],
         startTaggingTime: getMillis(),
         history: payload.history
     }
@@ -147,7 +153,7 @@ function setRangesList(state: TaggingClusterSession, rangesList: HighlightRange[
 function setRanges(state: TaggingClusterSession, payload: { answer: Answer, ranges: HighlightRange[] }): TaggingClusterSession {
     const answer: Answer = payload.answer
     const ranges: HighlightRange[] = payload.ranges
-    const idx = state.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
+    const idx = getCurrentCluster(state).findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
     if (idx === -1) return state
     console.log("setRanges")
     const new_ranges = [...state.rangesList]
@@ -167,13 +173,12 @@ function setTagsAndRanges(state: TaggingClusterSession,
                               }): TaggingClusterSession {
 
     console.log("setTagsAndRanges")
-    // TODO: figure out what's wrong
 
     const answer: Answer = payload.answer
     const tags: (string | null)[] = payload.tags
     const ranges: HighlightRange[] = payload.ranges
 
-    const idx = state.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
+    const idx = getCurrentCluster(state).findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
     if (idx === -1) return state
 
     _history_add_if_missing(state, tags)
@@ -193,9 +198,38 @@ function setTagsAndRanges(state: TaggingClusterSession,
     }
 }
 
+function setClusters(state: TaggingClusterSession, clusters: Answer[][]): TaggingClusterSession {
+    return {
+        ...state,
+        clusters: clusters
+    }
+}
+
+function nextCluster(state: TaggingClusterSession) {
+    const next_cluster_idx = state.currentCluster + 1
+    if (next_cluster_idx < state.clusters.length) {
+        return {
+            ...state,
+            currentCluster: next_cluster_idx
+        }
+    } else return state
+}
+
+
+function setCurrentCluster(state: TaggingClusterSession, idx: number) {
+    if (idx === state.currentCluster) return state
+    if (0 <= idx && idx < state.clusters.length) {
+        return {
+            ...state,
+            currentCluster: idx
+        }
+    }
+    return state
+}
+
 function post(state: TaggingClusterSession): TaggingClusterSession {
-    state.cluster.forEach((answer, index) => {
-        postAnswer(
+    getCurrentCluster(state).forEach((answer, index) => {
+        postHelper(
             state.dataset_id,
             state.question_id,
             answer.answer_id,
@@ -205,6 +239,27 @@ function post(state: TaggingClusterSession): TaggingClusterSession {
             state.rangesList[index],
             state.tags)
     })
+    return state
+}
+
+function pop_answer(state: TaggingClusterSession, idx: number) {
+    if (0 <= idx && idx < state.clusters.length) {
+        // store current value
+        post(state)
+
+        const cluster = state.clusters[state.currentCluster]
+        const popped: Answer[] = cluster.slice(idx, idx + 1)
+        const reduced_cluster: Answer[] = cluster.slice(0, idx).concat(cluster.slice(idx + 1))
+        const new_clusters = [...state.clusters]
+        new_clusters[state.currentCluster] = [...reduced_cluster].concat(popped)
+
+        postClusters(state.dataset_id, state.question_id, state.user_id, new_clusters)
+
+        return {
+            ...state,
+            clusters: new_clusters
+        }
+    }
     return state
 }
 
@@ -222,6 +277,14 @@ function reducer(state: TaggingClusterSession, action: TaggingClusterSessionDisp
             return setTagsAndRanges(state, action.payload)
         case TaggingClusterSessionActions.POST:
             return post(state)
+        case TaggingClusterSessionActions.SET_CURRENT_CLUSTER:
+            return setCurrentCluster(state, action.payload)
+        case TaggingClusterSessionActions.SET_CLUSTERS:
+            return setClusters(state, action.payload)
+        case TaggingClusterSessionActions.NEXT_CLUSTER:
+            return nextCluster(state)
+        case TaggingClusterSessionActions.POP_ANSWER:
+            return pop_answer(state, action.payload)
         case TaggingClusterSessionActions.INIT:
             return init(state, action.payload)
         default:
@@ -234,7 +297,8 @@ const initial_state: any = {
     question_id: "question_id",
     user_id: null,
     currentColor: null,
-    cluster: [],
+    clusters: [],
+    currentCluster: -1,
     tags: [],
     rangesList: [],
     startTaggingTime: -1,
@@ -252,9 +316,9 @@ function useTaggingClusterSession(): [
 }
 
 export function getRanges(state: TaggingClusterSession, answer: Answer): HighlightRange[] {
-    if (arrayEquals(state.cluster, [])) return []
-    const idx = state.cluster.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
-    if (idx === -1) return []
+    if (arrayEquals(getCurrentCluster(state), [])) return []
+    const idx = getCurrentCluster(state).findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
+    if (state.rangesList.length === 0) return []
     return state.rangesList[idx]
 }
 
@@ -265,6 +329,11 @@ export function getHistory(state: TaggingClusterSession): string[] {
 
 export function isUsingDefaultColor(state: TaggingClusterSession): boolean {
     return isUsingDefaultColorUtil(state.currentColor)
+}
+
+export function getCurrentCluster(state: TaggingClusterSession): Answer[] {
+    if (state.clusters.length === 0) return []
+    return state.clusters[state.currentCluster]
 }
 
 export default useTaggingClusterSession

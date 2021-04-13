@@ -7,32 +7,32 @@ import {GREY} from "../../../util/Colors"
 
 // @ts-ignore
 import Highlightable from "highlightable";
+
 import {TaggedAnswer} from "../../../interfaces/TaggedAnswer";
 import {useFetch} from "../../../helpers/LoaderHelper";
 import {
+    getCurrentCluster,
     getRanges, isUsingDefaultColor,
     TaggingClusterSession,
     TaggingClusterSessionDispatch
 } from "../../../model/TaggingClusterSession";
 import KeyIndication from "./KeyIndication";
 import {clusterSessionPost, setRanges, setTagsAndRanges} from "../../../model/TaggingClusterSessionDispatch";
-import {getCluster, TaggingSession} from "../../../model/TaggingSession";
 import TruthCircle from "../../tagger_component/TruthCircle";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
 interface Input {
-    taggingSession: TaggingSession,
     taggingClusterSession: TaggingClusterSession,
     dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>
 }
 
-function ClusterView({taggingSession, taggingClusterSession, dispatchTaggingClusterSession}: Input) {
+function ClusterView({taggingClusterSession, dispatchTaggingClusterSession}: Input) {
 
     return (
         <div>
             {
-                getCluster(taggingSession).map((answer: Answer, index: number) =>
+                getCurrentCluster(taggingClusterSession).map((answer: Answer, index: number) =>
                     <ClusterItem
                         key={"ClusterItem|Answer|" + answer.answer_id}
                         answer={answer}
