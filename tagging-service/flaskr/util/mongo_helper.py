@@ -56,3 +56,28 @@ def post_tagged_answer(tagged_answer):
             }
     }
     db.tagged_data.update_one(query, update, upsert=True)
+
+
+def save_cluster(dataset_id, question_id, user_id, cluster):
+    query = {
+        'dataset_id': dataset_id,
+        'question_id': question_id,
+        'user_id': user_id
+    }
+    update = {
+        '$set':
+            {
+                'clusters': cluster
+            }
+    }
+    db.cluster_data.update_one(query, update, upsert=True)
+
+
+def get_cluster(dataset_id, question_id, user_id):
+    clusters = list(db.cluster_data.find({'dataset_id': dataset_id, 'question_id': question_id, 'user_id': user_id},
+                                         {'_id': False}))
+
+    if len(clusters) == 0:
+        return list(db.cluster_data.find({'dataset_id': dataset_id, 'question_id': question_id, 'user_id': ''},
+                                         {'_id': False}))
+    return clusters

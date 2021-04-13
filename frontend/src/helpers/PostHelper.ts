@@ -1,4 +1,5 @@
 import {HighlightRange} from "../interfaces/HighlightRange";
+import {Answer} from "../interfaces/Dataset";
 
 
 const {TAGGING_SERVICE_URL} = require('../../config.json')
@@ -18,13 +19,13 @@ function post(url: string, data: any) {
     }).then((response: Response) => console.log(response.status));
 }
 
-export default function postAnswer(dataset_id: string,
-                                   question_id: string,
-                                   answer_id: string,
-                                   user_id: string,
-                                   data: string,
-                                   taggingTime: number, submitted_ranges: HighlightRange[],
-                                   given_tags: (string | null)[]) {
+export function postHelper(dataset_id: string,
+                           question_id: string,
+                           answer_id: string,
+                           user_id: string,
+                           data: string,
+                           taggingTime: number, submitted_ranges: HighlightRange[],
+                           given_tags: (string | null)[]) {
     post(post_answer_url,
         {
             dataset_id: dataset_id,
@@ -37,4 +38,12 @@ export default function postAnswer(dataset_id: string,
             answer_text: data
         }
     )
+}
+
+export function postClusters(dataset_id: string,
+                             question_id: string,
+                             user_id: string,
+                             clusters: Answer[][]) {
+    post(`${TAGGING_SERVICE_URL}/datasets/clusters/dataset/${dataset_id}/question/${question_id}/user/${user_id}`,
+        clusters)
 }

@@ -9,3 +9,4 @@ numpy~=1.19.5
 scikit-learn~=0.24.1
 semantic-text-similarity~=1.0.3
 pytest~=6.2.2
+nltk~=3.6.1

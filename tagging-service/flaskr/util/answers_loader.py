@@ -8,6 +8,7 @@ import datetime
 import logging
 
 from flaskr.util.grouper_helper import get_clusters
+from flaskr.util.mongo_helper import save_cluster, get_cluster
 
 logger = logging.getLogger(__name__)
 
@@ -29,8 +30,12 @@ def load_dataset(dataset_id):
             j = json.loads(content)
             for question in j['questions']:
                 answers = question['answers']
+                question_id = question['question_id']
                 logger.debug("SORTING ANSWERS")
-                question['clustered_answers'] = get_clusters(answers)
+                if len(get_cluster(dataset_id=dataset_id, question_id=question_id, user_id='')) == 0:
+                    logger.debug(f"creating default cluster for question ${question_id}")
+                    save_cluster(dataset_id=dataset_id, question_id=question_id, user_id='',
+                                 cluster=get_clusters(dataset_id=dataset_id, question_id=question_id, answers=answers))
             return j
     else:
         raise Error(f'File {file} not found at {file}', status_code=500)
@@ -88,10 +93,10 @@ def populate_retrieving_maps(dataset_id):
     dataset = load_dataset(dataset_id)
     id_to_question_data = {}
     id_to_answer_data = {}
-    logger.debug(dataset)
     for question in dataset['questions']:
+        question_id = question['question_id']
         id_to_question_data[question['question_id']] = question
-        for c in question['clustered_answers']:
+        for c in get_cluster(dataset_id=dataset_id, question_id=question_id, user_id='')[0]['clusters']:
             for answer in c:
                 id_to_answer_data[answer['answer_id']] = answer
     return id_to_question_data, id_to_answer_data
