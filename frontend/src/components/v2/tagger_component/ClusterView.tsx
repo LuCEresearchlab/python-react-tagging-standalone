@@ -113,7 +113,10 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
 
 
     return (
-        <Paper style={{padding: '1em', backgroundColor: GREY, display: 'flex', flexDirection: 'row'}}>
+        <Paper style={{
+            padding: '1em', backgroundColor: GREY, display: 'flex', flexDirection: 'row',
+            marginBottom: '2em'
+        }}>
             <KeyIndication displayKey={"" + displayKey}/>
             <TruthCircle value={answer.picked}/>
             <Highlightable
