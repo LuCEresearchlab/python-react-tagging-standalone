@@ -95,7 +95,7 @@ function StaticSelectorView({
                     {
                         backgroundColor: (isSelected() ? DARK_GREY : GREY),
                         textTransform: "none",
-                        width: '350px',
+                        width: '50%',
                     }
                 }>
                 {misconception}
