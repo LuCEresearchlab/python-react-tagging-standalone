@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         divLine: {
             display: "inline-flex",
+            width: '100%'
         }
     }),
 );
