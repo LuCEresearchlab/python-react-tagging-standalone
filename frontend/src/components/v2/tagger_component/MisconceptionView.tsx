@@ -1,13 +1,13 @@
 import React from "react"
 import SingleTagSelector from "./SingleTagSelector";
 import {
-    computeMiscList,
     filteredMisconceptions,
     getColor,
-    highlightRangesColorUpdating, isNoMisconception
+    highlightRangesColorUpdating
 } from "../../../helpers/Util";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import {
+    getCurrentCluster,
     PRE_DYNAMIC_SIZE,
     TaggingClusterSession,
     TaggingClusterSessionDispatch
@@ -45,6 +45,20 @@ interface Input {
     misconceptionsAvailable: MisconceptionElement[]
 }
 
+// computes updates for the whole misconception list to handle common functionality of increase/decrease of size
+function computeMiscList(tags: (string | null)[], element: (string | null), index: number): (string | null)[] {
+    let tmp_tags: (string | null)[] = [...tags]
+    tmp_tags.splice(index, 1, element)
+    if (tmp_tags.length == (index + 1) && element != null)
+        tmp_tags.push(null)
+    // removed tag, should decrease
+    if (tmp_tags.length >= (index + 2) && element == null)
+        tmp_tags.splice(index, 1)
+
+    if (tmp_tags[0] != null) tmp_tags[0] = null
+    return tmp_tags
+}
+
 function MisconceptionView(
     {
         misconceptionsAvailable,
@@ -59,17 +73,23 @@ function MisconceptionView(
 
     const currentColor: string = taggingClusterSession.currentColor
     const tags = taggingClusterSession.tags
-    const rangesList = taggingClusterSession.rangesList
 
 
     const set_current_color = (color: string) => dispatchTaggingClusterSession(setCurrentColor(color))
 
 
     const getNewRangesList = (element: (string | null), index: number) => {
-        if (isNoMisconception(element)) return [[]]
+        if (taggingClusterSession.tags[0] != null)  // delete highlighting if selecting with NoMisconception
+            return [...Array(getCurrentCluster(taggingClusterSession).length)].map(() => [])
         let new_ranges_list = []
-        for (let ranges of rangesList)
-            new_ranges_list.push(highlightRangesColorUpdating(misconceptionsAvailable, tags, ranges, element, index))
+        for (let ranges of taggingClusterSession.rangesList)
+            new_ranges_list.push(highlightRangesColorUpdating(
+                misconceptionsAvailable,
+                taggingClusterSession.tags,
+                ranges,
+                element,
+                index)
+            )
         return new_ranges_list
     }
 

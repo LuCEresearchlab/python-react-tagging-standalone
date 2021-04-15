@@ -40,6 +40,8 @@ function StaticSelectorView({
     const getNewRangesList = (element: (string | null), index: number) => {
 
         if (isNoMisconception(element)) return [...Array(getCurrentCluster(taggingClusterSession).length)].map(() => [])
+        if (handledIndex != 0 && taggingClusterSession.tags[0] != null)
+            return [...Array(getCurrentCluster(taggingClusterSession).length)].map(() => [])
         let new_ranges_list = []
         for (let ranges of taggingClusterSession.rangesList)
             new_ranges_list.push(highlightRangesColorUpdating(
@@ -77,17 +79,13 @@ function StaticSelectorView({
 
                     if (isNoMisconception(misconception) && isSelected()) // deselecting NoMisconception
                         new_tags = initEmptyTagsList()
-                    else
+                    else {
+                        if (taggingClusterSession.tags[0] != null)
+                            new_tags[0] = null
                         new_tags[handledIndex] = isSelected() ? null : misconception
+                    }
 
-                    if (isSelected() &&
-                        stringEquals(
-                            getColor(misconceptionsAvailable, misconception),
-                            taggingClusterSession.currentColor
-                        )
-                    )
-                        dispatchTaggingClusterSession(setCurrentColor(NO_COLOR))
-
+                    dispatchTaggingClusterSession(setCurrentColor(NO_COLOR))
                     dispatchTaggingClusterSession(setTags(new_tags))
                     dispatchTaggingClusterSession(clusterSessionPost())
 

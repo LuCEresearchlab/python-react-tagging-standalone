@@ -34,7 +34,7 @@ export interface TaggingClusterSessionDispatch {
 export function newNoMiscTagList(): (string | null)[] {
     const list = initEmptyTagsList()
     list[0] = NoMisconception
-    return list
+    return [...list, null]
 }
 
 export function initEmptyTagsList(): (string | null)[] {

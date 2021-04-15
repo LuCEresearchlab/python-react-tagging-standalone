@@ -2,7 +2,6 @@ import stringEquals from "../util/StringEquals";
 import {HighlightRange} from "../interfaces/HighlightRange";
 import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 import NoMisconception from "../util/NoMisconception";
-import {newNoMiscTagList, PRE_DYNAMIC_SIZE} from "../model/TaggingClusterSession";
 
 const NO_COLOR: string = "#000000"
 
@@ -50,24 +49,6 @@ function filteredMisconceptions(tags: (string | null)[], misconceptions: string[
     return filtered_misconceptions
 }
 
-// computes updates for the whole misconception list to handle common functionality of increase/decrease of size
-function computeMiscList(tags: (string | null)[], element: (string | null), index: number): (string | null)[] {
-    if (isNoMisconception(element)) return newNoMiscTagList()
-    if (isNoMisconception(tags[0])) {
-        const new_tags: (string | null)[] = newNoMiscTagList()
-        new_tags[PRE_DYNAMIC_SIZE] = element
-        return new_tags
-    }
-    let tmp_tags: (string | null)[] = [...tags]
-    tmp_tags.splice(index, 1, element)
-    if (tmp_tags.length == (index + 1) && element != null)
-        tmp_tags.push(null)
-    // removed tag, should decrease
-    if (tmp_tags.length >= (index + 2) && element == null)
-        tmp_tags.splice(index, 1)
-    return tmp_tags
-}
-
 function getColor(misconceptions_available: MisconceptionElement[], misc: (string | null)): string {
     if (misc == null)
         return ""
@@ -82,6 +63,5 @@ export {
     getMillis,
     highlightRangesColorUpdating,
     filteredMisconceptions,
-    computeMiscList,
     getColor
 }
