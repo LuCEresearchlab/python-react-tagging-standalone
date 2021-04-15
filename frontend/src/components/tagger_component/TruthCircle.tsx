@@ -10,7 +10,9 @@ function TruthCircle({value}: Input) {
     const color: string = value ? "green" : "red"
 
     return (
-        <div title={"Student Answer: " + value} style={{width: "inherit"}}>
+        <div title={"Student Answer: " + value} style={
+            {width: "inherit", paddingTop: 'inherit', paddingBottom: 'inherit'}
+        }>
             <FiberManualRecord style={{color: color, float: "left"}}/>
         </div>
     )
