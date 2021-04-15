@@ -128,7 +128,7 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
                 highlightStyle={highlightStyle}
                 style={{padding: 'inherit'}}
             />
-            <Button style={{marginLeft: 'auto'}} onClick={clear}>
+            <Button style={{marginLeft: 'auto'}} onClick={clear} title={'Clear highlighting'}>
                 <FormatColorReset/>
             </Button>
 

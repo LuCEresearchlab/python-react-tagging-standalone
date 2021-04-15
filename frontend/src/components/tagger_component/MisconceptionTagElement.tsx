@@ -225,12 +225,13 @@ function MisconceptionTagElement(
                 /></StyledTableCell>
             <StyledTableCell>{
                 enabled ?
-                    <Button hidden={!enabled} style={{marginLeft: 'auto'}} onClick={() => {
-                        if (enabled) {
-                            setRanges([])
-                            post_answer([], tags)
-                        }
-                    }}>
+                    <Button hidden={!enabled} style={{marginLeft: 'auto'}} title={'Clear highlighting'}
+                            onClick={() => {
+                                if (enabled) {
+                                    setRanges([])
+                                    post_answer([], tags)
+                                }
+                            }}>
                         <FormatColorReset/>
                     </Button> :
                     <></>
