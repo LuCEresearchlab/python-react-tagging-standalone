@@ -10,6 +10,7 @@ import {GREY} from "../../../util/Colors";
 import HistoryView from "./HistoryView";
 import StaticSelectorView from "./StaticSelectorView";
 import NoMisconception from "../../../util/NoMisconception";
+import stringEquals from "../../../util/StringEquals";
 
 interface Input {
     misconceptionsAvailable: MisconceptionElement[],
@@ -19,6 +20,10 @@ interface Input {
 
 function TagView({misconceptionsAvailable, taggingClusterSession, dispatchTaggingClusterSession}: Input) {
 
+
+    const misconceptionsAvailableNoMisc = misconceptionsAvailable.filter(
+        misc => !stringEquals(misc.name, NoMisconception)
+    )
 
     return (
         <Paper style={{padding: '1em', backgroundColor: GREY}}>
@@ -37,7 +42,7 @@ function TagView({misconceptionsAvailable, taggingClusterSession, dispatchTaggin
                     </TableRow>
                     <TableRow style={{display: "flex", flexDirection: "column"}}>
                         <HistoryView
-                            misconceptionsAvailable={misconceptionsAvailable}
+                            misconceptionsAvailable={misconceptionsAvailableNoMisc}
                             taggingClusterSession={taggingClusterSession}
                             dispatchTaggingClusterSession={dispatchTaggingClusterSession}
                         />
@@ -45,7 +50,7 @@ function TagView({misconceptionsAvailable, taggingClusterSession, dispatchTaggin
                     <TableRow>
                         <TableCell style={{borderBottom: "none"}}>
                             <MisconceptionView
-                                misconceptionsAvailable={misconceptionsAvailable}
+                                misconceptionsAvailable={misconceptionsAvailableNoMisc}
                                 taggingClusterSession={taggingClusterSession}
                                 dispatchTaggingClusterSession={dispatchTaggingClusterSession}
                             />

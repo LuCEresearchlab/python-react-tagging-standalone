@@ -1,4 +1,4 @@
-import {getMillis, isNoMisconception} from "../helpers/Util";
+import {getMillis, isNoMisconception, NO_COLOR} from "../helpers/Util";
 import {HighlightRange} from "../interfaces/HighlightRange";
 import {Answer} from "../interfaces/Dataset";
 import {postHelper, postClusters} from "../helpers/PostHelper";
@@ -101,9 +101,9 @@ function init(state: TaggingClusterSession,
                   question_id: string,
                   user_id: string,
                   currentColor: string,
-                  tags: (string | null)[],
                   history: string[]
               }) {
+    console.log("init")
     return {
         ...state,
         dataset_id: payload.dataset_id,
@@ -210,7 +210,10 @@ function nextCluster(state: TaggingClusterSession) {
     if (next_cluster_idx < state.clusters.length) {
         return {
             ...state,
-            currentCluster: next_cluster_idx
+            currentCluster: next_cluster_idx,
+            currentColor: NO_COLOR,
+            tags: [...initEmptyTagsList(), null],
+            rangesList: []
         }
     } else return state
 }
@@ -221,7 +224,10 @@ function setCurrentCluster(state: TaggingClusterSession, idx: number) {
     if (0 <= idx && idx < state.clusters.length) {
         return {
             ...state,
-            currentCluster: idx
+            currentCluster: idx,
+            currentColor: NO_COLOR,
+            tags: [...initEmptyTagsList(), null],
+            rangesList: []
         }
     }
     return state
