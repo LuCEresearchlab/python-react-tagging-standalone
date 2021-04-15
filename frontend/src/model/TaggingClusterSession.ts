@@ -137,7 +137,7 @@ function setTags(state: TaggingClusterSession, tags: (string | null)[]): Tagging
     console.log("setTags")
     return {
         ...state,
-        tags: new_tags
+        tags: new_tags,
     }
 }
 
@@ -201,7 +201,8 @@ function setTagsAndRanges(state: TaggingClusterSession,
 function setClusters(state: TaggingClusterSession, clusters: Answer[][]): TaggingClusterSession {
     return {
         ...state,
-        clusters: clusters
+        clusters: clusters,
+        startTaggingTime: getMillis(),
     }
 }
 
@@ -213,7 +214,8 @@ function nextCluster(state: TaggingClusterSession) {
             currentCluster: next_cluster_idx,
             currentColor: NO_COLOR,
             tags: [...initEmptyTagsList(), null],
-            rangesList: []
+            rangesList: [],
+            startTaggingTime: getMillis(),
         }
     } else return state
 }
@@ -227,7 +229,8 @@ function setCurrentCluster(state: TaggingClusterSession, idx: number) {
             currentCluster: idx,
             currentColor: NO_COLOR,
             tags: [...initEmptyTagsList(), null],
-            rangesList: []
+            rangesList: [],
+            startTaggingTime: getMillis(),
         }
     }
     return state

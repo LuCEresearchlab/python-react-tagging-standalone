@@ -25,7 +25,7 @@ function AnswersMerger({dataset_id, question_id, user_id, available_misconceptio
 
     if (isLoading) return (<Grid container>Loading...</Grid>)
 
-    const answers: TaggedAnswer[] = data == undefined ? [] : data
+    const answers: TaggedAnswer[] = data
         .filter((answer: TaggedAnswer) => answer.question_id == question_id) // only keep needed answers
 
 

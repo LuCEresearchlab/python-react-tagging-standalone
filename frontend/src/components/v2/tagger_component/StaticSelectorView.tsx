@@ -1,5 +1,6 @@
 import React from "react"
 import {
+    getCurrentCluster,
     initEmptyTagsList, TaggingClusterSession, TaggingClusterSessionDispatch
 } from "../../../model/TaggingClusterSession";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
@@ -37,7 +38,8 @@ function StaticSelectorView({
     const isSelected = () => taggingClusterSession.tags.findIndex(tag => stringEquals(tag, misconception)) !== -1
 
     const getNewRangesList = (element: (string | null), index: number) => {
-        if (isNoMisconception(element)) return [[]]
+
+        if (isNoMisconception(element)) return [...Array(getCurrentCluster(taggingClusterSession).length)].map(() => [])
         let new_ranges_list = []
         for (let ranges of taggingClusterSession.rangesList)
             new_ranges_list.push(highlightRangesColorUpdating(
