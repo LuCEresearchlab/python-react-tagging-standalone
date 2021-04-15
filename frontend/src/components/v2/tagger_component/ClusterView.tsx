@@ -19,6 +19,7 @@ import {
 import KeyIndication from "./KeyIndication";
 import {clusterSessionPost, setRanges, setTagsAndRanges} from "../../../model/TaggingClusterSessionDispatch";
 import TruthCircle from "../../tagger_component/TruthCircle";
+import {FormatColorReset} from "@material-ui/icons";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
@@ -125,9 +126,12 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
                 onTextHighlighted={onTextHighlighted}
                 text={answer.data}
                 highlightStyle={highlightStyle}
+                style={{padding: 'inherit'}}
             />
-            <Button onClick={clear}>Clear
+            <Button style={{marginLeft: 'auto'}} onClick={clear} title={'Clear highlighting'}>
+                <FormatColorReset/>
             </Button>
+
         </Paper>
     )
 }

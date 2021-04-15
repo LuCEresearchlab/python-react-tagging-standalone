@@ -24,7 +24,8 @@ export function postHelper(dataset_id: string,
                            answer_id: string,
                            user_id: string,
                            data: string,
-                           taggingTime: number, submitted_ranges: HighlightRange[],
+                           taggingTime: number,
+                           submitted_ranges: HighlightRange[],
                            given_tags: (string | null)[]) {
     post(post_answer_url,
         {

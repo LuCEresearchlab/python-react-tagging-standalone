@@ -20,7 +20,6 @@ const initClusterSession = (dataset_id: string,
                             question_id: string,
                             user_id: string,
                             currentColor: string,
-                            tags: (string | null)[],
                             history: string[]) =>
     basic(TaggingClusterSessionActions.INIT,
         {
@@ -28,7 +27,6 @@ const initClusterSession = (dataset_id: string,
             question_id,
             user_id,
             currentColor,
-            tags,
             history
         })
 const setClusters = (clusters: Answer[][]) => basic(TaggingClusterSessionActions.SET_CLUSTERS, clusters)

@@ -1,4 +1,4 @@
-import {getMillis, isNoMisconception} from "../helpers/Util";
+import {getMillis, isNoMisconception, NO_COLOR} from "../helpers/Util";
 import {HighlightRange} from "../interfaces/HighlightRange";
 import {Answer} from "../interfaces/Dataset";
 import {postHelper, postClusters} from "../helpers/PostHelper";
@@ -34,7 +34,7 @@ export interface TaggingClusterSessionDispatch {
 export function newNoMiscTagList(): (string | null)[] {
     const list = initEmptyTagsList()
     list[0] = NoMisconception
-    return list
+    return [...list, null]
 }
 
 export function initEmptyTagsList(): (string | null)[] {
@@ -101,9 +101,9 @@ function init(state: TaggingClusterSession,
                   question_id: string,
                   user_id: string,
                   currentColor: string,
-                  tags: (string | null)[],
                   history: string[]
               }) {
+    console.log("init")
     return {
         ...state,
         dataset_id: payload.dataset_id,
@@ -137,7 +137,7 @@ function setTags(state: TaggingClusterSession, tags: (string | null)[]): Tagging
     console.log("setTags")
     return {
         ...state,
-        tags: new_tags
+        tags: new_tags,
     }
 }
 
@@ -201,7 +201,8 @@ function setTagsAndRanges(state: TaggingClusterSession,
 function setClusters(state: TaggingClusterSession, clusters: Answer[][]): TaggingClusterSession {
     return {
         ...state,
-        clusters: clusters
+        clusters: clusters,
+        startTaggingTime: getMillis(),
     }
 }
 
@@ -210,7 +211,11 @@ function nextCluster(state: TaggingClusterSession) {
     if (next_cluster_idx < state.clusters.length) {
         return {
             ...state,
-            currentCluster: next_cluster_idx
+            currentCluster: next_cluster_idx,
+            currentColor: NO_COLOR,
+            tags: [...initEmptyTagsList(), null],
+            rangesList: [],
+            startTaggingTime: getMillis(),
         }
     } else return state
 }
@@ -221,7 +226,11 @@ function setCurrentCluster(state: TaggingClusterSession, idx: number) {
     if (0 <= idx && idx < state.clusters.length) {
         return {
             ...state,
-            currentCluster: idx
+            currentCluster: idx,
+            currentColor: NO_COLOR,
+            tags: [...initEmptyTagsList(), null],
+            rangesList: [],
+            startTaggingTime: getMillis(),
         }
     }
     return state

@@ -19,6 +19,7 @@ import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
 import stringEquals from "../../util/StringEquals";
 import TruthCircle from "./TruthCircle";
 import NoMisconception from "../../util/NoMisconception";
+import {FormatColorReset} from "@material-ui/icons";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
@@ -197,11 +198,12 @@ function MisconceptionTagElement(
 
     return (
         <StyledTableRow onClick={tagging_time_handler}>
-            <StyledTableCell component="th" scope="row" style={{width: "24px", paddingRight: 0}}>
+            <StyledTableCell component="th" scope="row" style={{width: "24px", paddingRight: 0, paddingTop: 8}}>
                 <TruthCircle value={answer.picked}/>
             </StyledTableCell>
-            <StyledTableCell component="th" scope="row">
+            <StyledTableCell component="th" scope="row" style={{width: '100%'}}>
                 <Highlightable
+                    style={{paddingTop: 'inherit', paddingBottom: 'inherit'}}
                     ranges={ranges}
                     enabled={enabled}
                     onTextHighlighted={(e: any) => {
@@ -212,22 +214,26 @@ function MisconceptionTagElement(
 
                         setRanges([...r])
                         post_answer(r, tags)
-                }}
-                text={answer.data}
-                highlightStyle={(range: HighlightRange) => {
-                    return {
-                        backgroundColor: range.color + "C8",
-                    }
-                }
-                }
-            />{
-                enabled ?
-                    <Button hidden={!enabled} onClick={() => {
-                        if (enabled) {
-                            setRanges([])
-                            post_answer([], tags)
+                    }}
+                    text={answer.data}
+                    highlightStyle={(range: HighlightRange) => {
+                        return {
+                            backgroundColor: range.color + "C8",
                         }
-                    }}>Clear</Button> :
+                    }
+                    }
+                /></StyledTableCell>
+            <StyledTableCell>{
+                enabled ?
+                    <Button hidden={!enabled} style={{marginLeft: 'auto'}} title={'Clear highlighting'}
+                            onClick={() => {
+                                if (enabled) {
+                                    setRanges([])
+                                    post_answer([], tags)
+                                }
+                            }}>
+                        <FormatColorReset/>
+                    </Button> :
                     <></>
             }</StyledTableCell>
             <StyledTableCell align="right" className={classes.root}>

@@ -41,7 +41,6 @@ function initState(dataset: (Dataset | null), user_id: string,
         questions[0].question_id,
         user_id,
         NO_COLOR,
-        [],
         history[0]
     ))
     return {
@@ -62,7 +61,6 @@ function _createTaggingClusterSession(state: TaggingSession,
             state.questions[state.currentQuestion].question_id,
             state.user_id,
             NO_COLOR,
-            [],
             state.history[state.currentQuestion]
         )
     )
