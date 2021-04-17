@@ -32,11 +32,13 @@ docker-compose down
 In case there are issues due to dependencies try to rebuild the containers (will wipe tagged data) with
 
 ```
-docker-compose up --build  # rebuil
+docker-compose up --build  # rebuild
 ```
 
-Note: by default `SIMILARITY_CLUSTERING_STATE=False`, this means that fake clustering will be used, to have actual
-clustering change the value to `True` inside `.env`.
+Note: by default `SIMILARITY_CLUSTERING_STATE=True`, this means that true clustering will be used, this means that the
+first time the dataset will be loaded clusters will be computed, this is time-consuming. To turn real clustering off
+set `SIMILARITY_CLUSTERING_STATE=False` inside `.env` (clusters are stored in the database so deleting clusters
+associated with user ```""``` might be required).
 
 ## Convert data from LUMI to required data format
 

@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {Grid, Paper} from "@material-ui/core";
+import {Grid, Paper, Tab} from "@material-ui/core";
 import {useFetch} from "../../helpers/LoaderHelper";
 import {StyledPagination} from "../styled/StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
+import {TabContext, TabList, TabPanel} from "@material-ui/lab";
 import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
 import QuestionSelect from "../question_component/QuestionSelect";
 import TagView from "./tagger_component/TagView";
@@ -15,6 +16,7 @@ import {
 } from "../../model/TaggingClusterSession";
 import {TaggingSession, TaggingSessionDispatch} from "../../model/TaggingSession";
 import {setClusters, setCurrentCluster} from "../../model/TaggingClusterSessionDispatch";
+import ClusterHandler from "./cluster_handler_component/ClusterHandler";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
@@ -55,6 +57,7 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
     const get_available_url = TAGGING_SERVICE_URL + '/progmiscon_api/misconceptions'
 
     const [page, setPage] = useState<number>(1)
+    const [tab, setTab] = useState<string>('1')
 
 
     const paginationChange = (event: any, value: number) => {
@@ -96,28 +99,57 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
                     setQuestionSelect={selectedChange}/>
             </Grid>
             <Grid item xs={8}>
-                <Grid container direction={'row'} className={classes.taggingMiscBlock} spacing={2} component={Paper}
-                      style={{backgroundColor: LIGHT_GREY}}>
-                    <Grid item xs={6}>
-                        <ClusterView
+                <TabContext value={tab}>
+                    <TabList
+                        indicatorColor='primary'
+                        textColor='primary'
+                        centered={true}
+                        onChange={(_, e: string) => {
+                            setTab(e)
+                        }}
+                    >
+                        <Tab
+                            label={'Tagging'}
+                            value={'1'}
+                        />
+                        <Tab
+                            label={'Clusters'}
+                            value={'2'}
+                        />
+                    </TabList>
+                    <TabPanel value={'1'}>
+                        <Grid container direction={'row'} className={classes.taggingMiscBlock} spacing={2}
+                              component={Paper}
+                              style={{backgroundColor: LIGHT_GREY}}>
+                            <Grid item xs={6}>
+                                <ClusterView
+                                    taggingClusterSession={taggingClusterSession}
+                                    dispatchTaggingClusterSession={dispatchTaggingClusterSession}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TagView
+                                    misconceptionsAvailable={data}
+                                    taggingClusterSession={taggingClusterSession}
+                                    dispatchTaggingClusterSession={dispatchTaggingClusterSession}
+                                />
+                            </Grid>
+                            <StyledPagination
+                                count={total_clusters}
+                                page={page}
+                                onChange={paginationChange}
+                                siblingCount={5}
+                            />
+                        </Grid>
+                    </TabPanel>
+                    <TabPanel value={'2'}>
+                        <ClusterHandler
+                            taggingSession={taggingSession}
                             taggingClusterSession={taggingClusterSession}
                             dispatchTaggingClusterSession={dispatchTaggingClusterSession}
                         />
-                    </Grid>
-                    <Grid item xs={6}>
-                        <TagView
-                            misconceptionsAvailable={data}
-                            taggingClusterSession={taggingClusterSession}
-                            dispatchTaggingClusterSession={dispatchTaggingClusterSession}
-                        />
-                    </Grid>
-                    <StyledPagination
-                        count={total_clusters}
-                        page={page}
-                        onChange={paginationChange}
-                        siblingCount={5}
-                    />
-                </Grid>
+                    </TabPanel>
+                </TabContext>
             </Grid>
         </Grid>
     )
