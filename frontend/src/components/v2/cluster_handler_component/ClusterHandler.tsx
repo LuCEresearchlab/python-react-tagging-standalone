@@ -1,5 +1,8 @@
 import React from "react"
-import {TaggingClusterSession, TaggingClusterSessionDispatch} from "../../../model/TaggingClusterSession";
+import {
+    TaggingClusterSession,
+    TaggingClusterSessionDispatch
+} from "../../../model/TaggingClusterSession";
 import {Answer} from "../../../interfaces/Dataset";
 import {
     DragDropContext,
@@ -14,12 +17,89 @@ import stringEquals from "../../../util/StringEquals";
 import {setClusters} from "../../../model/TaggingClusterSessionDispatch";
 import {postClusters} from "../../../helpers/PostHelper";
 import {getDatasetId, getQuestion, TaggingSession} from "../../../model/TaggingSession";
+import Fuse from "fuse.js";
 
 
 interface Input {
     taggingSession: TaggingSession,
     taggingClusterSession: TaggingClusterSession,
     dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>
+}
+
+// https://stackoverflow.com/questions/11688692/how-to-create-a-list-of-unique-items-in-javascript
+function uniqueArr(arr: any[]) {
+    let u: any = {}, a: any = [];
+    for (let i = 0, l = arr.length; i < l; ++i) {
+        if (!u.hasOwnProperty(arr[i])) { // eslint-disable-line
+            a.push(arr[i]);
+            u[arr[i]] = 1;
+        }
+    }
+    return a;
+}
+
+function getSortedClusters(clusters: Answer[][], query: string) {
+
+    type extended_cluster = {
+        cluster_idx: number,
+        answer_idx: number,
+        answer: Answer
+    }
+
+    const extended_clusters: extended_cluster[] = clusters
+        .map((cluster: Answer[], cluster_idx: number) =>
+            cluster.map((answer: Answer, answer_idx: number) => {
+                return {
+                    cluster_idx,
+                    answer_idx,
+                    answer
+                }
+            })
+        ).flat()
+
+
+    const options: Fuse.IFuseOptions<extended_cluster> = {
+        keys: ['answer.data'],
+        shouldSort: true,
+        includeMatches: true,
+        findAllMatches: true,
+        threshold: 1.0,
+        minMatchCharLength: Math.max(2, Math.floor(query.length / 2))
+    }
+
+    const fuse = new Fuse<extended_cluster>(extended_clusters, options)
+
+    const results = fuse.search(query)
+    extended_clusters.forEach(elem => {
+        if (results.findIndex(res => res.item.answer == elem.answer) == -1) // add elements that don't match
+            results.push({
+                item: elem,
+                matches: [],
+                refIndex: extended_clusters.findIndex(c => c.cluster_idx == elem.cluster_idx &&
+                    c.answer_idx == elem.answer_idx)
+            })
+    })
+
+    const sorted_clusters: any = [...Array(clusters.length)].map(() => {
+    })
+    let order: number[] = []
+    results.forEach(elem => {
+        order.push(elem.item.cluster_idx)
+    })
+
+    order = uniqueArr(order)
+    order.forEach((value, idx) => sorted_clusters[idx] = {cluster_idx: value, cluster: []})
+
+    results.forEach(result => {
+        const pos: number = order.findIndex(cluster_n => result.item.cluster_idx == cluster_n)
+        if (sorted_clusters != null && sorted_clusters[pos] != null && pos != -1)
+            sorted_clusters[pos].cluster.push(result)
+    })
+
+    console.log(order)
+    console.log(results)
+    console.log(sorted_clusters)
+    return results
 }
 
 function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingClusterSession}: Input) {
@@ -35,7 +115,7 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
         // change background colour if dragging
         background: isDragging ? 'lightgreen' : LIGHT_GREY,
 
-        // styles we need to apply on draggables
+        // styles we need to apply on draggable
         ...draggableStyle
     });
 
@@ -66,6 +146,8 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
             new_clusters
         )
     }
+
+    getSortedClusters(clusters, "unmutable")
 
     return (
         <DragDropContext onDragEnd={handleClusterChange}>
