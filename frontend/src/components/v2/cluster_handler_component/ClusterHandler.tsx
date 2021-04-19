@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState} from "react"
 import {
     TaggingClusterSession,
     TaggingClusterSessionDispatch
@@ -11,14 +11,17 @@ import {
     DroppableProvided,
     DropResult
 } from "react-beautiful-dnd";
-import {Paper} from "@material-ui/core";
+import {Container, Paper, TextField} from "@material-ui/core";
 import {GREY, LIGHT_GREY} from "../../../util/Colors";
 import stringEquals from "../../../util/StringEquals";
-import {setClusters} from "../../../model/TaggingClusterSessionDispatch";
-import {postClusters} from "../../../helpers/PostHelper";
 import {getDatasetId, getQuestion, TaggingSession} from "../../../model/TaggingSession";
 import Fuse from "fuse.js";
+import {JSONLoader} from "../../../helpers/LoaderHelper";
+import {TaggedAnswer} from "../../../interfaces/TaggedAnswer";
+import {postClusters, postHelper} from "../../../helpers/PostHelper";
+import {setClusters} from "../../../model/TaggingClusterSessionDispatch";
 
+const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
 interface Input {
     taggingSession: TaggingSession,
@@ -38,15 +41,29 @@ function uniqueArr(arr: any[]) {
     return a;
 }
 
-function getSortedClusters(clusters: Answer[][], query: string) {
+type ExtendedCluster = {
+    cluster_idx: number,
+    answer_idx: number,
+    answer: Answer
+}
 
-    type extended_cluster = {
-        cluster_idx: number,
-        answer_idx: number,
+type ResultCluster = {
+    item: {
         answer: Answer
-    }
+    },
+    matches: [{
+        indices: number[][]
+    }]
+}
 
-    const extended_clusters: extended_cluster[] = clusters
+type Result = {
+    cluster_idx: number,
+    clusters: ResultCluster[]
+}
+
+function getSortedClusters(clusters: Answer[][], query: string): Result[] {
+
+    const extended_clusters: ExtendedCluster[] = clusters
         .map((cluster: Answer[], cluster_idx: number) =>
             cluster.map((answer: Answer, answer_idx: number) => {
                 return {
@@ -58,7 +75,7 @@ function getSortedClusters(clusters: Answer[][], query: string) {
         ).flat()
 
 
-    const options: Fuse.IFuseOptions<extended_cluster> = {
+    const options: Fuse.IFuseOptions<ExtendedCluster> = {
         keys: ['answer.data'],
         shouldSort: true,
         includeMatches: true,
@@ -67,7 +84,7 @@ function getSortedClusters(clusters: Answer[][], query: string) {
         minMatchCharLength: Math.max(2, Math.floor(query.length / 2))
     }
 
-    const fuse = new Fuse<extended_cluster>(extended_clusters, options)
+    const fuse = new Fuse<ExtendedCluster>(extended_clusters, options)
 
     const results = fuse.search(query)
     extended_clusters.forEach(elem => {
@@ -80,29 +97,34 @@ function getSortedClusters(clusters: Answer[][], query: string) {
             })
     })
 
-    const sorted_clusters: any = [...Array(clusters.length)].map(() => {
-    })
+    const sorted_clusters: any = [...Array(clusters.length)]
+
     let order: number[] = []
     results.forEach(elem => {
         order.push(elem.item.cluster_idx)
     })
 
     order = uniqueArr(order)
-    order.forEach((value, idx) => sorted_clusters[idx] = {cluster_idx: value, cluster: []})
+    order.forEach((value, idx) => sorted_clusters[idx] = {cluster_idx: value, clusters: []})
 
     results.forEach(result => {
         const pos: number = order.findIndex(cluster_n => result.item.cluster_idx == cluster_n)
         if (sorted_clusters != null && sorted_clusters[pos] != null && pos != -1)
-            sorted_clusters[pos].cluster.push(result)
+            sorted_clusters[pos].clusters.push(result)
     })
 
-    console.log(order)
-    console.log(results)
-    console.log(sorted_clusters)
-    return results
+    return sorted_clusters
+}
+
+function getClusterFromExtended(extended_clusters: Result[], idx: number): Answer[] {
+    return extended_clusters[extended_clusters.findIndex(v => v.cluster_idx == idx)]
+        .clusters
+        .map(resultCluster => resultCluster.item.answer)
 }
 
 function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingClusterSession}: Input) {
+
+    const [query, setQuery] = useState<string>("")
 
     const clusters: Answer[][] = taggingClusterSession.clusters
 
@@ -119,6 +141,8 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
         ...draggableStyle
     });
 
+    const extended_clusters = getSortedClusters(clusters, query)
+
     const handleClusterChange = (result: DropResult) => {
         if (result.destination == undefined) return
 
@@ -131,11 +155,48 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
         const target_cluster = parseInt(result.destination?.droppableId)
         const target_idx = result.destination?.index
 
+        // reorder source cluster to match order in extended
+        new_clusters[source_cluster] = getClusterFromExtended(extended_clusters, source_cluster)
+
         const answer: Answer = new_clusters[source_cluster][source_index]
 
         new_clusters[source_cluster] = new_clusters[source_cluster].filter(elem =>
             !stringEquals(answer_id, elem.answer_id))
 
+        // reorder target cluster to match order in extended
+        new_clusters[target_cluster] = getClusterFromExtended(extended_clusters, target_cluster)
+
+        // update tags of moved answer to target cluster ones
+        if (new_clusters[target_cluster].length > 0) {
+
+            const get_url = (my_answer_id: string) => TAGGING_SERVICE_URL +
+                '/datasets/tagged-answer/dataset/' + taggingClusterSession.dataset_id +
+                '/question/' + taggingClusterSession.question_id +
+                '/answer/' + my_answer_id +
+                '/user/' + taggingClusterSession.user_id
+
+
+            JSONLoader(get_url(new_clusters[target_cluster][0].answer_id), (tagged_answers: TaggedAnswer[]) => {
+                if (tagged_answers.length == 0) {
+                    return;
+                } else {
+                    const tagged_answer = tagged_answers[0]
+                    postHelper(
+                        taggingClusterSession.dataset_id,
+                        taggingClusterSession.question_id,
+                        answer.answer_id,
+                        taggingClusterSession.user_id,
+                        answer.data,
+                        -1,
+                        [],
+                        tagged_answer.tags
+                    )
+                }
+
+            })
+        }
+
+        // update target cluster
         new_clusters[target_cluster].splice(target_idx, 0, answer)
 
         dispatchTaggingClusterSession(setClusters(new_clusters))
@@ -147,54 +208,59 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
         )
     }
 
-    getSortedClusters(clusters, "unmutable")
 
     return (
-        <DragDropContext onDragEnd={handleClusterChange}>
-            {
-                clusters.map((cluster: Answer[], index: number) =>
-                    <Droppable
-                        key={`droppable|${index}`}
-                        droppableId={'' + index}
-                    >
-                        {
-                            (provided: DroppableProvided) => (
-                                <Paper
-                                    style={{backgroundColor: GREY, padding: '2em', margin: '2em'}}
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                >
-                                    {
-                                        cluster.map((answer: Answer, answer_index: number) =>
-                                            <Draggable
-                                                key={answer.answer_id}
-                                                draggableId={'' + answer.answer_id}
-                                                index={answer_index}
-                                            >
-                                                {(provided1: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-                                                    <Paper
-                                                        ref={provided1.innerRef}
-                                                        {...provided1.draggableProps}
-                                                        {...provided1.dragHandleProps}
-                                                        style={getItemStyle(
-                                                            snapshot.isDragging,
-                                                            provided1.draggableProps.style
-                                                        )}
-                                                    >
-                                                        {answer.data}
-                                                    </Paper>
-                                                )}
-                                            </Draggable>
-                                        )
-                                    }
-                                    {provided.placeholder}
-                                </Paper>
-                            )
-                        }
-                    </Droppable>
-                )
-            }
-        </DragDropContext>
+        <Container>
+            <TextField id={'search_filter'} type={'text'} value={query} onChange={
+                (e) => setQuery(e.target.value)
+            } label={"Filter"}/>
+
+            <DragDropContext onDragEnd={handleClusterChange}>
+                {
+                    extended_clusters.map((result: Result) =>
+                        <Droppable
+                            key={`droppable|${result.cluster_idx}`}
+                            droppableId={'' + result.cluster_idx}
+                        >
+                            {
+                                (provided: DroppableProvided) => (
+                                    <Paper
+                                        style={{backgroundColor: GREY, padding: '2em', margin: '2em'}}
+                                        {...provided.droppableProps}
+                                        ref={provided.innerRef}
+                                    >
+                                        {
+                                            result.clusters.map((resultCluster: ResultCluster, idx: number) =>
+                                                <Draggable
+                                                    key={resultCluster.item.answer.answer_id}
+                                                    draggableId={'' + resultCluster.item.answer.answer_id}
+                                                    index={idx}
+                                                >
+                                                    {(provided1: DraggableProvided, snapshot: DraggableStateSnapshot) => (
+                                                        <Paper
+                                                            ref={provided1.innerRef}
+                                                            {...provided1.draggableProps}
+                                                            {...provided1.dragHandleProps}
+                                                            style={getItemStyle(
+                                                                snapshot.isDragging,
+                                                                provided1.draggableProps.style
+                                                            )}
+                                                        >
+                                                            {resultCluster.item.answer.data}
+                                                        </Paper>
+                                                    )}
+                                                </Draggable>
+                                            )
+                                        }
+                                        {provided.placeholder}
+                                    </Paper>
+                                )
+                            }
+                        </Droppable>
+                    )
+                }
+            </DragDropContext>
+        </Container>
     )
 }
 
