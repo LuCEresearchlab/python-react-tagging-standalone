@@ -147,6 +147,10 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
                             taggingSession={taggingSession}
                             taggingClusterSession={taggingClusterSession}
                             dispatchTaggingClusterSession={dispatchTaggingClusterSession}
+                            setCluster={(value: number) => {
+                                setTab('1')
+                                paginationChange(null, value)
+                            }}
                         />
                     </TabPanel>
                 </TabContext>

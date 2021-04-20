@@ -30,7 +30,9 @@ const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 interface Input {
     taggingSession: TaggingSession,
     taggingClusterSession: TaggingClusterSession,
-    dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>
+    dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>,
+
+    setCluster(value: number): void
 }
 
 // https://stackoverflow.com/questions/11688692/how-to-create-a-list-of-unique-items-in-javascript
@@ -210,7 +212,7 @@ function handleClusterChange(
     )
 }
 
-function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingClusterSession}: Input) {
+function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingClusterSession, setCluster}: Input) {
 
     const [query, setQuery] = useState<string>("")
 
@@ -251,6 +253,9 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                         style={{backgroundColor: GREY, padding: '2em', margin: '2em'}}
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
+                                        onClick={() => {
+                                            setCluster(result.cluster_idx + 1)
+                                        }}
                                     >
                                         {
                                             result.clusters.map((resultCluster: ResultCluster, idx: number) =>
