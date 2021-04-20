@@ -11,7 +11,7 @@ import {
     DroppableProvided,
     DropResult
 } from "react-beautiful-dnd";
-import {Container, Paper, TextField} from "@material-ui/core";
+import {Button, Container, Paper, TextField} from "@material-ui/core";
 import {GREY, LIGHT_GREY} from "../../../util/Colors";
 import stringEquals from "../../../util/StringEquals";
 import {getDatasetId, getQuestion, TaggingSession} from "../../../model/TaggingSession";
@@ -23,6 +23,7 @@ import {setClusters} from "../../../model/TaggingClusterSessionDispatch";
 
 // @ts-ignore
 import Highlightable from "highlightable";
+import {Clear} from "@material-ui/icons";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
@@ -219,9 +220,14 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
 
     return (
         <Container>
-            <TextField id={'search_filter'} type={'text'} value={query} onChange={
-                (e) => setQuery(e.target.value)
-            } label={"Filter"}/>
+            <div>
+                <TextField id={'search_filter'} type={'text'} value={query} onChange={
+                    (e) => setQuery(e.target.value)
+                } label={"Filter"}/>
+                <Button style={{height: 48, width: 48}} onClick={() => setQuery("")}>
+                    <Clear/>
+                </Button>
+            </div>
 
             <DragDropContext onDragEnd={(result: DropResult) => {
                 handleClusterChange(
