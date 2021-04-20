@@ -84,7 +84,7 @@ function getSortedClusters(clusters: Answer[][], query: string): Result[] {
         findAllMatches: true,
         ignoreLocation: true,
         threshold: 0.3,
-        minMatchCharLength: Math.max(2, Math.floor(query.length / 2))
+        minMatchCharLength: Math.max(2, query.length - 2)
     }
 
     const fuse = new Fuse<ExtendedCluster>(extended_clusters, options)
