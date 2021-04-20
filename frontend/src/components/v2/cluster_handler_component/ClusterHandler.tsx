@@ -256,6 +256,7 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                         onClick={() => {
                                             setCluster(result.cluster_idx + 1)
                                         }}
+                                        title={`Switch to cluster ${result.cluster_idx + 1}`}
                                     >
                                         {
                                             result.clusters.map((resultCluster: ResultCluster, idx: number) =>
