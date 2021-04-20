@@ -21,6 +21,9 @@ import {TaggedAnswer} from "../../../interfaces/TaggedAnswer";
 import {postClusters, postHelper} from "../../../helpers/PostHelper";
 import {setClusters} from "../../../model/TaggingClusterSessionDispatch";
 
+// @ts-ignore
+import Highlightable from "highlightable";
+
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
 interface Input {
@@ -51,9 +54,7 @@ type ResultCluster = {
     item: {
         answer: Answer
     },
-    matches: [{
-        indices: number[][]
-    }]
+    matches: { indices: number[][] }[]
 }
 
 type Result = {
@@ -80,8 +81,9 @@ function getSortedClusters(clusters: Answer[][], query: string): Result[] {
         shouldSort: true,
         includeMatches: true,
         findAllMatches: true,
-        threshold: 1.0,
-        minMatchCharLength: Math.max(2, Math.floor(query.length / 2))
+        ignoreLocation: true,
+        threshold: 0.3,
+        minMatchCharLength: Math.max(2, Math.ceil(query.length / 2))
     }
 
     const fuse = new Fuse<ExtendedCluster>(extended_clusters, options)
@@ -246,7 +248,19 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                                                 provided1.draggableProps.style
                                                             )}
                                                         >
-                                                            {resultCluster.item.answer.data}
+                                                            <Highlightable
+                                                                ranges={resultCluster.matches.length == 0 ? [] :
+                                                                    resultCluster.matches[0].indices.map(interval => {
+                                                                        return {
+                                                                            start: interval[0],
+                                                                            end: interval[1],
+                                                                        }
+                                                                    })}
+                                                                enabled={false}
+                                                                text={resultCluster.item.answer.data}
+                                                                highlightStyle={{backgroundColor: '#EE000044'}}
+                                                            />
+                                                            {/*{resultCluster.item.answer.data}*/}
                                                         </Paper>
                                                     )}
                                                 </Draggable>
