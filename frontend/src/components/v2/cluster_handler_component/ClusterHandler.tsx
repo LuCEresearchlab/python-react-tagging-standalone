@@ -133,6 +133,7 @@ function getItemStyle(isDragging: boolean, draggableStyle: any) {
         userSelect: 'none',
         padding: '1em',
         margin: '2em',
+        display: 'inline-flex',
 
         // change background colour if dragging
         background: isDragging ? 'lightgreen' : LIGHT_GREY,
@@ -227,19 +228,23 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
         <Container>
             <div>
                 <TextField id={'search_filter'} type={'text'} value={state.query} onChange={
-                    (e) =>
+                    (e) => {
+                        e.preventDefault()
                         setState({
                                 extendedClusters: getSortedClusters(clusters, e.target.value),
                                 query: e.target.value
                             }
                         )
+                    }
                 } label={"Filter"}/>
-                <Button style={{height: 48, width: 48}} onClick={() =>
+                <Button style={{height: 48, width: 48}} onClick={(e) => {
+                    e.preventDefault()
                     setState({
                             extendedClusters: getSortedClusters(clusters, ""),
                             query: ""
                         }
                     )
+                }
                 }>
                     <Clear/>
                 </Button>
@@ -264,7 +269,10 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                             {
                                 (provided: DroppableProvided) => (
                                     <Paper
-                                        style={{backgroundColor: GREY, padding: '2em', margin: '2em'}}
+                                        style={{
+                                            backgroundColor: GREY, padding: '2em', margin: '2em', display: 'flex',
+                                            flexDirection: 'column'
+                                        }}
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
                                         onClick={() => {
@@ -302,9 +310,19 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                                                         enabled={false}
                                                                         text={resultCluster.item.answer.data}
                                                                         highlightStyle={{backgroundColor: '#EE000044'}}
+                                                                        style={{width: '95%'}}
                                                                     /> :
-                                                                    resultCluster.item.answer.data
+                                                                    <div style={{width: '95%'}}>
+                                                                        {resultCluster.item.answer.data}
+                                                                    </div>
                                                             }
+                                                            <Button style={{height: 48, width: 48, justifySelf: 'end'}}
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault()
+                                                                        console.log(e)
+                                                                    }}>
+                                                                <Clear/>
+                                                            </Button>
                                                         </Paper>
                                                     )}
                                                 </Draggable>
