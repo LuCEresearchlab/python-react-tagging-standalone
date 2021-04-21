@@ -312,10 +312,11 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                         ref={provided.innerRef}
                                     >
                                         <Button
+                                            variant={'outlined'}
                                             title={`Switch to cluster ${result.cluster_idx + 1}`}
                                             onClick={() => setCluster(result.cluster_idx + 1)}
                                         >
-                                            Select
+                                            Switch to
                                         </Button>
                                         {
                                             result.clusters.map((resultCluster: ResultCluster, idx: number) =>
