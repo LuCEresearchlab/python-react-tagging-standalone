@@ -214,19 +214,33 @@ function handleClusterChange(
 
 function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingClusterSession, setCluster}: Input) {
 
-    const [query, setQuery] = useState<string>("")
-
     const clusters: Answer[][] = taggingClusterSession.clusters
-    const extendedClusters = getSortedClusters(clusters, query)
 
+    const [state, setState] = useState<{ extendedClusters: Result[], query: string }>({
+        extendedClusters: getSortedClusters(clusters, ""),
+        query: ""
+    })
+
+    const extendedClusters = state.extendedClusters
 
     return (
         <Container>
             <div>
-                <TextField id={'search_filter'} type={'text'} value={query} onChange={
-                    (e) => setQuery(e.target.value)
+                <TextField id={'search_filter'} type={'text'} value={state.query} onChange={
+                    (e) =>
+                        setState({
+                                extendedClusters: getSortedClusters(clusters, e.target.value),
+                                query: e.target.value
+                            }
+                        )
                 } label={"Filter"}/>
-                <Button style={{height: 48, width: 48}} onClick={() => setQuery("")}>
+                <Button style={{height: 48, width: 48}} onClick={() =>
+                    setState({
+                            extendedClusters: getSortedClusters(clusters, ""),
+                            query: ""
+                        }
+                    )
+                }>
                     <Clear/>
                 </Button>
             </div>
