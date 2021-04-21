@@ -128,6 +128,10 @@ export function getQuestion(state: TaggingSession): Question {
     return state.questions[state.currentQuestion]
 }
 
+export function getDatasetId(state: TaggingSession): string {
+    return state.dataset.dataset_id
+}
+
 
 export default useTaggingSession
 
