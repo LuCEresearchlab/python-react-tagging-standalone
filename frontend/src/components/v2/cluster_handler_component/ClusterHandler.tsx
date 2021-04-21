@@ -143,14 +143,40 @@ function getItemStyle(isDragging: boolean, draggableStyle: any) {
     }
 }
 
+function popAnswer(clusters: Answer[][], result: Result, resultCluster: ResultCluster,
+                   taggingSession: TaggingSession,
+                   dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>): Answer[][] {
+    const cluster = clusters[result.cluster_idx]
+    const answer_idx = cluster.findIndex(
+        answer => stringEquals(answer.answer_id,
+            resultCluster.item.answer.answer_id)
+    )
+    const popped: Answer[] = cluster.slice(answer_idx, answer_idx + 1)
+
+    const reduced_cluster: Answer[] = cluster.slice(0, answer_idx).concat(cluster.slice(answer_idx + 1))
+    let new_clusters = [...clusters]
+    new_clusters[result.cluster_idx] = reduced_cluster
+    new_clusters.push(popped)
+    new_clusters = new_clusters.filter(cluster => cluster.length > 0) // remove empty clusters
+
+    dispatchTaggingClusterSession(setClusters(new_clusters))
+    postClusters(
+        getDatasetId(taggingSession),
+        getQuestion(taggingSession).question_id,
+        taggingSession.user_id,
+        new_clusters
+    )
+    return new_clusters
+}
+
 function handleClusterChange(
     taggingSession: TaggingSession,
     taggingClusterSession: TaggingClusterSession,
     dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>,
     clusters: Answer[][],
     extended_clusters: Result[],
-    result: DropResult) {
-    if (result.destination == undefined) return
+    result: DropResult): Answer[][] {
+    if (result.destination == undefined) return clusters
 
     const new_clusters: Answer[][] = [...clusters]
 
@@ -203,14 +229,18 @@ function handleClusterChange(
     }
     // update target cluster
     new_clusters[target_cluster].splice(target_idx, 0, answer)
+    const clean_new_clusters = new_clusters.filter(cluster => cluster.length > 0)
 
-    dispatchTaggingClusterSession(setClusters(new_clusters))
+    dispatchTaggingClusterSession(
+        setClusters(clean_new_clusters) // remove empty clusters
+    )
     postClusters(
         getDatasetId(taggingSession),
         getQuestion(taggingSession).question_id,
         taggingSession.user_id,
-        new_clusters
+        clean_new_clusters
     )
+    return clean_new_clusters
 }
 
 function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingClusterSession, setCluster}: Input) {
@@ -251,13 +281,18 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
             </div>
 
             <DragDropContext onDragEnd={(result: DropResult) => {
-                handleClusterChange(
+                const new_clusters = handleClusterChange(
                     taggingSession,
                     taggingClusterSession,
                     dispatchTaggingClusterSession,
                     clusters,
                     extendedClusters,
                     result
+                )
+                setState({
+                        ...state,
+                        extendedClusters: getSortedClusters(new_clusters, state.query),
+                    }
                 )
             }}>
                 {
@@ -275,11 +310,13 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                         }}
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
-                                        onClick={() => {
-                                            setCluster(result.cluster_idx + 1)
-                                        }}
-                                        title={`Switch to cluster ${result.cluster_idx + 1}`}
                                     >
+                                        <Button
+                                            title={`Switch to cluster ${result.cluster_idx + 1}`}
+                                            onClick={() => setCluster(result.cluster_idx + 1)}
+                                        >
+                                            Select
+                                        </Button>
                                         {
                                             result.clusters.map((resultCluster: ResultCluster, idx: number) =>
                                                 <Draggable
@@ -317,9 +354,23 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                                                     </div>
                                                             }
                                                             <Button style={{height: 48, width: 48, justifySelf: 'end'}}
-                                                                    onClick={(e) => {
-                                                                        e.preventDefault()
-                                                                        console.log(e)
+                                                                    onClick={() => {
+                                                                        const new_clusters = popAnswer(
+                                                                            clusters,
+                                                                            result,
+                                                                            resultCluster,
+                                                                            taggingSession,
+                                                                            dispatchTaggingClusterSession
+                                                                        )
+                                                                        setState({
+                                                                                ...state,
+                                                                                extendedClusters:
+                                                                                    getSortedClusters(
+                                                                                        new_clusters,
+                                                                                        state.query
+                                                                                    ),
+                                                                            }
+                                                                        )
                                                                     }}>
                                                                 <Clear/>
                                                             </Button>
