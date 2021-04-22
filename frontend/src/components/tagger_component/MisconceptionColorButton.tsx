@@ -1,5 +1,5 @@
 import React from "react";
-import {FiberManualRecord, FiberManualRecordOutlined} from "@material-ui/icons";
+import {Brush, FiberManualRecord, FiberManualRecordOutlined} from "@material-ui/icons";
 import {Button} from "@material-ui/core";
 import stringEquals from "../../util/StringEquals";
 
@@ -20,6 +20,8 @@ function MisconceptionColorButton({color, enabled, current_color, setColor, stat
 
     if (staticColor && !enabled) return (<Button disabled={true}/>)
 
+    if (!enabled) return (<Button disabled={true}><FiberManualRecord style={{color: color}}/></Button>)
+
     return (
         <Button
             title={"Select Misconception for highlighting"}
@@ -29,8 +31,8 @@ function MisconceptionColorButton({color, enabled, current_color, setColor, stat
             disabled={disabled || !enabled}
         >
             {
-                stringEquals(color, current_color) || !enabled ?
-                    <FiberManualRecord style={{color: color}}/> :
+                stringEquals(color, current_color) ?
+                    <Brush style={{color: color}}/> :
                     <FiberManualRecordOutlined
                         style={{color: color}}
                     />
