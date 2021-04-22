@@ -1,7 +1,7 @@
 import React, {useEffect} from "react"
 import {Answer} from "../../../interfaces/Dataset";
 import {rangesCompressor} from "../../../util/RangeCompressor";
-import {HighlightRange} from "../../../interfaces/HighlightRange";
+import {HighlightRange, HighlightRangeColor} from "../../../interfaces/HighlightRange";
 import {Button, Paper} from "@material-ui/core";
 import {GREY} from "../../../util/Colors"
 
@@ -11,7 +11,7 @@ import Highlightable from "highlightable";
 import {TaggedAnswer} from "../../../interfaces/TaggedAnswer";
 import {useFetch} from "../../../helpers/LoaderHelper";
 import {
-    getCurrentCluster,
+    getCurrentCluster, getCurrentMisconception,
     getRanges, isUsingDefaultColor,
     TaggingClusterSession,
     TaggingClusterSessionDispatch
@@ -83,17 +83,21 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
         }
     }, [isLoading, data])
 
-    const ranges: HighlightRange[] = getRanges(taggingClusterSession, answer)
+    const ranges: HighlightRangeColor[] = getRanges(taggingClusterSession, answer)
 
     const onTextHighlighted = (e: any) => {
         if (isUsingDefaultColor(taggingClusterSession)) return
+        const misconception = getCurrentMisconception(taggingClusterSession)
+        if (misconception == null) return
 
-        const newRange = {
+        const newRange: HighlightRangeColor = {
             start: e.start,
             end: e.end,
-            text: answer.data,
+            misconception: misconception,
             color: taggingClusterSession.currentColor
         }
+
+
         const r = rangesCompressor(ranges, newRange)
 
         dispatchTaggingClusterSession(setRanges(answer, [...r]))
@@ -120,7 +124,9 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
                 enabled={true}
                 onTextHighlighted={onTextHighlighted}
                 text={answer.data}
-                highlightStyle={highlightStyle}
+                highlightStyle={(range: HighlightRange) =>
+                    highlightStyle(range, taggingClusterSession.availableMisconceptions)
+                }
                 style={{padding: 'inherit'}}
             />
             <Button style={{marginLeft: 'auto'}} onClick={clear} title={'Clear highlighting'}>

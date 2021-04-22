@@ -44,7 +44,10 @@ function DatasetSelection() {
     }
 
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} style={{
+            width: '98%',
+            margin: 'auto'
+        }}>
             <Table className={classes.table} aria-label="customized table">
                 <TableHead>
                     <TableRow>

@@ -28,7 +28,10 @@ function highlightRangesColorUpdating(misconceptions_available: MisconceptionEle
         if (tags[index] != null) removed_color = getColor(misconceptions_available, tags[index])
 
         return [...ranges]
-            .filter((elem: HighlightRange) => !stringEquals(elem.color, removed_color))
+            .filter((elem: HighlightRange) => !stringEquals(
+                highlightRangeToColor(elem, misconceptions_available),
+                removed_color)
+            )
     }
     return ranges
 }
@@ -72,10 +75,16 @@ function pickTextColorBasedOnBgColorAdvanced(backgroundColor: string): string {
     return (L > 0.179) ? '#000000' : '#FFFFFF'
 }
 
-function highlightStyle(range: HighlightRange) {
+function highlightRangeToColor(range: HighlightRange, availableMisconceptions: MisconceptionElement[]) {
+    const index: number = availableMisconceptions.findIndex(elem => stringEquals(elem.name, range.misconception))
+    return index == -1 ? NO_COLOR : availableMisconceptions[index].color
+}
+
+function highlightStyle(range: HighlightRange, availableMisconceptions: MisconceptionElement[]) {
+    const color: string = highlightRangeToColor(range, availableMisconceptions)
     return {
-        color: pickTextColorBasedOnBgColorAdvanced(range.color),
-        backgroundColor: range.color,
+        color: pickTextColorBasedOnBgColorAdvanced(color),
+        backgroundColor: color,
     }
 }
 
@@ -87,5 +96,6 @@ export {
     highlightRangesColorUpdating,
     filteredMisconceptions,
     getColor,
-    highlightStyle
+    highlightStyle,
+    highlightRangeToColor
 }
