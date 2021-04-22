@@ -315,6 +315,7 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                             variant={'outlined'}
                                             title={`Switch to cluster ${result.cluster_idx + 1}`}
                                             onClick={() => setCluster(result.cluster_idx + 1)}
+                                            style={{margin: '2em', marginTop: 0}}
                                         >
                                             Switch to
                                         </Button>
