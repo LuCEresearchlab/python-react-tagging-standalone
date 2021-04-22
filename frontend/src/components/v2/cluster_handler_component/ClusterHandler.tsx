@@ -256,7 +256,7 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
 
     return (
         <Container>
-            <div>
+            <div style={{marginLeft: '2em'}}>
                 <TextField id={'search_filter'} type={'text'} value={state.query} onChange={
                     (e) => {
                         e.preventDefault()
