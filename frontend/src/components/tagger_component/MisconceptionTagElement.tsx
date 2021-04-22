@@ -20,6 +20,7 @@ import stringEquals from "../../util/StringEquals";
 import TruthCircle from "./TruthCircle";
 import NoMisconception from "../../util/NoMisconception";
 import {FormatColorReset} from "@material-ui/icons";
+import {highlightStyle} from "../../helpers/Util";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
@@ -216,12 +217,7 @@ function MisconceptionTagElement(
                         post_answer(r, tags)
                     }}
                     text={answer.data}
-                    highlightStyle={(range: HighlightRange) => {
-                        return {
-                            backgroundColor: range.color + "C8",
-                        }
-                    }
-                    }
+                    highlightStyle={highlightStyle}
                 /></StyledTableCell>
             <StyledTableCell>{
                 enabled ?

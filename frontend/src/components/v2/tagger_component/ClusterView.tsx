@@ -20,6 +20,7 @@ import KeyIndication from "./KeyIndication";
 import {clusterSessionPost, setRanges, setTagsAndRanges} from "../../../model/TaggingClusterSessionDispatch";
 import TruthCircle from "../../tagger_component/TruthCircle";
 import {FormatColorReset} from "@material-ui/icons";
+import {highlightStyle} from "../../../helpers/Util";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
@@ -97,12 +98,6 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
 
         dispatchTaggingClusterSession(setRanges(answer, [...r]))
         dispatchTaggingClusterSession(clusterSessionPost())
-    }
-
-    const highlightStyle = (range: HighlightRange) => {
-        return {
-            backgroundColor: range.color + "C8",
-        }
     }
 
     const clear = () => {

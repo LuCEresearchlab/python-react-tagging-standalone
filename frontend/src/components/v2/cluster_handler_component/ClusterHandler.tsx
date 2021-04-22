@@ -256,7 +256,7 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
 
     return (
         <Container>
-            <div>
+            <div style={{marginLeft: '2em'}}>
                 <TextField id={'search_filter'} type={'text'} value={state.query} onChange={
                     (e) => {
                         e.preventDefault()
@@ -266,7 +266,7 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                             }
                         )
                     }
-                } label={"Filter"}/>
+                } label={"Search"}/>
                 <Button style={{height: 48, width: 48}} onClick={(e) => {
                     e.preventDefault()
                     setState({
