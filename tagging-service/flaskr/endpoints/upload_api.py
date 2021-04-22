@@ -54,6 +54,7 @@ class Upload(Resource):
         if uploaded_file.filename == '':
             return "no file received"
         full_path = os.path.join(current_app.config['UPLOAD_FOLDER'], uploaded_file.filename)
+        # TODO: compute clustering before saving, add checks or loader to prevent issues
         uploaded_file.save(full_path)
         cache.delete('datasets-cache')
         cache.delete('datasets-cache-list')

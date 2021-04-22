@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import {JSONLoader} from "../../helpers/LoaderHelper";
 import {Button} from "@material-ui/core";
-import {HighlightRange} from "../../interfaces/HighlightRange";
+import {HighlightRange, HighlightRangeColor} from "../../interfaces/HighlightRange";
 import {StyledTableCell, StyledTableRow} from "../styled/StyledTable";
 import {TaggedAnswer} from "../../interfaces/TaggedAnswer";
 import {Answer} from "../../interfaces/Dataset";
@@ -20,7 +20,7 @@ import stringEquals from "../../util/StringEquals";
 import TruthCircle from "./TruthCircle";
 import NoMisconception from "../../util/NoMisconception";
 import {FormatColorReset} from "@material-ui/icons";
-import {highlightStyle} from "../../helpers/Util";
+import {highlightRangeToColor, highlightStyle} from "../../helpers/Util";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
@@ -90,15 +90,16 @@ function MisconceptionTagElement(
     const post_answer_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer'
 
     const [tags, setTags] = useState<(string | null)[]>([])
-    const [ranges, setRanges] = useState<HighlightRange[]>([])
+    const [ranges, setRanges] = useState<HighlightRangeColor[]>([])
 
     const [currentColor, setCurrentColor] = useState<string>(NO_COLOR)
+    const [currentMisconception, setCurrentMisconception] = useState<null | string>("")
+
     const [startTaggingTime, setStartTaggingTime] = useState<number>(0)
 
     const [loaded, setLoaded] = useState<boolean>(false)
 
     const misconceptions_string_list: string[] = misconceptions_available.map<string>(misc => misc.name)
-
 
 
     if (!loaded) {
@@ -114,7 +115,10 @@ function MisconceptionTagElement(
 
 
                 setTags(previous_tags)
-                setRanges(previousTaggedAnswer.highlighted_ranges == null ? [] : previousTaggedAnswer.highlighted_ranges)
+                setRanges(previousTaggedAnswer.highlighted_ranges == null ? [] :
+                    previousTaggedAnswer.highlighted_ranges.map(range => {
+                        return {...range, color: highlightRangeToColor(range, misconceptions_available)}
+                    }))
             }
             else {  // has never been tagged
                 setTags([null])
@@ -175,7 +179,10 @@ function MisconceptionTagElement(
             if (tags[index] != null) removed_color = get_color(tags[index])
 
             return [...ranges]
-                .filter((elem: HighlightRange) => !stringEquals(elem.color, removed_color))
+                .filter((elem: HighlightRange) => !stringEquals(
+                    highlightRangeToColor(elem, misconceptions_available),
+                    removed_color)
+                )
         }
         return ranges
     }
@@ -209,15 +216,19 @@ function MisconceptionTagElement(
                     enabled={enabled}
                     onTextHighlighted={(e: any) => {
                         if (using_default_color()) return
+                        if (currentMisconception == null) return
 
-                        const newRange = {start: e.start, end: e.end, text: answer.data, color: currentColor}
+                        const newRange: HighlightRangeColor = {
+                            start: e.start, end: e.end, color: currentColor,
+                            misconception: currentMisconception
+                        }
                         const r = rangesCompressor(ranges, newRange)
 
                         setRanges([...r])
                         post_answer(r, tags)
                     }}
                     text={answer.data}
-                    highlightStyle={highlightStyle}
+                    highlightStyle={(range: HighlightRange) => highlightStyle(range, misconceptions_available)}
                 /></StyledTableCell>
             <StyledTableCell>{
                 enabled ?
@@ -241,7 +252,10 @@ function MisconceptionTagElement(
                                     color={get_color(tags[0])}
                                     enabled={enabled}
                                     current_color={currentColor}
-                                    setColor={setCurrentColor}
+                                    setColor={(color: string) => {
+                                        setCurrentColor(color)
+                                        setCurrentMisconception(tags[0])
+                                    }}
                                     staticColor={false}
                                 />
                                 <SingleTagSelector
@@ -282,7 +296,10 @@ function MisconceptionTagElement(
                                                     color={(() => get_color(tags[handled_element]))()}
                                                     enabled={enabled}
                                                     current_color={currentColor}
-                                                    setColor={setCurrentColor}
+                                                    setColor={(color: string) => {
+                                                        setCurrentColor(color)
+                                                        setCurrentMisconception(tags[handled_element])
+                                                    }}
                                                     staticColor={false}
                                                 />
                                                 <SingleTagSelector

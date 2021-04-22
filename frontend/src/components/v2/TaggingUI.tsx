@@ -15,7 +15,7 @@ import {
     TaggingClusterSession, TaggingClusterSessionDispatch,
 } from "../../model/TaggingClusterSession";
 import {TaggingSession, TaggingSessionDispatch} from "../../model/TaggingSession";
-import {setClusters, setCurrentCluster} from "../../model/TaggingClusterSessionDispatch";
+import {setAvailableMisconceptions, setClusters, setCurrentCluster} from "../../model/TaggingClusterSessionDispatch";
 import ClusterHandler from "./cluster_handler_component/ClusterHandler";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
@@ -87,6 +87,9 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
 
     const {data, isLoading} = useFetch<MisconceptionElement[]>(get_available_url)
 
+    useEffect(() => {
+        if (!isLoading) dispatchTaggingClusterSession(setAvailableMisconceptions(data))
+    }, [isLoading, data])
 
     if (isLoading || isLoadingClusters) return (<>Loading...</>)
 

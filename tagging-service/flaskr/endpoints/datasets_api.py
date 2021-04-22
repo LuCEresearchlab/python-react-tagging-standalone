@@ -12,8 +12,8 @@ RANGE = api.model('Range', {
                             example='0'),
     'end': fields.Integer(required=True, readonly=True, description='end of the range',
                           example='10'),
-    'color': fields.String(required=True, readonly=True, description='HEX representing a color',
-                           example='#00FF00'),
+    'misconception': fields.String(required=True, readonly=True, description='Misconception associated with the range',
+                                   example='NoMisconception'),
 })
 
 

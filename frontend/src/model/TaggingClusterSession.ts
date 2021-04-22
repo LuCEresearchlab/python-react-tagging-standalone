@@ -1,5 +1,5 @@
-import {getMillis, isNoMisconception, NO_COLOR} from "../helpers/Util";
-import {HighlightRange} from "../interfaces/HighlightRange";
+import {getMillis, highlightRangeToColor, isNoMisconception, NO_COLOR} from "../helpers/Util";
+import {HighlightRange, HighlightRangeColor} from "../interfaces/HighlightRange";
 import {Answer} from "../interfaces/Dataset";
 import {postHelper, postClusters} from "../helpers/PostHelper";
 import {isUsingDefaultColor as isUsingDefaultColorUtil} from "../helpers/Util";
@@ -7,13 +7,13 @@ import stringEquals from "../util/StringEquals";
 import {arrayFilteredNotNullEquals, arrayEquals} from "../util/ArrayEquals";
 import NoMisconception from "../util/NoMisconception";
 import {Dispatch, ReducerAction, ReducerState, useReducer} from "react";
+import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 
 const MAX_HISTORY_SIZE: number = 4
 export const PRE_DYNAMIC_SIZE: number = MAX_HISTORY_SIZE
 const MIN_LENGTH: number = 1 + PRE_DYNAMIC_SIZE + 1
 
 export enum TaggingClusterSessionActions {
-    INIT,
     SET_CURRENT_COLOR,
     SET_CURRENT_CLUSTER,
     SET_CLUSTERS,
@@ -23,7 +23,9 @@ export enum TaggingClusterSessionActions {
     SET_TAGS_AND_RANGES,
     NEXT_CLUSTER,
     POP_ANSWER,
-    POST
+    POST,
+    INIT,
+    SET_AVAILABLE_MISCONCEPTIONS
 }
 
 export interface TaggingClusterSessionDispatch {
@@ -91,7 +93,8 @@ export interface TaggingClusterSession {
     tags: (string | null)[],
     rangesList: HighlightRange[][],
     startTaggingTime: number,
-    history: string[]
+    history: string[],
+    availableMisconceptions: MisconceptionElement[]
 }
 
 
@@ -113,9 +116,10 @@ function init(state: TaggingClusterSession,
         clusters: [],
         currentCluster: 0,
         tags: [...initEmptyTagsList(), null],
-        rangesList: [],
+        rangesList: [...Array(PRE_DYNAMIC_SIZE + 1)].map(() => []),
         startTaggingTime: getMillis(),
-        history: payload.history
+        history: payload.history,
+        availableMisconceptions: []
     }
 }
 
@@ -198,10 +202,11 @@ function setTagsAndRanges(state: TaggingClusterSession,
     }
 }
 
-function setClusters(state: TaggingClusterSession, clusters: Answer[][]): TaggingClusterSession {
+function setClusters(state: TaggingClusterSession, new_clusters: Answer[][]): TaggingClusterSession {
     return {
         ...state,
-        clusters: clusters,
+        clusters: new_clusters,
+        rangesList: [...Array(new_clusters[state.currentCluster].length)].map(() => []),
         startTaggingTime: getMillis(),
     }
 }
@@ -214,7 +219,7 @@ function nextCluster(state: TaggingClusterSession) {
             currentCluster: next_cluster_idx,
             currentColor: NO_COLOR,
             tags: [...initEmptyTagsList(), null],
-            rangesList: [],
+            rangesList: [...Array(state.clusters[next_cluster_idx].length)].map(() => []),
             startTaggingTime: getMillis(),
         }
     } else return state
@@ -229,11 +234,18 @@ function setCurrentCluster(state: TaggingClusterSession, idx: number) {
             currentCluster: idx,
             currentColor: NO_COLOR,
             tags: [...initEmptyTagsList(), null],
-            rangesList: [],
+            rangesList: [...Array(state.clusters[idx].length)].map(() => []),
             startTaggingTime: getMillis(),
         }
     }
     return state
+}
+
+function setAvailableMisconceptions(state: TaggingClusterSession, misconceptions: MisconceptionElement[]) {
+    return {
+        ...state,
+        availableMisconceptions: misconceptions
+    }
 }
 
 function post(state: TaggingClusterSession): TaggingClusterSession {
@@ -245,7 +257,13 @@ function post(state: TaggingClusterSession): TaggingClusterSession {
             state.user_id,
             answer.data,
             getMillis() - state.startTaggingTime,
-            state.rangesList[index],
+            state.rangesList[index].map(value => {
+                return {
+                    start: value.start,
+                    end: value.end,
+                    misconception: value.misconception
+                }
+            }), // discard extra data
             state.tags)
     })
     return state
@@ -294,6 +312,8 @@ function reducer(state: TaggingClusterSession, action: TaggingClusterSessionDisp
             return nextCluster(state)
         case TaggingClusterSessionActions.POP_ANSWER:
             return pop_answer(state, action.payload)
+        case TaggingClusterSessionActions.SET_AVAILABLE_MISCONCEPTIONS:
+            return setAvailableMisconceptions(state, action.payload)
         case TaggingClusterSessionActions.INIT:
             return init(state, action.payload)
         default:
@@ -324,11 +344,16 @@ function useTaggingClusterSession(): [
     return [state, dispatch]
 }
 
-export function getRanges(state: TaggingClusterSession, answer: Answer): HighlightRange[] {
+export function getRanges(state: TaggingClusterSession, answer: Answer): HighlightRangeColor[] {
     if (arrayEquals(getCurrentCluster(state), [])) return []
     const idx = getCurrentCluster(state).findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
-    if (state.rangesList.length === 0) return []
-    return state.rangesList[idx]
+    if (state.rangesList.length === 0 || state.availableMisconceptions.length == 0) return []
+    return state.rangesList[idx].map(elem => {
+        return {
+            ...elem,
+            color: highlightRangeToColor(elem, state.availableMisconceptions)
+        }
+    })
 }
 
 export function getHistory(state: TaggingClusterSession): string[] {
@@ -343,6 +368,14 @@ export function isUsingDefaultColor(state: TaggingClusterSession): boolean {
 export function getCurrentCluster(state: TaggingClusterSession): Answer[] {
     if (state.clusters.length === 0) return []
     return state.clusters[state.currentCluster]
+}
+
+export function getCurrentMisconception(state: TaggingClusterSession): (string | null) {
+    return isUsingDefaultColor(state) || state.clusters.length == 0 ?
+        null :
+        state.availableMisconceptions[
+            state.availableMisconceptions.findIndex(misc => stringEquals(misc.color, state.currentColor))
+            ].name
 }
 
 export default useTaggingClusterSession

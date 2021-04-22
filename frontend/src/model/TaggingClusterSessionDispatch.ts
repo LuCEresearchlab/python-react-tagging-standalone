@@ -1,12 +1,15 @@
 import {TaggingClusterSessionActions} from "./TaggingClusterSession";
 import {HighlightRange} from "../interfaces/HighlightRange";
 import {Answer} from "../interfaces/Dataset";
+import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 
 function basic(type: TaggingClusterSessionActions, payload: any) {
     return {type: type, payload: payload}
 }
 
 
+const setAvailableMisconceptions = (misconceptions: MisconceptionElement[]) =>
+    basic(TaggingClusterSessionActions.SET_AVAILABLE_MISCONCEPTIONS, misconceptions)
 const setCurrentColor = (color: string) => basic(TaggingClusterSessionActions.SET_CURRENT_COLOR, color)
 const setTags = (tags: (string | null)[]) => basic(TaggingClusterSessionActions.SET_TAGS, tags)
 const setRangesList = (rangesList: HighlightRange[][]) =>
@@ -35,6 +38,7 @@ const popAnswer = (idx: number) => basic(TaggingClusterSessionActions.POP_ANSWER
 
 
 export {
+    setAvailableMisconceptions,
     setCurrentColor,
     setCurrentCluster,
     setClusters,

@@ -1,8 +1,8 @@
-import {HighlightRange} from "../interfaces/HighlightRange";
+import {HighlightRange, HighlightRangeColor} from "../interfaces/HighlightRange";
 
 
 // https://stackoverflow.com/questions/22784883/check-if-more-than-two-date-ranges-overlap
-function is_range_overlap(range1: HighlightRange, range2: HighlightRange): boolean {
+function is_range_overlap(range1: HighlightRangeColor, range2: HighlightRangeColor): boolean {
     if (range1.color != range2.color) return false // different misconceptions
     if (range1.start <= range2.start && range2.start <= range1.end) return true // b starts in a
     if (range1.start <= range2.end && range2.end <= range1.end) return true // b ends in a
@@ -10,10 +10,11 @@ function is_range_overlap(range1: HighlightRange, range2: HighlightRange): boole
     return false
 }
 
-function merge_ranges(range1: HighlightRange, range2: HighlightRange): HighlightRange {
+function merge_ranges(range1: HighlightRangeColor, range2: HighlightRangeColor): HighlightRangeColor {
     return {
         start: Math.min(range1.start, range2.start),
         end: Math.max(range1.end, range2.end),
+        misconception: range1.misconception,
         color: range1.color
     }
 }
@@ -23,14 +24,14 @@ function comparator(r1: HighlightRange, r2: HighlightRange): number {
 }
 
 // put same misconceptions close to each other
-function compare_colors(r1: HighlightRange, r2: HighlightRange): number {
+function compare_colors(r1: HighlightRangeColor, r2: HighlightRangeColor): number {
     return r1.color.localeCompare(r2.color)
 }
 
-export function rangesCompressor(ranges: HighlightRange[], newRange: HighlightRange): HighlightRange[] {
-    const sorted_ranges: HighlightRange[] = [...ranges, newRange].sort(compare_colors).sort(comparator)
+export function rangesCompressor(ranges: HighlightRangeColor[], newRange: HighlightRangeColor): HighlightRangeColor[] {
+    const sorted_ranges: HighlightRangeColor[] = [...ranges, newRange].sort(compare_colors).sort(comparator)
 
-    return sorted_ranges.reduce(((previousValue: HighlightRange[], currentValue: HighlightRange) => {
+    return sorted_ranges.reduce(((previousValue: HighlightRangeColor[], currentValue: HighlightRangeColor) => {
         if (previousValue.length == 0) return [currentValue]
         let values = previousValue.slice(0, -1)
         let last_elem = previousValue[previousValue.length - 1]
