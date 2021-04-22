@@ -266,7 +266,7 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                             }
                         )
                     }
-                } label={"Filter"}/>
+                } label={"Search"}/>
                 <Button style={{height: 48, width: 48}} onClick={(e) => {
                     e.preventDefault()
                     setState({
