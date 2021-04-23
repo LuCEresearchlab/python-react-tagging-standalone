@@ -71,7 +71,7 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
     }
 
     const clusterFetch = useFetch<any>(
-        `${TAGGING_SERVICE_URL}/datasets/clusters/dataset/${taggingClusterSession.dataset_id
+        `${TAGGING_SERVICE_URL}/clusters/dataset/${taggingClusterSession.dataset_id
         }/question/${taggingClusterSession.question_id
         }/user/${taggingClusterSession.user_id}`)
 
