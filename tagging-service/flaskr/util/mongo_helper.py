@@ -58,7 +58,8 @@ def post_tagged_answer(tagged_answer):
     db.tagged_data.update_one(query, update, upsert=True)
 
 
-def save_cluster(dataset_id, question_id, user_id, cluster):
+def save_cluster(connection, dataset_id, question_id, user_id, cluster):
+    local_db = connection['tagging_db']
     query = {
         'dataset_id': dataset_id,
         'question_id': question_id,
@@ -70,14 +71,24 @@ def save_cluster(dataset_id, question_id, user_id, cluster):
                 'clusters': cluster
             }
     }
-    db.cluster_data.update_one(query, update, upsert=True)
+    local_db.cluster_data.update_one(query, update, upsert=True)
+
+    connection['dataset_db'].dataset.update_one(
+        {'dataset_id': dataset_id},
+        {'$inc': {'clusters_computed': 1}},
+        upsert=True
+    )
 
 
-def get_cluster(dataset_id, question_id, user_id):
-    clusters = list(db.cluster_data.find({'dataset_id': dataset_id, 'question_id': question_id, 'user_id': user_id},
-                                         {'_id': False}))
+def get_cluster(connection, dataset_id, question_id, user_id):
+    clusters = list(connection['tagging_db'].cluster_data.find(
+        {'dataset_id': dataset_id, 'question_id': question_id, 'user_id': user_id},
+        {'_id': False}
+    ))
 
     if len(clusters) == 0:
-        return list(db.cluster_data.find({'dataset_id': dataset_id, 'question_id': question_id, 'user_id': ''},
-                                         {'_id': False}))
+        return list(connection['tagging_db'].cluster_data.find(
+            {'dataset_id': dataset_id, 'question_id': question_id, 'user_id': ''},
+            {'_id': False}
+        ))
     return clusters

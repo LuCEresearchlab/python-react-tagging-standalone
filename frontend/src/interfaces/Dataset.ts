@@ -1,8 +1,16 @@
 export interface Dataset {
-    name: string,
+    "name": string,
     "creation_data": Date,
     "dataset_id": string,
     "questions": [Question]
+}
+
+export interface DatasetDesc {
+    "name": string,
+    "creation_data": Date,
+    "dataset_id": string,
+    "nr_questions": number,
+    "clusters_computed": number
 }
 
 export interface Question {

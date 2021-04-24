@@ -22,12 +22,14 @@ services:
     environment:
       - FLASK_APP=${FLASK_APP}
       - FLASK_ENV=${FLASK_ENV}
+      - NR_WORKERS=${NR_WORKERS}
+      - NR_THREADS=${NR_THREADS}
     depends_on:
       - tagging-database
 
 
   tagging-database:
-    image: 'mongo:4.4.3'
+    image: 'mongo:4.2.13-bionic'
     ports:
     - "27017:27017"
     volumes:
