@@ -59,7 +59,6 @@ def post_tagged_answer(tagged_answer):
 
 
 def save_cluster(connection, dataset_id, question_id, user_id, cluster):
-    local_db = connection['tagging_db']
     query = {
         'dataset_id': dataset_id,
         'question_id': question_id,
@@ -71,7 +70,7 @@ def save_cluster(connection, dataset_id, question_id, user_id, cluster):
                 'clusters': cluster
             }
     }
-    local_db.cluster_data.update_one(query, update, upsert=True)
+    connection['tagging_db'].cluster_data.update_one(query, update, upsert=True)
 
     connection['dataset_db'].dataset.update_one(
         {'dataset_id': dataset_id},

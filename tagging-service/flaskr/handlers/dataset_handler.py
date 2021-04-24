@@ -10,15 +10,9 @@ from flaskr.util.mongo_helper import save_cluster
 logger = logging.getLogger(__name__)
 
 
-def _get_connection():
-    return MongoClient("mongodb://tagging-database:27017/?appname=tagging_service&ssl=false")
+client = MongoClient("mongodb://tagging-database:27017/?appname=tagging_service&ssl=false")
 
-
-def _get_db():
-    return _get_connection()['dataset_db']
-
-
-file_db = _get_db()
+file_db = client['dataset_db']
 
 
 def _db_add_dataset(db, dataset, computed_clusters):
@@ -54,15 +48,15 @@ def _db_add_questions(db, dataset_id, question_id, question):
     db.questions.update_one(query, update, upsert=True)
 
 
-def add_dataset(dataset):
-    db = _get_db()
+def add_dataset(input_client, dataset):
+    db = input_client['dataset_db']
 
     logger.debug('setting dataset as loading')
     _db_add_dataset(db=db, dataset=dataset, computed_clusters=0)
     logger.debug('dataset now loading')
 
-    def thread_func(_dataset_id, _question_id, _answers):
-        connection = _get_connection()
+    def thread_func(_dataset_id, _question_id, _answers, my_client):
+        connection = my_client
         logger.debug('clustering ' + _question_id)
         c = cluster(_answers)  # force computation
         save_cluster(connection=connection,
@@ -78,7 +72,7 @@ def add_dataset(dataset):
         question_id = question['question_id']
         answers = question['answers']
 
-        thread = Thread(target=thread_func, args=(dataset_id, question_id, answers,))
+        thread = Thread(target=thread_func, args=(dataset_id, question_id, answers, client,))
         thread.start()
         threads.append(thread)
 

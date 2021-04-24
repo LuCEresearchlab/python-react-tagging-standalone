@@ -4,7 +4,7 @@ from flask import request
 from flask_restx import Namespace, Resource, fields
 from flaskr import cache
 
-from flaskr.handlers.dataset_handler import get_dataset_list, add_dataset, get_dataset
+from flaskr.handlers.dataset_handler import get_dataset_list, add_dataset, get_dataset, client as dataset_handler_client
 
 api = Namespace('datasets', description='Upload API to load files')
 
@@ -56,14 +56,14 @@ class Upload(Resource):
         if uploaded_file.filename == '':
             return "no file received"
 
-        def thread_function(dataset):
+        def thread_function(dataset, my_client):
             logger.debug('adding dataset in thread')
-            add_dataset(dataset=dataset)
+            add_dataset(dataset=dataset, input_client=my_client)
             logger.debug('added dataset')
 
         json_dataset = json.loads(uploaded_file.read())
 
-        threading.Thread(target=thread_function, args=(json_dataset,)).start()
+        threading.Thread(target=thread_function, args=(json_dataset, dataset_handler_client,)).start()
 
         #
         # cache.delete('datasets-cache')
