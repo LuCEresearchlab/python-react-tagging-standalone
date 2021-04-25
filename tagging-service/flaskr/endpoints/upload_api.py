@@ -66,6 +66,10 @@ class Upload(Resource):
 
         json_dataset = json.loads(uploaded_file.read())
 
+        dataset_from_db = get_dataset(dataset_id=json_dataset['dataset_id'])
+        if dataset_from_db is not None and dataset_from_db['clusters_computed'] != len(dataset_from_db['questions']):
+            return f'rejected file: {uploaded_file.name}, dataset still uploading'
+
         Thread(target=thread_function, args=(json_dataset,)).start()
 
         return f'uploaded file: {uploaded_file.name} successfully'
