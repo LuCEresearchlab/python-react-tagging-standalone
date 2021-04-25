@@ -13,7 +13,7 @@ const useStyles = makeStyles({
 });
 
 const navLinks = [
-    {title: `Home`, path: `/`},
+    {title: `Logout`, path: `/logout`},
     {title: `Upload File`, path: `/file_uploader`},
     {title: `Tagging UI`, path: `/taggingUI/selector`},
 ]

@@ -35,10 +35,16 @@ In case there are issues due to dependencies try to rebuild the containers (will
 docker-compose up --build  # rebuild
 ```
 
-Note: by default `SIMILARITY_CLUSTERING_STATE=True`, this means that true clustering will be used, this means that the
-first time the dataset will be loaded clusters will be computed, this is time-consuming. To turn real clustering off
-set `SIMILARITY_CLUSTERING_STATE=False` inside `.env` (clusters are stored in the database so deleting clusters
-associated with user ```""``` might be required).
+Note: The clustering might take a while, the clusters tend to finish close to each other don't panic if you see no
+progress for several minutes.
+
+Optimizations: It's possible to change the resources allocated to the python-service from `.env `, this will impact
+clustering performance, to change the resources modify the environment variables:
+
+```
+NR_WORKERS=2 
+NR_THREADS=5
+```
 
 ## Convert data from LUMI to required data format
 

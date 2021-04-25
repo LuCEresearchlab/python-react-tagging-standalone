@@ -11,3 +11,4 @@ semantic-text-similarity~=1.0.3
 pytest~=6.2.2
 nltk~=3.6.1
 gunicorn~=20.1.0
+Flask-HTTPAuth~=4.2.0
