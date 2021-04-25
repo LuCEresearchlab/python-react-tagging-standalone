@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 DATASET_DESC = api.model('Dataset Description', {
     'dataset_id': fields.String(required=True, readonly=True, description='ID of the dataset'),
     'name': fields.String(required=True, readonly=True, description='The name of the dataset'),
-    'creation_data': fields.Date(required=True, readonly=True, description='The Date of the dataset creation'),
+    'creation_data': fields.DateTime(required=True, readonly=True, description='The Date of the dataset creation'),
     'clusters_computed': fields.Integer(required=True, readonly=True, description='Number of computed clusters'),
     'nr_questions': fields.Integer(required=True, readonly=True, description='Number of questions in dataset')
 })
@@ -35,7 +35,7 @@ QUESTION = api.model('Question', {
 
 DATASET = api.model('Dataset', {
     "name": fields.String(required=True, readonly=True, description='Name of dataset'),
-    "creation_data": fields.Date(required=True, readonly=True, description='The Date of the Dataset creation'),
+    "creation_data": fields.DateTime(required=True, readonly=True, description='The Date of the Dataset creation'),
     "dataset_id": fields.String(required=True, readonly=True, description='ID of the Dataset'),
     "questions": fields.List(fields.Nested(QUESTION))
 })

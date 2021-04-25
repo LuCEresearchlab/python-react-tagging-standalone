@@ -59,16 +59,20 @@ function DatasetSelection() {
                 <TableBody>
                     {datasets.map((dataset: DatasetDesc) => {
                         const loading_cluster = dataset.clusters_computed != dataset.nr_questions
-                        // const needed_time_s = 1000 * 60 * 2 * dataset.nr_questions
-                        // const started = new Date(dataset.creation_data)
-                        // const now = new Date()
-                        //
-                        // const time_left = needed_time_s - (now.getTime() - started.getTime()) - now.getTimezoneOffset() * 1000 * 60
-                        //
-                        // const time_left_minutes = Math.floor(time_left / (60 * 1000))
-                        // const seconds = Math.floor((time_left - time_left_minutes * (60 * 1000)) / (1000))
-                        //
-                        // const time_left_seconds = seconds < 10 ? '0' + seconds : seconds
+                        const needed_time_s = 1000 * 60 * 2 * dataset.nr_questions
+                        const started = new Date(dataset.creation_data)
+                        const now = new Date()
+
+                        const time_left = needed_time_s - (now.getTime() - started.getTime())
+
+                        const time_left_minutes = Math.max(Math.floor(time_left / (60 * 1000)), 0)
+                        const seconds = Math.floor((time_left - time_left_minutes * (60 * 1000)) / (1000))
+
+                        const time_left_seconds = seconds < 10 ? '0' + seconds : seconds
+
+                        const displayed_time = time_left_minutes < 1 ?
+                            '<1m' :
+                            `~${time_left_minutes}:${time_left_seconds}`
 
                         if (dataset.clusters_computed != dataset.nr_questions) {
                             return (
@@ -83,7 +87,8 @@ function DatasetSelection() {
                                         />
                                     </StyledTableCell>
                                     <StyledTableCell component={'th'} scope={'row'} style={{textAlign: 'end'}}>
-                                        {`${dataset.clusters_computed}/${dataset.nr_questions}`}
+                                        {`${dataset.clusters_computed}/${dataset.nr_questions} Time Left: ${
+                                            displayed_time}`}
                                     </StyledTableCell>
                                 </StyledTableRow>
                             )
