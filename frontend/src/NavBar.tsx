@@ -1,5 +1,5 @@
 import React from 'react';
-import {makeStyles, Container, AppBar, Toolbar, List, ListItem, ListItemText, Box} from "@material-ui/core";
+import {makeStyles, Link, Container, AppBar, Toolbar, List, ListItem, ListItemText, Box} from "@material-ui/core";
 
 const useStyles = makeStyles({
     navDisplayFlex: {
@@ -30,11 +30,11 @@ function NavBar() {
                             aria-labelledby="main navigation"
                             className={classes.navDisplayFlex}>
                             {navLinks.map(({title, path}) => (
-                                <a href={path} key={title} className={classes.linkText}>
+                                <Link href={path} key={title} className={classes.linkText}>
                                     <ListItem button>
                                         <ListItemText primary={title}/>
                                     </ListItem>
-                                </a>
+                                </Link>
                             ))}
                         </List>
                     </Container>
