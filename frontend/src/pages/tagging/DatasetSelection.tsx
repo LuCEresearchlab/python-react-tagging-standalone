@@ -59,7 +59,7 @@ function DatasetSelection() {
                 <TableBody>
                     {datasets.map((dataset: DatasetDesc) => {
                         const loading_cluster = dataset.clusters_computed != dataset.nr_questions
-                        const needed_time_s = 1000 * 60 * 2 * dataset.nr_questions
+                        const needed_time_s = 1000 * 90 * dataset.nr_questions
                         const started = new Date(dataset.creation_data)
                         const now = new Date()
 

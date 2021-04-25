@@ -35,8 +35,15 @@ In case there are issues due to dependencies try to rebuild the containers (will
 docker-compose up --build  # rebuild
 ```
 
-Note: The clustering might take a while, the clusters tend to finish close to each other don't panic if you see no
-progress for several minutes.
+Notes:
+
+- The clustering might take a while, the clusters tend to finish close to each other don't panic if you see no progress
+  for several minutes.
+- If the tagging-service is interrupted before completing the clustering it'll be necessary to manually log into the
+  database and delete the object under `dataset_db/dataset` with `dataset_id` equal to the one that was interrupted.
+  
+  If the entry is not deleted it'll be impossible to complete the clustering for it and the dataset will always result
+  as loading.
 
 Optimizations: It's possible to change the resources allocated to the python-service from `.env `, this will impact
 clustering performance, to change the resources modify the environment variables:
