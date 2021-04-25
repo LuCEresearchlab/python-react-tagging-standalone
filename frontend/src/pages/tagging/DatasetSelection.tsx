@@ -36,7 +36,7 @@ function DatasetSelection() {
     }
 
     useEffect(() => {
-        const interval = setInterval(() => setLoaded(false), 5000);
+        const interval = setInterval(() => setLoaded(false), 10000);
         return () => {
             clearInterval(interval);
         };
