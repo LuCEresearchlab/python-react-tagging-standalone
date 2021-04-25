@@ -1,20 +1,24 @@
-import os
+import json
 import logging
-from flask import request, current_app
+from threading import Thread
+from flask import request
 from flask_restx import Namespace, Resource, fields
 from flaskr import cache
 
-import flaskr.util.mongo_helper as db
-from flaskr.util.answers_loader import load_dataset_name_list, load_dataset, populate_retrieving_maps
+from flaskr.handlers.dataset_handler import get_dataset_list, add_dataset, get_dataset
+from flaskr.util.answers_loader import populate_retrieving_maps
+from flaskr.util.mongo_helper import get_tagged_dataset, get_tagged_dataset_with_tag
 
 api = Namespace('datasets', description='Upload API to load files')
 
 logger = logging.getLogger(__name__)
 
 DATASET_DESC = api.model('Dataset Description', {
-    'id': fields.String(required=True, readonly=True, description='ID of the dataset'),
+    'dataset_id': fields.String(required=True, readonly=True, description='ID of the dataset'),
     'name': fields.String(required=True, readonly=True, description='The name of the dataset'),
-    'date': fields.Date(required=True, readonly=True, description='The Date of the dataset creation')
+    'creation_data': fields.Date(required=True, readonly=True, description='The Date of the dataset creation'),
+    'clusters_computed': fields.Integer(required=True, readonly=True, description='Number of computed clusters'),
+    'nr_questions': fields.Integer(required=True, readonly=True, description='Number of questions in dataset')
 })
 
 ANSWER = api.model('Answer', {
@@ -40,9 +44,10 @@ DATASET = api.model('Dataset', {
 @api.route('/list')
 @api.doc(description='list all available datasets')
 class DatasetsAPI(Resource):
+    @cache.cached(key_prefix='dataset-list', timeout=10)
     @api.marshal_list_with(DATASET_DESC)
     def get(self):
-        return load_dataset_name_list()
+        return get_dataset_list()
 
 
 @api.route('/upload')
@@ -53,34 +58,38 @@ class Upload(Resource):
         uploaded_file = request.files['file']
         if uploaded_file.filename == '':
             return "no file received"
-        full_path = os.path.join(current_app.config['UPLOAD_FOLDER'], uploaded_file.filename)
-        # TODO: compute clustering before saving, add checks or loader to prevent issues
-        uploaded_file.save(full_path)
-        cache.delete('datasets-cache')
-        cache.delete('datasets-cache-list')
-        cache.delete('dataset-id-map')
-        logger.debug('Deleted datasets cache')
+
+        def thread_function(dataset):
+            logger.debug('adding dataset in thread')
+            add_dataset(dataset=dataset, mem_to_clean=[TaggedAnswersDownloadAPI.get, UploadedDataset.get])
+            logger.debug('added dataset')
+
+        json_dataset = json.loads(uploaded_file.read())
+
+        Thread(target=thread_function, args=(json_dataset,)).start()
+
         return f'uploaded file: {uploaded_file.name} successfully'
 
 
 @api.route('/get-dataset/dataset/<string:dataset_id>')
 @api.doc(description='get content of uploaded file')
 class UploadedDataset(Resource):
+    @cache.memoize()
     @api.doc(description='Get content of specific dataset')
     @api.marshal_with(DATASET)
     def get(self, dataset_id):
-        content = load_dataset(dataset_id)
-        return content
+        return get_dataset(dataset_id=dataset_id)
 
 
 @api.route('/download/dataset/<string:dataset_id>')
 @api.doc(description='Get all tagged answers in specified dataset in a downloadable format',
          params={'dataset_id': 'ID of the dataset'})
 class TaggedAnswersDownloadAPI(Resource):
+    @cache.memoize()
     def get(self, dataset_id):
-        id_to_question_data, id_to_answer_data = populate_retrieving_maps(dataset_id)
+        id_to_question_data, id_to_answer_data = populate_retrieving_maps(get_dataset(dataset_id=dataset_id))
 
-        tagged_answers = db.get_tagged_dataset(dataset_id)
+        tagged_answers = get_tagged_dataset(dataset_id)
 
         formatted_values = []
 
@@ -104,10 +113,9 @@ class TaggedAnswersMisconceptionAPI(Resource):
     def get(self, dataset_id, misconception):
         id_to_question_data, id_to_answer_data = populate_retrieving_maps(dataset_id)
 
-        answers = db.get_tagged_dataset_with_tag(dataset_id=dataset_id, tag=misconception)
+        answers = get_tagged_dataset_with_tag(dataset_id=dataset_id, tag=misconception)
 
         for answer in answers:
-
             question_id = answer['question_id']
             answer_id = int(answer['answer_id'])
 

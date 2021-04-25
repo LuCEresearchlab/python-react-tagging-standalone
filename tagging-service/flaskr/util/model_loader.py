@@ -8,7 +8,7 @@ import nltk
 from semantic_text_similarity.models import WebBertSimilarity
 from sklearn.cluster import SpectralClustering
 
-from nltk.corpus import stopwords
+from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import word_tokenize
 
 # def load_answers():
@@ -32,6 +32,7 @@ nltk.download('punkt')
 
 stop_words = set(stopwords.words('english'))
 lemma = nltk.wordnet.WordNetLemmatizer()
+wordnet.ensure_loaded()
 
 
 def clean_answers(answers):
