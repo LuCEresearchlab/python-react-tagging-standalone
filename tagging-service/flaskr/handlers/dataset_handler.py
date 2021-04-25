@@ -31,20 +31,6 @@ def _db_add_dataset(db, dataset, computed_clusters):
     logger.debug(f'called _db_add_dataset: clusters_computed {total_computed}')
 
 
-def _db_add_questions(db, dataset_id, question_id, question):
-    query = {
-        'dataset_id': dataset_id,
-        'question_id': question_id
-    }
-    update = {
-        '$set':
-            {
-                'question': question,
-            }
-    }
-    db.questions.update_one(query, update, upsert=True)
-
-
 def add_dataset(dataset):
     # runs in thread, need local client
     db = get_new_mongo_client()['dataset_db']
@@ -71,8 +57,6 @@ def add_dataset(dataset):
         thread = Thread(target=thread_func, args=(dataset_id, question_id, answers,))
         thread.start()
         threads.append(thread)
-
-        # _db_add_questions(db=db, dataset_id=dataset_id, question_id=question_id, question=question)
 
     for thread in threads:
         logger.debug('waiting for thread')
