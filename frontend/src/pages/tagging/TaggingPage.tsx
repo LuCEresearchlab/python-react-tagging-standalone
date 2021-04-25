@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Container} from "@material-ui/core";
 import {useFetch} from '../../helpers/LoaderHelper';
-import {useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import TaggingUI from '../../components/v2/TaggingUI'
 import {Dataset} from "../../interfaces/Dataset";
 import useTaggingSession, {TaggingSessionActions} from "../../model/TaggingSession";
 import useTaggingClusterSession from "../../model/TaggingClusterSession";
+import {userContext} from "../../util/UserContext";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
@@ -14,6 +15,11 @@ function TaggingPage() {
     const {dataset_id, user_id}: { dataset_id: string, user_id: string } = useParams()
 
     const {data, isLoading} = useFetch<Dataset>(`${TAGGING_SERVICE_URL}/datasets/get-dataset/dataset/${dataset_id}`)
+
+    const {username} = useContext(userContext)
+    const history = useHistory()
+
+    if (username.length == 0) history.push('/login')
 
     const [taggingClusterSession, dispatchTaggingClusterSession] = useTaggingClusterSession()
     const [taggingSession, dispatchTaggingSession] =

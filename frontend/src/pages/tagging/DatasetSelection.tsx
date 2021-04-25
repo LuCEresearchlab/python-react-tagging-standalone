@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Table, TableBody, TableContainer, TableHead, TableRow, Paper, Button, LinearProgress} from '@material-ui/core';
 import {JSONLoader} from '../../helpers/LoaderHelper';
 import {useHistory} from 'react-router-dom'
@@ -6,33 +6,24 @@ import {StyledTableRow, StyledTableCell, useStyles} from "../../components/style
 import {downloadDatasetHelper} from "../../helpers/DownloadHelper";
 import {Assignment, AssignmentLate, CloudDownload} from "@material-ui/icons";
 import {DatasetDesc} from "../../interfaces/Dataset";
+import {userContext} from "../../util/UserContext";
 
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
 
-const redirect = (id: string, url: string, router: any) => {
-    // request user input
-    let temp = requestUserId()
-    while (temp == null || temp == '') {
-        temp = requestUserId()
-    }
-    router.push(url + id + '/' + temp)
+const redirect = (id: string, url: string, user_id: string, router: any) => {
+    router.push(url + id + '/' + user_id)
 }
 
-function requestUserId() {
-    const user_id: string | null = prompt("Enter your username", "user_id");
-    if (user_id == null || user_id == "") {
-        console.log("No user_id entered")
-    }
-    return user_id
-}
 
 function DatasetSelection() {
     const router = useHistory() // TODO: use router from next once integrated, fix import
 
     const [datasets, setDatasets] = useState<DatasetDesc[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
+
+    const {username} = useContext(userContext)
 
     const classes = useStyles();
     const url = TAGGING_SERVICE_URL + "/datasets/list"
@@ -101,11 +92,11 @@ function DatasetSelection() {
                         return (
                             <StyledTableRow key={dataset.dataset_id}>
                                 <StyledTableCell component="th" scope="row" onClick={
-                                    () => redirect(dataset.dataset_id, "/taggingUI/tagView/", router)}>
+                                    () => redirect(dataset.dataset_id, "/taggingUI/tagView/", username, router)}>
                                     {dataset.name}
                                 </StyledTableCell>
                                 <StyledTableCell align="right" onClick={
-                                    () => redirect(dataset.dataset_id, "/taggingUI/tagView/", router)
+                                    () => redirect(dataset.dataset_id, "/taggingUI/tagView/", username, router)
                                 }>
                                     {dataset.creation_data}
                                 </StyledTableCell>
@@ -124,7 +115,9 @@ function DatasetSelection() {
                                         disabled={loading_cluster}
                                         color="primary"
                                         onClick={
-                                            () => redirect(dataset.dataset_id, "/taggingUI/summary/", router)
+                                            () => redirect(
+                                                dataset.dataset_id, "/taggingUI/summary/", username, router
+                                            )
                                         }>
                                         <Assignment/>
                                     </Button>
@@ -134,7 +127,9 @@ function DatasetSelection() {
                                         disabled={loading_cluster}
                                         color="primary"
                                         onClick={
-                                            () => redirect(dataset.dataset_id, "/taggingUI/mergeView/", router)
+                                            () => redirect(
+                                                dataset.dataset_id, "/taggingUI/mergeView/", username, router
+                                            )
                                         }>
                                         <AssignmentLate/>
                                     </Button>
