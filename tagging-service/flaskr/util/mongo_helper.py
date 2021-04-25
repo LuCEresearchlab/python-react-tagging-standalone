@@ -1,6 +1,11 @@
 from pymongo import MongoClient
 
-client = MongoClient("mongodb://tagging-database:27017/?appname=tagging_service&ssl=false")
+
+def get_new_mongo_client():
+    return MongoClient("mongodb://tagging-database:27017/?appname=tagging_service&ssl=false", connect=False)
+
+
+client = get_new_mongo_client()
 db = client['tagging_db']
 
 
@@ -58,7 +63,8 @@ def post_tagged_answer(tagged_answer):
     db.tagged_data.update_one(query, update, upsert=True)
 
 
-def save_cluster(connection, dataset_id, question_id, user_id, cluster):
+def save_cluster(dataset_id, question_id, user_id, cluster):
+    connection = get_new_mongo_client()
     query = {
         'dataset_id': dataset_id,
         'question_id': question_id,
@@ -79,14 +85,14 @@ def save_cluster(connection, dataset_id, question_id, user_id, cluster):
     )
 
 
-def get_cluster(connection, dataset_id, question_id, user_id):
-    clusters = list(connection['tagging_db'].cluster_data.find(
+def get_cluster(dataset_id, question_id, user_id):
+    clusters = list(db.cluster_data.find(
         {'dataset_id': dataset_id, 'question_id': question_id, 'user_id': user_id},
         {'_id': False}
     ))
 
     if len(clusters) == 0:
-        return list(connection['tagging_db'].cluster_data.find(
+        return list(db.cluster_data.find(
             {'dataset_id': dataset_id, 'question_id': question_id, 'user_id': ''},
             {'_id': False}
         ))

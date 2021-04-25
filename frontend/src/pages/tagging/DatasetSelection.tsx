@@ -68,13 +68,14 @@ function DatasetSelection() {
                 <TableBody>
                     {datasets.map((dataset: DatasetDesc) => {
                         const loading_cluster = dataset.clusters_computed != dataset.nr_questions
-                        const needed_time_s = new Date(1000 * 60 * dataset.nr_questions)
-                        const time_left = new Date(
-                            new Date(dataset.creation_data).getTime() +
-                            needed_time_s.getTime() -
-                            new Date().getTime()
-                        )
+                        const needed_time_s = 1000 * 80 * dataset.nr_questions
+                        const time_left = needed_time_s +
+                            (new Date(dataset.creation_data).getUTCDate() - new Date().getUTCDate()) / 1000
 
+                        const time_left_minutes = Math.floor(time_left / (60 * 1000))
+                        const seconds = Math.floor((time_left - time_left_minutes * (60 * 1000)) / (1000))
+
+                        const time_left_seconds = seconds < 10 ? '0' + seconds : seconds
 
                         if (dataset.clusters_computed != dataset.nr_questions) {
                             return (
@@ -90,7 +91,7 @@ function DatasetSelection() {
                                     </StyledTableCell>
                                     <StyledTableCell component={'th'} scope={'row'} style={{textAlign: 'end'}}>
                                         {`${dataset.clusters_computed}/${dataset.nr_questions}\tTime Left: ~${
-                                            time_left.getMinutes()}:${time_left.getSeconds()}`}
+                                            time_left_minutes}:${time_left_seconds}`}
                                     </StyledTableCell>
                                 </StyledTableRow>
                             )

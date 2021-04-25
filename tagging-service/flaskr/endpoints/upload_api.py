@@ -1,10 +1,13 @@
 import json
-import logging, threading
+import logging
+from threading import Thread
 from flask import request
 from flask_restx import Namespace, Resource, fields
 from flaskr import cache
 
-from flaskr.handlers.dataset_handler import get_dataset_list, add_dataset, get_dataset, client as dataset_handler_client
+from flaskr.handlers.dataset_handler import get_dataset_list, add_dataset, get_dataset
+from flaskr.util.answers_loader import populate_retrieving_maps
+from flaskr.util.mongo_helper import get_tagged_dataset, get_tagged_dataset_with_tag
 
 api = Namespace('datasets', description='Upload API to load files')
 
@@ -56,14 +59,14 @@ class Upload(Resource):
         if uploaded_file.filename == '':
             return "no file received"
 
-        def thread_function(dataset, my_client):
+        def thread_function(dataset):
             logger.debug('adding dataset in thread')
-            add_dataset(dataset=dataset, input_client=my_client)
+            add_dataset(dataset=dataset)
             logger.debug('added dataset')
 
         json_dataset = json.loads(uploaded_file.read())
 
-        threading.Thread(target=thread_function, args=(json_dataset, dataset_handler_client,)).start()
+        Thread(target=thread_function, args=(json_dataset,)).start()
 
         #
         # cache.delete('datasets-cache')
@@ -79,47 +82,47 @@ class UploadedDataset(Resource):
     @api.doc(description='Get content of specific dataset')
     @api.marshal_with(DATASET)
     def get(self, dataset_id):
-        return get_dataset(dataset_id=dataset_id)
+        return
 
-# @api.route('/download/dataset/<string:dataset_id>')
-# @api.doc(description='Get all tagged answers in specified dataset in a downloadable format',
-#          params={'dataset_id': 'ID of the dataset'})
-# class TaggedAnswersDownloadAPI(Resource):
-#     def get(self, dataset_id):
-#         id_to_question_data, id_to_answer_data = populate_retrieving_maps(dataset_id)
-#
-#         tagged_answers = db.get_tagged_dataset(dataset_id)
-#
-#         formatted_values = []
-#
-#         for tagged_answer in tagged_answers:
-#             question_id = tagged_answer['question_id']
-#             answer_id = int(tagged_answer['answer_id'])
-#
-#             tagged_answer['question_text'] = id_to_question_data[question_id]['text']
-#             tagged_answer['answer_text'] = id_to_answer_data[answer_id]['data']
-#             formatted_values.append(tagged_answer)
-#         return formatted_values
-#
-#
-# @api.route('/tagged-answer/dataset/<string:dataset_id>/tag/<string:misconception>')
-# @api.doc(description='Get all tagged answers in specified dataset with specific misconception',
-#          params={
-#              'dataset_id': 'ID of the dataset',
-#              'misconception': 'misconception contained by the answers to return'
-#          })
-# class TaggedAnswersMisconceptionAPI(Resource):
-#     def get(self, dataset_id, misconception):
-#         id_to_question_data, id_to_answer_data = populate_retrieving_maps(dataset_id)
-#
-#         answers = db.get_tagged_dataset_with_tag(dataset_id=dataset_id, tag=misconception)
-#
-#         for answer in answers:
-#
-#             question_id = answer['question_id']
-#             answer_id = int(answer['answer_id'])
-#
-#             answer['question_text'] = id_to_question_data[question_id]['text']
-#             answer['data'] = id_to_answer_data[answer_id]['data']
-#
-#         return answers
+
+@api.route('/download/dataset/<string:dataset_id>')
+@api.doc(description='Get all tagged answers in specified dataset in a downloadable format',
+         params={'dataset_id': 'ID of the dataset'})
+class TaggedAnswersDownloadAPI(Resource):
+    def get(self, dataset_id):
+        id_to_question_data, id_to_answer_data = populate_retrieving_maps(get_dataset(dataset_id=dataset_id))
+
+        tagged_answers = get_tagged_dataset(dataset_id)
+
+        formatted_values = []
+
+        for tagged_answer in tagged_answers:
+            question_id = tagged_answer['question_id']
+            answer_id = int(tagged_answer['answer_id'])
+
+            tagged_answer['question_text'] = id_to_question_data[question_id]['text']
+            tagged_answer['answer_text'] = id_to_answer_data[answer_id]['data']
+            formatted_values.append(tagged_answer)
+        return formatted_values
+
+
+@api.route('/tagged-answer/dataset/<string:dataset_id>/tag/<string:misconception>')
+@api.doc(description='Get all tagged answers in specified dataset with specific misconception',
+         params={
+             'dataset_id': 'ID of the dataset',
+             'misconception': 'misconception contained by the answers to return'
+         })
+class TaggedAnswersMisconceptionAPI(Resource):
+    def get(self, dataset_id, misconception):
+        id_to_question_data, id_to_answer_data = populate_retrieving_maps(dataset_id)
+
+        answers = get_tagged_dataset_with_tag(dataset_id=dataset_id, tag=misconception)
+
+        for answer in answers:
+            question_id = answer['question_id']
+            answer_id = int(answer['answer_id'])
+
+            answer['question_text'] = id_to_question_data[question_id]['text']
+            answer['data'] = id_to_answer_data[answer_id]['data']
+
+        return answers

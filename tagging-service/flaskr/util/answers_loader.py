@@ -1,44 +1,14 @@
 from flask import current_app
 from flaskr import cache
-from flaskr.exceptions.error import Error
 import os
 import pathlib
 import json
 import datetime
 import logging
 
-from flaskr.util.grouper_helper import get_clusters
-from flaskr.util.mongo_helper import save_cluster, get_cluster
+from flaskr.util.mongo_helper import get_cluster
 
 logger = logging.getLogger(__name__)
-
-
-@cache.cached(key_prefix='datasets-cache')
-def load_dataset(dataset_id):
-    id_to_filename, _ = get_dataset_id_to_filename_name_map()
-
-    file = pathlib.Path(id_to_filename[dataset_id])
-
-    logger.debug(f"Trying to load {file}")
-
-    if file.exists():
-        logger.debug("File Exists")
-        with open(file, 'r') as file:
-            logger.debug("File Opened")
-            content = file.read()
-            logger.debug("Read file")
-            j = json.loads(content)
-            for question in j['questions']:
-                answers = question['answers']
-                question_id = question['question_id']
-                logger.debug("SORTING ANSWERS")
-                if len(get_cluster(dataset_id=dataset_id, question_id=question_id, user_id='')) == 0:
-                    logger.debug(f"creating default cluster for question ${question_id}")
-                    save_cluster(dataset_id=dataset_id, question_id=question_id, user_id='',
-                                 cluster=get_clusters(dataset_id=dataset_id, question_id=question_id, answers=answers))
-            return j
-    else:
-        raise Error(f'File {file} not found at {file}', status_code=500)
 
 
 @cache.cached(key_prefix='datasets-id-map')
@@ -89,10 +59,11 @@ def load_dataset_name_list():
     return datasets
 
 
-def populate_retrieving_maps(dataset_id):
-    dataset = load_dataset(dataset_id)
+def populate_retrieving_maps(dataset):
     id_to_question_data = {}
     id_to_answer_data = {}
+    dataset_id = dataset['dataset_id']
+
     for question in dataset['questions']:
         question_id = question['question_id']
         id_to_question_data[question['question_id']] = question
@@ -100,4 +71,3 @@ def populate_retrieving_maps(dataset_id):
             for answer in c:
                 id_to_answer_data[answer['answer_id']] = answer
     return id_to_question_data, id_to_answer_data
-
