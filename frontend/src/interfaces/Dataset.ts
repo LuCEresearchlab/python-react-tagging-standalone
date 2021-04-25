@@ -1,13 +1,13 @@
 export interface Dataset {
     "name": string,
-    "creation_data": Date,
+    "creation_data": string,
     "dataset_id": string,
     "questions": [Question]
 }
 
 export interface DatasetDesc {
     "name": string,
-    "creation_data": Date,
+    "creation_data": string,
     "dataset_id": string,
     "nr_questions": number,
     "clusters_computed": number
