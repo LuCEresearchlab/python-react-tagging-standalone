@@ -44,7 +44,7 @@ DATASET = api.model('Dataset', {
 @api.route('/list')
 @api.doc(description='list all available datasets')
 class DatasetsAPI(Resource):
-    @cache.cached(timeout=10)
+    @cache.cached(key_prefix='dataset-list', timeout=10)
     @api.marshal_list_with(DATASET_DESC)
     def get(self):
         return get_dataset_list()
@@ -61,34 +61,31 @@ class Upload(Resource):
 
         def thread_function(dataset):
             logger.debug('adding dataset in thread')
-            add_dataset(dataset=dataset)
+            add_dataset(dataset=dataset, mem_to_clean=[TaggedAnswersDownloadAPI.get, UploadedDataset.get])
             logger.debug('added dataset')
 
         json_dataset = json.loads(uploaded_file.read())
 
         Thread(target=thread_function, args=(json_dataset,)).start()
 
-        #
-        # cache.delete('datasets-cache')
-
-        # cache.delete('dataset-id-map')
-        # logger.debug('Deleted datasets cache')
         return f'uploaded file: {uploaded_file.name} successfully'
 
 
 @api.route('/get-dataset/dataset/<string:dataset_id>')
 @api.doc(description='get content of uploaded file')
 class UploadedDataset(Resource):
+    @cache.memoize()
     @api.doc(description='Get content of specific dataset')
     @api.marshal_with(DATASET)
     def get(self, dataset_id):
-        return
+        return get_dataset(dataset_id=dataset_id)
 
 
 @api.route('/download/dataset/<string:dataset_id>')
 @api.doc(description='Get all tagged answers in specified dataset in a downloadable format',
          params={'dataset_id': 'ID of the dataset'})
 class TaggedAnswersDownloadAPI(Resource):
+    @cache.memoize()
     def get(self, dataset_id):
         id_to_question_data, id_to_answer_data = populate_retrieving_maps(get_dataset(dataset_id=dataset_id))
 
