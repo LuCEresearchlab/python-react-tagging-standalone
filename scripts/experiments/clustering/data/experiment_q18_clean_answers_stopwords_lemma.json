@@ -1,0 +1,134 @@
+[
+  [
+    {
+      "data": "after printing c1, the system teminates",
+      "idx": 818
+    },
+    {
+      "data": "After printing 'c1' the program terminates and so the following output is not printed.",
+      "idx": 833
+    },
+    {
+      "data": "The execution is similar to the one in the previous exercise. In this case C2 will not be printed because c terminates the execution before printing.",
+      "idx": 837
+    },
+    {
+      "data": "The program will be terminated after c1 is printed.",
+      "idx": 842
+    }
+  ],
+  [
+    {
+      "data": "This is wrong as the program exits before it can print out ff2",
+      "idx": 822
+    },
+    {
+      "data": "Because after printing c1 the process exits.",
+      "idx": 827
+    },
+    {
+      "data": "After process.exit(1) the program terminates so it can't print anything else after c1 is printed.",
+      "idx": 835
+    },
+    {
+      "data": "c(four,null) execute process.exit(1) which doesn't allow to print other things further",
+      "idx": 836
+    }
+  ],
+  [
+    {
+      "data": "The last output is ft2",
+      "idx": 829
+    },
+    {
+      "data": "the first function evaluated  is a (a1) which takes another function and than console.log('ft1'), then b is evaluated (b1) which thake another function and then console.log(ff1) and final c it is evaluated (c1) which reach the process.exit(1) and terminateds",
+      "idx": 845
+    }
+  ],
+  [
+    {
+      "data": "The execution stops after process.exit(1) when function c is called.",
+      "idx": 817
+    },
+    {
+      "data": "The process exits inside the call to c, therefore all the lines after c1 will not be part of the output",
+      "idx": 825
+    },
+    {
+      "data": "No, the code after `process.exit(1);' will not run. ",
+      "idx": 828
+    },
+    {
+      "data": "Seq is correct, but c call kills program, so no function returns and logs '...2'",
+      "idx": 846
+    }
+  ],
+  [
+    {
+      "data": "it will terminate during c",
+      "idx": 820
+    },
+    {
+      "data": "Proceeding the same way as in Option 1, when we reach function c(), after logging 'c1' we abruptly terminate the whole program. No other statement is executed after that point.",
+      "idx": 824
+    },
+    {
+      "data": "Since function a calls function b which calls function c which kills the program, the instructions that would happen after c (the remaining line of b and a as well as the console.log('ff2') and console.log('tf2')) will not be executed.",
+      "idx": 831
+    },
+    {
+      "data": "Because the program terminates after calling console.log('c1') so it is not possible to call console.log ('c2') and the other console.log.",
+      "idx": 844
+    },
+    {
+      "data": "The program is terminated in function c.",
+      "idx": 847
+    }
+  ],
+  [
+    {
+      "data": "is a wrong result of continuation",
+      "idx": 848
+    }
+  ],
+  [
+    {
+      "data": "See Option 1.",
+      "idx": 819
+    },
+    {
+      "data": "the option 1 was right",
+      "idx": 826
+    },
+    {
+      "data": "Option 1 is the correct answer.",
+      "idx": 838
+    },
+    {
+      "data": "I think this is wrong for the same reason the previous option was",
+      "idx": 840
+    },
+    {
+      "data": "No, the correct execution is listed in Option 1",
+      "idx": 849
+    }
+  ],
+  [
+    {
+      "data": "There can only be one correct solution and that is option 1 (since the code doesn't change).",
+      "idx": 821
+    },
+    {
+      "data": "Since, we saw already that the first option was correct, and the program is always the same.",
+      "idx": 823
+    },
+    {
+      "data": "no time to type in the explanation, but the correct output is in the first option",
+      "idx": 839
+    },
+    {
+      "data": "It is the same code and since the first option was right this one can not output something different.",
+      "idx": 841
+    }
+  ]
+]

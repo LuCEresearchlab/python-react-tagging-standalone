@@ -1,0 +1,152 @@
+[
+  [
+    {
+      "data": "it is wrong, the function f would have to be called from r(is not a lambda)",
+      "idx": 446
+    },
+    {
+      "data": "Yes, it's a lambda increasing the argument by one and being directly called, the value of r is 4.",
+      "idx": 455
+    },
+    {
+      "data": "Yes. In this case, we are calling a lambda that increments its argument by one immediately. r will contain the number 4.",
+      "idx": 457
+    },
+    {
+      "data": "If correct means that it is a lambda that is parsed and executed correctly then yes, it is correct. The anonymous function is immediately invoked, thus 'r' will contain the value 4",
+      "idx": 467
+    },
+    {
+      "data": "Yes, it is a lambda which the argument 3 is applied and return 4",
+      "idx": 471
+    }
+  ],
+  [
+    {
+      "data": "It invokes lambda function and assgin  the return value to a variable. It is called IIFE, Immediately Invoked Function Expression.",
+      "idx": 454
+    },
+    {
+      "data": "You can use a lambda directly and without naming it.",
+      "idx": 460
+    },
+    {
+      "data": "You can directly call a lambda with an argument.",
+      "idx": 461
+    }
+  ],
+  [
+    {
+      "data": "This is a basic anonymous function that is additionally called with the parameter 3 in the same line.",
+      "idx": 447
+    },
+    {
+      "data": "In this case we already evaluate the anonymous function, by passing at the end x = 3 and assign the result to r.",
+      "idx": 449
+    },
+    {
+      "data": "it results in invoking an anonymous function with the parameter 3, resulting in 4.",
+      "idx": 452
+    },
+    {
+      "data": "yes, it is correct, we create a function that we assign to the variable r, and then we pass them three as a parameter.",
+      "idx": 456
+    },
+    {
+      "data": "In the right  end of the assignment expression, we are creating a new anonymous function on which we apply the value 3.",
+      "idx": 463
+    }
+  ],
+  [
+    {
+      "data": "it is an immediately invoked function expression. (function ...)(3) would be immediately called and return 4",
+      "idx": 459
+    },
+    {
+      "data": "first lambda is defined and then it's invoked with param 3",
+      "idx": 462
+    },
+    {
+      "data": "it applys a lambda function on parameter 3. ",
+      "idx": 473
+    }
+  ],
+  [
+    {
+      "data": "The anonymous function is immediately invoked with the argument 3. At the end of the assignment, r will contain the value 4.",
+      "idx": 450
+    },
+    {
+      "data": "We are just calling the anonymous functions inside the () immediately with 3, which returns in storing 4 in r. I assume that by 'correct', you mean that this is valid JS code.",
+      "idx": 466
+    },
+    {
+      "data": "You create an anonymous function and inmediatly afet you call it with '(3)', so in r is just saved the output of the function, in this case 4.",
+      "idx": 468
+    }
+  ],
+  [
+    {
+      "data": "It use an anonymous function and it immediately invoke it with 3. r now is 4.",
+      "idx": 453
+    },
+    {
+      "data": "It's an IIFE anonymous function and will assign r to 4.",
+      "idx": 469
+    },
+    {
+      "data": "I think it is licit in JavaScript to define an anonymous function, wrap it inside paranthesis and call it immediately. In this case, at the end of the statement r is queal to 4.",
+      "idx": 470
+    }
+  ],
+  [
+    {
+      "data": "r yields 4",
+      "idx": 443
+    },
+    {
+      "data": "This is correct as it uses an anonymous function where x is set to 3. r will be set to 4.",
+      "idx": 448
+    },
+    {
+      "data": "We pass argument 3 to the anonymous function. if we print r we will get 4. ",
+      "idx": 464
+    },
+    {
+      "data": "yes, it's correct, and the output is 4.",
+      "idx": 465
+    },
+    {
+      "data": "Yes, r will contains the result of function call with the parameter 3. I will expect to find the value 4 in variable r",
+      "idx": 475
+    }
+  ],
+  [
+    {
+      "data": "r can be reassign",
+      "idx": 474
+    }
+  ],
+  [
+    {
+      "data": "it's an correct expression of immediately invoked function expression",
+      "idx": 444
+    },
+    {
+      "data": "This is a direct invocation of an anonymous function.",
+      "idx": 445
+    },
+    {
+      "data": "This is a valid way to define and then invoke an anonymous function in JS",
+      "idx": 451
+    },
+    {
+      "data": "This is a correct way to declare a function without a name an call it immediately. That function will not be reusable afterwards",
+      "idx": 458
+    },
+    {
+      "data": "Instgant call of inline-defined function",
+      "idx": 472
+    }
+  ]
+]

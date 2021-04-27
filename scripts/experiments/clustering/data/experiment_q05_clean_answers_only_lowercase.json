@@ -1,0 +1,154 @@
+[
+  [
+    {
+      "data": "It has no side effects. ",
+      "idx": 171
+    },
+    {
+      "data": "the function has no side effects",
+      "idx": 190
+    }
+  ],
+  [
+    {
+      "data": "Method twice only uses its argument, does not access/modify external state, does not perform I/O and thus it is pure",
+      "idx": 178
+    },
+    {
+      "data": "The method does not modify anything outside its local scope.",
+      "idx": 179
+    },
+    {
+      "data": "Yes this method is pure, it does not affect the state or do the IO action.",
+      "idx": 182
+    },
+    {
+      "data": "It doesnt produce any side-effect and the result is deterministic",
+      "idx": 201
+    },
+    {
+      "data": "Method twice has no side-effect and the result is the same if you call the method multiple times with the same input",
+      "idx": 203
+    }
+  ],
+  [
+    {
+      "data": "Yes. The method has no side effects. It works just like a mathematical function (i.e. 2*x). Invoking twice(10) multiple times will always produce the same output.",
+      "idx": 185
+    },
+    {
+      "data": "'twice' has no side effect and is idempotent. It always perform the same action with the same input without having any side effect",
+      "idx": 187
+    },
+    {
+      "data": "twice is idempotent, i.e. it always returns the same output value given the same input value (assuming the compiler produces deterministic code). Moreover, it doesn't interact with the outside world, apart from just getting and returning a value. No side effects.",
+      "idx": 194
+    }
+  ],
+  [
+    {
+      "data": "This is correct because the method is idempotent, has no side effects and doesn't access non-local variables.",
+      "idx": 175
+    },
+    {
+      "data": "Since it just return a new value, and we don't modify the parameter passed to the function.",
+      "idx": 177
+    },
+    {
+      "data": "The output of twice depends only on the input argument v and does not have side effects.",
+      "idx": 192
+    },
+    {
+      "data": "No side effects; depends on input, returns output",
+      "idx": 200
+    }
+  ],
+  [
+    {
+      "data": "It's referentially transparent, has no side effects and is idempotent.",
+      "idx": 188
+    },
+    {
+      "data": "It is referentially transparent, idempotent and does not have side effects. It does not access any state in the memory, it simply take an integer in the input and returns the input values times two. If we recall the function with the same input we obtain always the same result.",
+      "idx": 198
+    },
+    {
+      "data": "there is no external neither IO",
+      "idx": 199
+    }
+  ],
+  [
+    {
+      "data": "twice is pure because it does not have side effects, it simply take an argument and return an output without modifying the passed argument",
+      "idx": 186
+    },
+    {
+      "data": "Yes it is pure, as it returns something based only on its input parameters and calling it more than once with the same argument will always produce the same result, without modifying the state of the program",
+      "idx": 195
+    },
+    {
+      "data": "This method is pure because it has no side effects. It takes the input and returns an output without reading or writing any memory from outside it or other side effects. We could replace it by it's value after call it and is idempotent.",
+      "idx": 196
+    },
+    {
+      "data": "Because the function does not alter the state of the program - it just takes an argument and produces an output using that argument.",
+      "idx": 197
+    },
+    {
+      "data": "take an imputes and return an output without change the variable x",
+      "idx": 202
+    }
+  ],
+  [
+    {
+      "data": "Because it hasn't side effect. It is also idempotent. It only use the given parameter and return an elaboration of that value.",
+      "idx": 181
+    }
+  ],
+  [
+    {
+      "data": "the function maps always the same result to the same inputs without having any side-effects",
+      "idx": 180
+    },
+    {
+      "data": "yes, is pure, we don't have any kind of side effect",
+      "idx": 184
+    },
+    {
+      "data": "The function depends only on the argument `v`.",
+      "idx": 191
+    }
+  ],
+  [
+    {
+      "data": "It is directly equiavalent to a functional mapping. It always produces the same output for the same input, without any side-effects.",
+      "idx": 173
+    },
+    {
+      "data": "As v is declared in the parameters and it always will give the same output aslong as the value of v is the same it is pure.",
+      "idx": 176
+    },
+    {
+      "data": "it's taking a parameter v (defined nowhere else) and returning twice its value, which is completely fine. twice is pure.",
+      "idx": 193
+    }
+  ],
+  [
+    {
+      "data": "nothing change and also no side effect when method twice is called, v is only effected inside the method",
+      "idx": 172
+    },
+    {
+      "data": "The method twice is pure because it doesn't change any variable value outside of it's scope. It also benefits of idempotency(if called more than once subsequently it will continue to return the same value)",
+      "idx": 174
+    },
+    {
+      "data": "twice is not accessing global variables and not doing IO. All it uses is received as an argument and all it produces comes from the return statement. Therefore twice is idempotent and pure.",
+      "idx": 183
+    },
+    {
+      "data": "The method is pure because it doesn't access any internal field and only works with the given argument, without producing any side effect.",
+      "idx": 189
+    }
+  ]
+]

@@ -1,0 +1,150 @@
+[
+  [
+    {
+      "data": "Since we assign to f the anonymous function and then call it with the parameter the anonymous function has to to take.",
+      "idx": 517
+    },
+    {
+      "data": "f can be assigned to an anonymous function and this would not throw any error.",
+      "idx": 527
+    },
+    {
+      "data": "We don't have anonymous functions anymore, in the sense that f now points to what was an anonymous function in the previous options. So, we can call f with different values below. Anyway, this specific code still returns 4.",
+      "idx": 534
+    },
+    {
+      "data": "f points to an anonymous function 'function(x)' and will assign r to 4.",
+      "idx": 537
+    }
+  ],
+  [
+    {
+      "data": "The anonymous function was stored in a variable and then was invoked using f(3).",
+      "idx": 516
+    },
+    {
+      "data": "In the first statement we bind an anonymous function to a name `f`. In the second statement we use the function by applying it to the argument 3.",
+      "idx": 531
+    }
+  ],
+  [
+    {
+      "data": "This is a basic anonymous function that is additionally called with the parameter 3 in the next statement.",
+      "idx": 515
+    },
+    {
+      "data": "yes, that's correct,we create a function f and then call it passing it three as a parameter",
+      "idx": 524
+    }
+  ],
+  [
+    {
+      "data": "The anonymous function is stored in variable f. In the second line, it is called passing 3 as an argument. At the end of the assignment, r will contain the value 4.",
+      "idx": 518
+    },
+    {
+      "data": "In this case it first create a named function f, then it is invoked with 3. r now is 4.",
+      "idx": 521
+    },
+    {
+      "data": "Yes, here the function is stored in a variable named `f`. And then invokes f with input value 3, so that r is 4.",
+      "idx": 522
+    },
+    {
+      "data": "Yes, f is a lambda taking one argument and increasing it by one. then r = f(3) calls the lambda on 3 and gets back 4.",
+      "idx": 523
+    },
+    {
+      "data": "yes, you can define f as a function and then assign it to variable r by passing 3 as argument, r is going to be 4 as a result.",
+      "idx": 533
+    }
+  ],
+  [
+    {
+      "data": "it is equal to defining a named 'function f(x) { ... }' and invoking it afterwards, resulting in 4.",
+      "idx": 520
+    }
+  ],
+  [
+    {
+      "data": "first line is the correct expression in javascript, and second line pass the vale to the function then store it in r",
+      "idx": 512
+    },
+    {
+      "data": "the variable r will store the result of the function f",
+      "idx": 539
+    }
+  ],
+  [
+    {
+      "data": "f is the definition and then r is the invocation",
+      "idx": 530
+    },
+    {
+      "data": "we are saving lambda in variable f and then we are invoking lambda using reference f and passing argument 3. variable r will have value 4. ",
+      "idx": 532
+    },
+    {
+      "data": "f refers to a function. r is the output when the function applys on parameter 3.",
+      "idx": 541
+    },
+    {
+      "data": "f contains the lambda function and r the result of the call of this lambda with the x variable set to 3",
+      "idx": 543
+    }
+  ],
+  [
+    {
+      "data": "r yields 4",
+      "idx": 511
+    },
+    {
+      "data": "it returns 4",
+      "idx": 514
+    },
+    {
+      "data": "Yes the code is correct and r will store 4",
+      "idx": 535
+    }
+  ],
+  [
+    {
+      "data": "This is an invocation of a function stored in a variable f. To invoke this function, we need to use the variable name rather than the function name.",
+      "idx": 513
+    },
+    {
+      "data": "This is a valid way to define and then invoke an anonymous function in JS. (that is still an anonymous function, even if assigned to a variable)",
+      "idx": 519
+    },
+    {
+      "data": "Unless it's not possible to insert the keyword 'function' to declare a lambda, the above code is correct.",
+      "idx": 525
+    },
+    {
+      "data": "You can name the lambda function and invoke it later.",
+      "idx": 528
+    },
+    {
+      "data": "Definition of function; call of function",
+      "idx": 540
+    }
+  ],
+  [
+    {
+      "data": "It is possible to store a function in a variable and use it after",
+      "idx": 526
+    },
+    {
+      "data": "You can store a lambda in a variable and then call it using the variable.",
+      "idx": 529
+    },
+    {
+      "data": "It is correct because you are saving a function in to f, and them you are calling it.",
+      "idx": 536
+    },
+    {
+      "data": "We store an anonymous function inside a variable (f). In this case, calling f and passing a value to it, we call the anonymous function stored in f (we treat the anonymous function as a value) and we expect that at the end of the statements, r will be equal to 4.",
+      "idx": 538
+    }
+  ]
+]
