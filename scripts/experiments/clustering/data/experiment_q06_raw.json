@@ -1,0 +1,152 @@
+[
+  [
+    {
+      "data": "This is wrong since we acess non-local variables in the method.",
+      "idx": 209
+    },
+    {
+      "data": "Since it return an object field, that is a modifiable variable.",
+      "idx": 211
+    },
+    {
+      "data": "Because it returns a variable declared outside of the function.",
+      "idx": 215
+    },
+    {
+      "data": "return a non-local variable",
+      "idx": 226
+    },
+    {
+      "data": "The method getX returns a value that is not directly related to the input passed but depends on setX calls. Using local variables in this way is considered a side-effect",
+      "idx": 237
+    }
+  ],
+  [
+    {
+      "data": "It has a side effect: it returns part of the program's state, namely the instance variable x",
+      "idx": 205
+    },
+    {
+      "data": "It does not affect the `x`, just read and return. And also this function is idempotent if we don't invoke `setX`.",
+      "idx": 216
+    },
+    {
+      "data": "it has no side effect and it always return the variable 'x' without any side effect",
+      "idx": 221
+    },
+    {
+      "data": "The global variable x may be subject to changes as the program proceeds which makes it impure.",
+      "idx": 231
+    },
+    {
+      "data": "does not take any input but not change the variable x as output.",
+      "idx": 236
+    }
+  ],
+  [
+    {
+      "data": "x is outside the method, so when u call the method, it will change the state of the class",
+      "idx": 206
+    },
+    {
+      "data": "it returns a field of the class which can change",
+      "idx": 224
+    },
+    {
+      "data": "The property x of this class can change because there's the method setX, so calling x multiple times can return different values, i.e. getX is not idempotent, which makes it impure.",
+      "idx": 228
+    }
+  ],
+  [
+    {
+      "data": "it depends on the state of Pacman and in particular to a non final field, which could change at any point in the execution. Successive calls are not guaranteed to return the same value.",
+      "idx": 214
+    },
+    {
+      "data": "no, is not pure, if we return x it is possible to change the state of pacman, and this is a side effect",
+      "idx": 218
+    },
+    {
+      "data": "The method is not pure as it returns a variable of PacMan which might change over time. Calling the getX() method in different lines of the code might produce different results.",
+      "idx": 219
+    },
+    {
+      "data": "It is not pure as it accesses and returns a field inside Pacman (x) which could change over time, as it is not immutable",
+      "idx": 229
+    }
+  ],
+  [
+    {
+      "data": "The method get x is pure because even if it accesses a variable outside of it's scope it doesn't change its value or state, it also benefits of idempotency(if called twice it will return the same result)",
+      "idx": 208
+    },
+    {
+      "data": "getX is accessing x from the Pacman's scope, therefore the value of x can change overtime (e.g. a call of setX). Pure functions are idempotent and because of what said getX is not. So getX is not pure.",
+      "idx": 217
+    },
+    {
+      "data": "its returning the value of global variable x, which means there could be a side effect when the value of x changes. getX is not pure.",
+      "idx": 227
+    }
+  ],
+  [
+    {
+      "data": "This is not pure as it is getting the variable x which is declared outside of the scope of the function.",
+      "idx": 210
+    },
+    {
+      "data": "Method getX accesses the external state to retrieve the value of field x, thus it is not pure",
+      "idx": 212
+    },
+    {
+      "data": "getX is not pure because it accesses an external variable x",
+      "idx": 220
+    },
+    {
+      "data": "It accesses a variable outside of it's state/scope, making it not pure.",
+      "idx": 222
+    },
+    {
+      "data": "It is not pure as return an external variable x that is not defined as it own argument.",
+      "idx": 233
+    }
+  ],
+  [
+    {
+      "data": "The method is not pure because it returns a modifiable field.",
+      "idx": 223
+    },
+    {
+      "data": "This method reads memory from outside the function, so it can't be pure.",
+      "idx": 230
+    }
+  ],
+  [
+    {
+      "data": "The result of the function depends on the state of the Pacman object, that is, its value of x.",
+      "idx": 207
+    },
+    {
+      "data": "It depends on the current state of the object.",
+      "idx": 225
+    },
+    {
+      "data": "getX has implicit this arg; the result depends on it",
+      "idx": 234
+    }
+  ],
+  [
+    {
+      "data": "The method does not modify anything outside its local scope.",
+      "idx": 213
+    },
+    {
+      "data": "No because the function access a state in the memory. The variable x can be modified and if we invoke the function again we cannot guarantee that the result will be the same.",
+      "idx": 232
+    },
+    {
+      "data": "It accesses memory state.",
+      "idx": 235
+    }
+  ]
+]
