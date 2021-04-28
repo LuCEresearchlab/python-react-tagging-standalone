@@ -25,3 +25,8 @@ export interface Answer {
     "picked": boolean,
     "matches_expected": boolean
 }
+
+export interface Cluster {
+    "name": string,
+    "cluster": Answer[]
+}

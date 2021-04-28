@@ -1,5 +1,5 @@
 import React, {useEffect} from "react"
-import {Answer} from "../../../interfaces/Dataset";
+import {Answer, Cluster} from "../../../interfaces/Dataset";
 import {rangesCompressor} from "../../../util/RangeCompressor";
 import {HighlightRange, HighlightRangeColor} from "../../../interfaces/HighlightRange";
 import {Button, Paper} from "@material-ui/core";
@@ -31,18 +31,23 @@ interface Input {
 
 function ClusterView({taggingClusterSession, dispatchTaggingClusterSession}: Input) {
 
+    const currentCluster: Cluster = getCurrentCluster(taggingClusterSession)
+    // TODO: use name field
+
     return (
         <div>
             {
-                getCurrentCluster(taggingClusterSession).map((answer: Answer, index: number) =>
-                    <ClusterItem
-                        key={"ClusterItem|Answer|" + answer.answer_id}
-                        answer={answer}
-                        taggingClusterSession={taggingClusterSession}
-                        dispatchTaggingClusterSession={dispatchTaggingClusterSession}
-                        displayKey={index + 1}
-                    />
-                )}
+                currentCluster
+                    .cluster
+                    .map((answer: Answer, index: number) =>
+                        <ClusterItem
+                            key={"ClusterItem|Answer|" + answer.answer_id}
+                            answer={answer}
+                            taggingClusterSession={taggingClusterSession}
+                            dispatchTaggingClusterSession={dispatchTaggingClusterSession}
+                            displayKey={index + 1}
+                        />
+                    )}
         </div>
     )
 }

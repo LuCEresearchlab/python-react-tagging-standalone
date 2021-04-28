@@ -80,7 +80,7 @@ function MisconceptionView(
 
     const getNewRangesList = (element: (string | null), index: number) => {
         if (taggingClusterSession.tags[0] != null)  // delete highlighting if selecting with NoMisconception
-            return [...Array(getCurrentCluster(taggingClusterSession).length)].map(() => [])
+            return [...Array(getCurrentCluster(taggingClusterSession).cluster.length)].map(() => [])
         let new_ranges_list = []
         for (let ranges of taggingClusterSession.rangesList)
             new_ranges_list.push(highlightRangesColorUpdating(

@@ -1,6 +1,6 @@
 import {TaggingClusterSessionActions} from "./TaggingClusterSession";
 import {HighlightRange} from "../interfaces/HighlightRange";
-import {Answer} from "../interfaces/Dataset";
+import {Answer, Cluster} from "../interfaces/Dataset";
 import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 
 function basic(type: TaggingClusterSessionActions, payload: any) {
@@ -32,7 +32,7 @@ const initClusterSession = (dataset_id: string,
             currentColor,
             history
         })
-const setClusters = (clusters: Answer[][]) => basic(TaggingClusterSessionActions.SET_CLUSTERS, clusters)
+const setClusters = (clusters: Cluster[]) => basic(TaggingClusterSessionActions.SET_CLUSTERS, clusters)
 const setCurrentCluster = (idx: number) => basic(TaggingClusterSessionActions.SET_CURRENT_CLUSTER, idx)
 const popAnswer = (idx: number) => basic(TaggingClusterSessionActions.POP_ANSWER, idx)
 

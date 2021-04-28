@@ -3,7 +3,7 @@ import {
     TaggingClusterSession,
     TaggingClusterSessionDispatch
 } from "../../../model/TaggingClusterSession";
-import {Answer} from "../../../interfaces/Dataset";
+import {Answer, Cluster} from "../../../interfaces/Dataset";
 import {
     DragDropContext,
     Draggable, DraggableProvided, DraggableStateSnapshot,
@@ -62,14 +62,15 @@ type ResultCluster = {
 
 type Result = {
     cluster_idx: number,
+    name: string,
     clusters: ResultCluster[]
 }
 
-function getSortedClusters(clusters: Answer[][], query: string): Result[] {
+function getSortedClusters(clusters: Cluster[], query: string): Result[] {
 
     const extended_clusters: ExtendedCluster[] = clusters
-        .map((cluster: Answer[], cluster_idx: number) =>
-            cluster.map((answer: Answer, answer_idx: number) => {
+        .map((cluster: Cluster, cluster_idx: number) =>
+            cluster.cluster.map((answer: Answer, answer_idx: number) => {
                 return {
                     cluster_idx,
                     answer_idx,
@@ -121,10 +122,9 @@ function getSortedClusters(clusters: Answer[][], query: string): Result[] {
     return sorted_clusters
 }
 
-function getClusterFromExtended(extended_clusters: Result[], idx: number): Answer[] {
-    return extended_clusters[extended_clusters.findIndex(v => v.cluster_idx == idx)]
-        .clusters
-        .map(resultCluster => resultCluster.item.answer)
+function getClusterFromExtended(extended_clusters: Result[], idx: number): Cluster {
+    const r: Result = extended_clusters[extended_clusters.findIndex(v => v.cluster_idx == idx)]
+    return {name: r.name, cluster: r.clusters.map(resultCluster => resultCluster.item.answer)}
 }
 
 function getItemStyle(isDragging: boolean, draggableStyle: any) {
@@ -143,21 +143,21 @@ function getItemStyle(isDragging: boolean, draggableStyle: any) {
     }
 }
 
-function popAnswer(clusters: Answer[][], result: Result, resultCluster: ResultCluster,
+function popAnswer(clusters: Cluster[], result: Result, resultCluster: ResultCluster,
                    taggingSession: TaggingSession,
-                   dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>): Answer[][] {
-    const cluster = clusters[result.cluster_idx]
-    const answer_idx = cluster.findIndex(
+                   dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>): Cluster[] {
+    const cluster: Cluster = clusters[result.cluster_idx]
+    const answer_idx = cluster.cluster.findIndex(
         answer => stringEquals(answer.answer_id,
             resultCluster.item.answer.answer_id)
     )
-    const popped: Answer[] = cluster.slice(answer_idx, answer_idx + 1)
+    const popped: Answer[] = cluster.cluster.slice(answer_idx, answer_idx + 1)
 
-    const reduced_cluster: Answer[] = cluster.slice(0, answer_idx).concat(cluster.slice(answer_idx + 1))
+    const reduced_cluster: Answer[] = cluster.cluster.slice(0, answer_idx).concat(cluster.cluster.slice(answer_idx + 1))
     let new_clusters = [...clusters]
-    new_clusters[result.cluster_idx] = reduced_cluster
-    new_clusters.push(popped)
-    new_clusters = new_clusters.filter(cluster => cluster.length > 0) // remove empty clusters
+    new_clusters[result.cluster_idx] = {name: cluster.name, cluster: reduced_cluster}
+    new_clusters.push({name: 'Cluster ' + new_clusters.length, cluster: popped})
+    new_clusters = new_clusters.filter(cluster => cluster.cluster.length > 0) // remove empty clusters
 
     dispatchTaggingClusterSession(setClusters(new_clusters))
     postClusters(
@@ -173,12 +173,12 @@ function handleClusterChange(
     taggingSession: TaggingSession,
     taggingClusterSession: TaggingClusterSession,
     dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>,
-    clusters: Answer[][],
+    clusters: Cluster[],
     extended_clusters: Result[],
-    result: DropResult): Answer[][] {
+    result: DropResult): Cluster[] {
     if (result.destination == undefined) return clusters
 
-    const new_clusters: Answer[][] = [...clusters]
+    const new_clusters: Cluster[] = [...clusters]
 
     const answer_id = result.draggableId
     const source_cluster = parseInt(result.source.droppableId)
@@ -190,16 +190,16 @@ function handleClusterChange(
     // reorder source cluster to match order in extended
     new_clusters[source_cluster] = getClusterFromExtended(extended_clusters, source_cluster)
 
-    const answer: Answer = new_clusters[source_cluster][source_index]
+    const answer: Answer = new_clusters[source_cluster].cluster[source_index]
 
-    new_clusters[source_cluster] = new_clusters[source_cluster].filter(elem =>
+    new_clusters[source_cluster].cluster = new_clusters[source_cluster].cluster.filter(elem =>
         !stringEquals(answer_id, elem.answer_id))
 
     // reorder target cluster to match order in extended
     new_clusters[target_cluster] = getClusterFromExtended(extended_clusters, target_cluster)
 
     // update tags of moved answer to target cluster ones
-    if (new_clusters[target_cluster].length > 0) {
+    if (new_clusters[target_cluster].cluster.length > 0) {
 
         const get_url = (my_answer_id: string) => TAGGING_SERVICE_URL +
             '/datasets/tagged-answer/dataset/' + taggingClusterSession.dataset_id +
@@ -208,7 +208,7 @@ function handleClusterChange(
             '/user/' + taggingClusterSession.user_id
 
 
-        JSONLoader(get_url(new_clusters[target_cluster][0].answer_id), (tagged_answers: TaggedAnswer[]) => {
+        JSONLoader(get_url(new_clusters[target_cluster].cluster[0].answer_id), (tagged_answers: TaggedAnswer[]) => {
             if (tagged_answers.length == 0) {
                 return;
             } else {
@@ -228,8 +228,8 @@ function handleClusterChange(
         })
     }
     // update target cluster
-    new_clusters[target_cluster].splice(target_idx, 0, answer)
-    const clean_new_clusters = new_clusters.filter(cluster => cluster.length > 0)
+    new_clusters[target_cluster].cluster.splice(target_idx, 0, answer)
+    const clean_new_clusters: Cluster[] = new_clusters.filter(cluster => cluster.cluster.length > 0)
 
     dispatchTaggingClusterSession(
         setClusters(clean_new_clusters) // remove empty clusters
@@ -245,7 +245,7 @@ function handleClusterChange(
 
 function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingClusterSession, setCluster}: Input) {
 
-    const clusters: Answer[][] = taggingClusterSession.clusters
+    const clusters: Cluster[] = taggingClusterSession.clusters
 
     const [state, setState] = useState<{ extendedClusters: Result[], query: string }>({
         extendedClusters: getSortedClusters(clusters, ""),
