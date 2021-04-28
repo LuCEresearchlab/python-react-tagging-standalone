@@ -11,7 +11,7 @@ import {
     DroppableProvided,
     DropResult
 } from "react-beautiful-dnd";
-import {Button, Card, CardContent, CardHeader, Container, TextField} from "@material-ui/core";
+import {Button, Card, CardContent, Container, Paper, TextField} from "@material-ui/core";
 import {GREY, LIGHT_GREY} from "../../../util/Colors";
 import stringEquals from "../../../util/StringEquals";
 import {getDatasetId, getQuestion, TaggingSession} from "../../../model/TaggingSession";
@@ -133,7 +133,7 @@ function getItemStyle(isDragging: boolean, draggableStyle: any) {
         userSelect: 'none',
         padding: '1em',
         margin: '1.5em',
-        marginBottom: 0,
+        marginTop: 0,
         display: 'inline-flex',
 
         // change background colour if dragging
@@ -262,11 +262,10 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                if (e.key == 'Enter') setExtendedClusters(getSortedClusters(clusters, query))
                            }}
                 />
-                <Button style={{height: 48, width: 48}}
-                        onClick={() => setExtendedClusters(getSortedClusters(clusters, query))}>
+                <Button onClick={() => setExtendedClusters(getSortedClusters(clusters, query))}>
                     <Search/>
                 </Button>
-                <Button style={{height: 48, width: 48}} onClick={(e) => {
+                <Button onClick={(e) => {
                     e.preventDefault()
                     setQuery("")
                     setExtendedClusters(getSortedClusters(clusters, ""))
@@ -296,13 +295,13 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                 (provided: DroppableProvided) => (
                                     <Card
                                         style={{
-                                            backgroundColor: GREY, paddingBottom: '2em', marginTop: '2.5em',
-                                            display: 'flex', flexDirection: 'column'
+                                            backgroundColor: GREY, marginTop: '2.5em', display: 'flex',
+                                            flexDirection: 'column'
                                         }}
                                         {...provided.droppableProps}
                                         ref={provided.innerRef}
                                     >
-                                        <CardHeader>
+                                        <CardContent style={{padding: 0, paddingBottom: '1em'}}>
                                             <Button
                                                 variant={'outlined'}
                                                 title={`Switch to cluster ${result.cluster_idx + 1}`}
@@ -310,7 +309,7 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                             >
                                                 <ZoomIn/>
                                             </Button>
-                                        </CardHeader>
+                                        </CardContent>
                                         {
                                             result.clusters.map((resultCluster: ResultCluster, idx: number) =>
                                                 <Draggable
@@ -319,7 +318,7 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                                     index={idx}
                                                 >
                                                     {(provided1: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-                                                        <CardContent
+                                                        <Paper
                                                             ref={provided1.innerRef}
                                                             {...provided1.draggableProps}
                                                             {...provided1.dragHandleProps}
@@ -347,23 +346,24 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                                                         {resultCluster.item.answer.data}
                                                                     </div>
                                                             }
-                                                            <Button style={{height: 48, width: 48, justifySelf: 'end'}}
-                                                                    onClick={() => {
-                                                                        const new_clusters = popAnswer(
-                                                                            clusters,
-                                                                            result,
-                                                                            resultCluster,
-                                                                            taggingSession,
-                                                                            dispatchTaggingClusterSession
-                                                                        )
-                                                                        setExtendedClusters(getSortedClusters(
-                                                                            new_clusters,
-                                                                            query
-                                                                        ))
-                                                                    }}>
+                                                            <Button
+                                                                style={{padding: 0}}
+                                                                onClick={() => {
+                                                                    const new_clusters = popAnswer(
+                                                                        clusters,
+                                                                        result,
+                                                                        resultCluster,
+                                                                        taggingSession,
+                                                                        dispatchTaggingClusterSession
+                                                                    )
+                                                                    setExtendedClusters(getSortedClusters(
+                                                                        new_clusters,
+                                                                        query
+                                                                    ))
+                                                                }}>
                                                                 <Eject/>
                                                             </Button>
-                                                        </CardContent>
+                                                        </Paper>
                                                     )}
                                                 </Draggable>
                                             )
