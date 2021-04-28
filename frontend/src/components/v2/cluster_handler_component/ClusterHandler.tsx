@@ -257,6 +257,7 @@ function ClusterHandler({taggingSession, taggingClusterSession, dispatchTaggingC
                                         query={query}
                                         provided={provided}
                                         result={result}
+                                        extendedClusters={extendedClusters}
                                         setCluster={setCluster}
                                         setExtendedClusters={setExtendedClusters}
                                         getSortedClusters={getSortedClusters}
