@@ -98,8 +98,8 @@ function DroppableCluster({
                 <Button>
                     {
                         collapse ?
-                            <ExpandLess onClick={() => flipCollapse()}/> :
-                            <ExpandMore onClick={() => flipCollapse()}/>
+                            <ExpandMore onClick={() => flipCollapse()}/> :
+                            <ExpandLess onClick={() => flipCollapse()}/>
                     }
                 </Button>
             </CardContent>
