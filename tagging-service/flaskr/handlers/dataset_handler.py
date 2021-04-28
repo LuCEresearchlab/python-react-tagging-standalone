@@ -23,7 +23,7 @@ def _db_add_dataset(db, dataset, computed_clusters):
         '$set':
             {
                 'name': dataset['name'],
-                'creation_data': datetime.now(timezone.utc),
+                'creation_data': datetime.now(tz=timezone.utc).isoformat(),
                 'dataset_id': dataset['dataset_id'],
                 'questions': dataset['questions'],
                 'clusters_computed': total_computed
@@ -44,11 +44,11 @@ def add_dataset(dataset, mem_to_clean):
 
     def thread_func(_dataset_id, _question_id, _answers):
         logger.debug('clustering ' + _question_id)
-        c = cluster(_answers)  # force computation
+        cls = cluster(_answers)  # force computation
         save_cluster(dataset_id=_dataset_id,
                      question_id=_question_id,
                      user_id='',
-                     cluster=c)
+                     cluster=[{'cluster': c, 'name': f'Cluster {i}'} for i, c in enumerate(cls)])  # convert format
         logger.debug('done ' + _question_id)
 
     threads = []
