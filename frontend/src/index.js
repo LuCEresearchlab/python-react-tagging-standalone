@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import ReactDOM from "react-dom";
-import {BrowserRouter as Router, Switch, useHistory} from "react-router-dom"
+import {BrowserRouter as Router, Switch} from "react-router-dom"
 
 import NavBar from "./NavBar";
 import Uploader from "./pages/upload/FileUploader"
@@ -20,9 +20,6 @@ import LoginRoute from "./pages/auth/LoginRoute";
 
 function App() {
     const [session, setSession] = useState(getSessionCookie())
-    const router = useHistory()
-
-    console.log(router)
 
     const update_session = (data) => {
         setSession(data)
@@ -30,7 +27,6 @@ function App() {
         console.log('save cookies')
     }
 
-    if (router !== undefined && (session.loggedIn === undefined || !session.loggedIn)) router.push('/login')
 
     return (
         <Router>

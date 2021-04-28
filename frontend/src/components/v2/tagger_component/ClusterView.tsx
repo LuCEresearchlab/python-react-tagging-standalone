@@ -38,7 +38,7 @@ function ClusterView({taggingClusterSession, dispatchTaggingClusterSession}: Inp
         <div>
             {
                 currentCluster
-                    .cluster
+                    .answers
                     .map((answer: Answer, index: number) =>
                         <ClusterItem
                             key={"ClusterItem|Answer|" + answer.answer_id}

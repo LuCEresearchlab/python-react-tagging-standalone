@@ -40,10 +40,10 @@ function StaticSelectorView({
     const getNewRangesList = (element: (string | null), index: number) => {
 
         if (isNoMisconception(element))
-            return [...Array(getCurrentCluster(taggingClusterSession).cluster.length)].map(() => [])
+            return [...Array(getCurrentCluster(taggingClusterSession).answers.length)].map(() => [])
 
         if (handledIndex != 0 && taggingClusterSession.tags[0] != null)
-            return [...Array(getCurrentCluster(taggingClusterSession).cluster.length)].map(() => [])
+            return [...Array(getCurrentCluster(taggingClusterSession).answers.length)].map(() => [])
 
         let new_ranges_list = []
         for (let ranges of taggingClusterSession.rangesList)

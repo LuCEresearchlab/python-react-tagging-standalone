@@ -66,7 +66,7 @@ function getSortedClusters(clusters: Cluster[], query: string): Result[] {
 
     const extended_clusters: ExtendedCluster[] = clusters
         .map((cluster: Cluster, cluster_idx: number) =>
-            cluster.cluster.map((answer: Answer, answer_idx: number) => {
+            cluster.answers.map((answer: Answer, answer_idx: number) => {
                 return {
                     cluster_idx,
                     answer_idx,
@@ -123,7 +123,7 @@ function getSortedClusters(clusters: Cluster[], query: string): Result[] {
 
 function getClusterFromExtended(extended_clusters: Result[], idx: number): Cluster {
     const r: Result = extended_clusters[extended_clusters.findIndex(v => v.cluster_idx == idx)]
-    return {name: r.name, cluster: r.clusters.map(resultCluster => resultCluster.item.answer)}
+    return {name: r.name, answers: r.clusters.map(resultCluster => resultCluster.item.answer)}
 }
 
 
@@ -148,16 +148,16 @@ function handleClusterChange(
     // reorder source cluster to match order in extended
     new_clusters[source_cluster] = getClusterFromExtended(extended_clusters, source_cluster)
 
-    const answer: Answer = new_clusters[source_cluster].cluster[source_index]
+    const answer: Answer = new_clusters[source_cluster].answers[source_index]
 
-    new_clusters[source_cluster].cluster = new_clusters[source_cluster].cluster.filter(elem =>
+    new_clusters[source_cluster].answers = new_clusters[source_cluster].answers.filter(elem =>
         !stringEquals(answer_id, elem.answer_id))
 
     // reorder target cluster to match order in extended
     new_clusters[target_cluster] = getClusterFromExtended(extended_clusters, target_cluster)
 
     // update tags of moved answer to target cluster ones
-    if (new_clusters[target_cluster].cluster.length > 0) {
+    if (new_clusters[target_cluster].answers.length > 0) {
 
         const get_url = (my_answer_id: string) => TAGGING_SERVICE_URL +
             '/datasets/tagged-answer/dataset/' + taggingClusterSession.dataset_id +
@@ -166,7 +166,7 @@ function handleClusterChange(
             '/user/' + taggingClusterSession.user_id
 
 
-        JSONLoader(get_url(new_clusters[target_cluster].cluster[0].answer_id), (tagged_answers: TaggedAnswer[]) => {
+        JSONLoader(get_url(new_clusters[target_cluster].answers[0].answer_id), (tagged_answers: TaggedAnswer[]) => {
             if (tagged_answers.length == 0) {
                 return;
             } else {
@@ -186,8 +186,8 @@ function handleClusterChange(
         })
     }
     // update target cluster
-    new_clusters[target_cluster].cluster.splice(target_idx, 0, answer)
-    const clean_new_clusters: Cluster[] = new_clusters.filter(cluster => cluster.cluster.length > 0)
+    new_clusters[target_cluster].answers.splice(target_idx, 0, answer)
+    const clean_new_clusters: Cluster[] = new_clusters.filter(cluster => cluster.answers.length > 0)
 
     dispatchTaggingClusterSession(
         setClusters(clean_new_clusters) // remove empty clusters

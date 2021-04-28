@@ -17,6 +17,4 @@ if (initial_state == null) {
 
 const userContext = React.createContext<User>(initial_state);
 
-console.log('created new context', initial_state)
-
 export {userContext, initial_state};

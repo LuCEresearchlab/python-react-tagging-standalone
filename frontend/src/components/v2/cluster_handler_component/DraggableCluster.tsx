@@ -54,17 +54,17 @@ function popAnswer(clusters: Cluster[], result: Result, resultCluster: ResultClu
                    taggingSession: TaggingSession,
                    dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>): Cluster[] {
     const cluster: Cluster = clusters[result.cluster_idx]
-    const answer_idx = cluster.cluster.findIndex(
+    const answer_idx = cluster.answers.findIndex(
         answer => stringEquals(answer.answer_id,
             resultCluster.item.answer.answer_id)
     )
-    const popped: Answer[] = cluster.cluster.slice(answer_idx, answer_idx + 1)
+    const popped: Answer[] = cluster.answers.slice(answer_idx, answer_idx + 1)
 
-    const reduced_cluster: Answer[] = cluster.cluster.slice(0, answer_idx).concat(cluster.cluster.slice(answer_idx + 1))
+    const reduced_cluster: Answer[] = cluster.answers.slice(0, answer_idx).concat(cluster.answers.slice(answer_idx + 1))
     let new_clusters = [...clusters]
-    new_clusters[result.cluster_idx] = {name: cluster.name, cluster: reduced_cluster}
-    new_clusters.push({name: 'Cluster ' + new_clusters.length, cluster: popped})
-    new_clusters = new_clusters.filter(cluster => cluster.cluster.length > 0) // remove empty clusters
+    new_clusters[result.cluster_idx] = {name: cluster.name, answers: reduced_cluster}
+    new_clusters.push({name: 'Cluster ' + new_clusters.length, answers: popped})
+    new_clusters = new_clusters.filter(cluster => cluster.answers.length > 0) // remove empty clusters
 
     dispatchTaggingClusterSession(setClusters(new_clusters))
     postClusters(
