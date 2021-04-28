@@ -1,5 +1,5 @@
 import {GREY, LIGHT_GREY} from "../../../util/Colors";
-import {Button, Card, CardContent, Paper} from "@material-ui/core";
+import {Button, Card, CardContent, Paper, TextField} from "@material-ui/core";
 import {Eject, ZoomIn} from "@material-ui/icons";
 import {Draggable, DraggableProvided, DraggableStateSnapshot, DroppableProvided} from "react-beautiful-dnd";
 import React from "react";
@@ -96,6 +96,17 @@ function DroppableCluster({
             ref={provided.innerRef}
         >
             <CardContent style={{padding: 0, paddingBottom: '1em'}}>
+                <TextField value={result.name} onChange={(e) => {
+                    clusters[result.cluster_idx].name = e.target.value
+                    postClusters(
+                        getDatasetId(taggingSession),
+                        getQuestion(taggingSession).question_id,
+                        taggingSession.user_id,
+                        [...clusters]
+                    )
+                    dispatchTaggingClusterSession(setClusters([...clusters]))
+                    setExtendedClusters(getSortedClusters([...clusters], query))
+                }}/>
                 <Button
                     variant={'outlined'}
                     title={`Switch to cluster ${result.cluster_idx + 1}`}

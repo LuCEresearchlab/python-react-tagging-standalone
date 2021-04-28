@@ -107,7 +107,10 @@ function getSortedClusters(clusters: Cluster[], query: string): Result[] {
     })
 
     order = uniqueArr(order)
-    order.forEach((value, idx) => sorted_clusters[idx] = {cluster_idx: value, clusters: []})
+    order.forEach((value, idx) => sorted_clusters[idx] = {
+        cluster_idx: value, clusters: [],
+        name: clusters[value].name
+    })
 
     results.forEach(result => {
         const pos: number = order.findIndex(cluster_n => result.item.cluster_idx == cluster_n)

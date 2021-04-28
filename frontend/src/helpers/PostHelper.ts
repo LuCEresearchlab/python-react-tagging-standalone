@@ -45,6 +45,9 @@ export function postClusters(dataset_id: string,
                              question_id: string,
                              user_id: string,
                              clusters: Cluster[]) {
+    console.log(`posting to ${TAGGING_SERVICE_URL}/clusters/dataset/${dataset_id}/question/${question_id}/user/${
+        user_id}`)
+    console.log(clusters)
     post(`${TAGGING_SERVICE_URL}/clusters/dataset/${dataset_id}/question/${question_id}/user/${user_id}`,
         clusters)
 }
