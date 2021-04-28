@@ -48,7 +48,7 @@ def add_dataset(dataset, mem_to_clean):
         save_cluster(dataset_id=_dataset_id,
                      question_id=_question_id,
                      user_id='',
-                     cluster=[{'cluster': c, 'name': f'Cluster {i}'} for i, c in enumerate(cls)])  # convert format
+                     cluster=[{'answers': c, 'name': f'Cluster {i}'} for i, c in enumerate(cls)])  # convert format
         logger.debug('done ' + _question_id)
 
     threads = []

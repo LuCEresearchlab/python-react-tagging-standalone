@@ -28,5 +28,5 @@ export interface Answer {
 
 export interface Cluster {
     "name": string,
-    "cluster": Answer[]
+    "answers": Answer[]
 }

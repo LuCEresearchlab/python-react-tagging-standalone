@@ -9,7 +9,7 @@ api = Namespace('clusters', description='API to view available datasets')
 CLUSTER = api.model('Cluster', {
     'name': fields.String(required=True, readonly=True, description='Name of the cluster',
                           example='Special Cluster'),
-    'cluster': fields.List(fields.Nested(ANSWER))
+    'answers': fields.List(fields.Nested(ANSWER))
 })
 
 CLUSTERED_ANSWERS = api.model('Clustered Answers', {

@@ -32,8 +32,6 @@ interface Input {
 
 
 function shouldCollapse(query: string, result: Result): boolean {
-    console.log('shouldNotCollapse')
-    console.log(query, query.length == 0)
     for (let c of result.clusters) {
         if (c.matches.length != 0) return false
     }
