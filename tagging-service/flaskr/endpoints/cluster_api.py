@@ -6,13 +6,18 @@ from flaskr.util.mongo_helper import get_cluster, save_cluster
 
 api = Namespace('clusters', description='API to view available datasets')
 
+CLUSTER = api.model('Cluster', {
+    'name': fields.String(required=True, readonly=True, description='Name of the cluster',
+                          example='Special Cluster'),
+    'cluster': fields.List(fields.Nested(ANSWER))
+})
 
 CLUSTERED_ANSWERS = api.model('Clustered Answers', {
     'dataset_id': fields.String(required=True, readonly=True, description='ID of the dataset',
                                 example='603501f39175ac3898e094cc'),
     'question_id': fields.String(required=True, readonly=True, description='ID of the question',
                                  example='6035089963cf6ef09a9c418e'),
-    'clusters': fields.List(fields.List(fields.Nested(ANSWER)))
+    'clusters': fields.List(fields.Nested(CLUSTER))
 })
 
 

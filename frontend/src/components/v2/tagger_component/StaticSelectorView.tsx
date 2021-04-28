@@ -39,9 +39,12 @@ function StaticSelectorView({
 
     const getNewRangesList = (element: (string | null), index: number) => {
 
-        if (isNoMisconception(element)) return [...Array(getCurrentCluster(taggingClusterSession).length)].map(() => [])
+        if (isNoMisconception(element))
+            return [...Array(getCurrentCluster(taggingClusterSession).cluster.length)].map(() => [])
+
         if (handledIndex != 0 && taggingClusterSession.tags[0] != null)
-            return [...Array(getCurrentCluster(taggingClusterSession).length)].map(() => [])
+            return [...Array(getCurrentCluster(taggingClusterSession).cluster.length)].map(() => [])
+
         let new_ranges_list = []
         for (let ranges of taggingClusterSession.rangesList)
             new_ranges_list.push(highlightRangesColorUpdating(
