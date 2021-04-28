@@ -72,18 +72,22 @@ function DroppableCluster({
             {...provided.droppableProps}
             ref={provided.innerRef}
         >
-            <CardContent style={{padding: 0, paddingBottom: '1em'}}>
-                <TextField value={result.name} onChange={(e) => {
-                    clusters[result.cluster_idx].name = e.target.value
-                    postClusters(
-                        getDatasetId(taggingSession),
-                        getQuestion(taggingSession).question_id,
-                        taggingSession.user_id,
-                        [...clusters]
-                    )
-                    dispatchTaggingClusterSession(setClusters([...clusters]))
-                    setExtendedClusters(getSortedClusters([...clusters], query))
-                }}/>
+            <CardContent style={{
+                paddingLeft: '0.5em', paddingRight: '0.5em', paddingBottom: '1em', display: 'flex',
+                flexDirection: 'row'
+            }}>
+                <TextField style={{margin: 'auto', marginLeft: '2em'}} value={result.name}
+                           onChange={(e) => {
+                               clusters[result.cluster_idx].name = e.target.value
+                               postClusters(
+                                   getDatasetId(taggingSession),
+                                   getQuestion(taggingSession).question_id,
+                                   taggingSession.user_id,
+                                   [...clusters]
+                               )
+                               dispatchTaggingClusterSession(setClusters([...clusters]))
+                               setExtendedClusters(getSortedClusters([...clusters], query))
+                           }}/>
                 <Button
                     variant={'outlined'}
                     title={`Switch to cluster ${result.cluster_idx + 1}`}
@@ -100,7 +104,7 @@ function DroppableCluster({
                 </Button>
             </CardContent>
             <Collapse in={!collapse} timeout={0}>
-                <CardContent>
+                <CardContent style={{display: 'flex', flexDirection: 'column'}}>
                     {
                         result.clusters.map((resultCluster: ResultCluster, idx: number) =>
                             <DraggableCluster
