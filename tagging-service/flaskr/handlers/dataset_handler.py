@@ -14,7 +14,7 @@ client = get_new_mongo_client()
 file_db = client['dataset_db']
 
 
-def _db_add_dataset(db, dataset, computed_clusters):
+def _db_add_dataset(db, dataset, computed_clusters, finished_clustering):
     total_computed = int(computed_clusters)
     query = {
         'dataset_id': dataset['dataset_id']
@@ -26,7 +26,8 @@ def _db_add_dataset(db, dataset, computed_clusters):
                 'creation_data': datetime.now(tz=timezone.utc).isoformat(),
                 'dataset_id': dataset['dataset_id'],
                 'questions': dataset['questions'],
-                'clusters_computed': total_computed
+                'clusters_computed': total_computed,
+                'finished_clustering': finished_clustering,
             }
     }
     db.dataset.update_one(query, update, upsert=True)
@@ -39,7 +40,7 @@ def add_dataset(dataset, mem_to_clean):
     db = get_new_mongo_client()['dataset_db']
 
     logger.debug('setting dataset as loading')
-    _db_add_dataset(db=db, dataset=dataset, computed_clusters=0)
+    _db_add_dataset(db=db, dataset=dataset, computed_clusters=0, finished_clustering=False)
     logger.debug('dataset now loading')
 
     def thread_func(_dataset_id, _question_id, _answers):
@@ -66,7 +67,7 @@ def add_dataset(dataset, mem_to_clean):
 
     # set as loaded
     logger.debug('set dataset as loaded')
-    _db_add_dataset(db=db, dataset=dataset, computed_clusters=len(dataset['questions']))
+    _db_add_dataset(db=db, dataset=dataset, computed_clusters=len(dataset['questions']), finished_clustering=True)
 
     # clean cache
     for mem in mem_to_clean:

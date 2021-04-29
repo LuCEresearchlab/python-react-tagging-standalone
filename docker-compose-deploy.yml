@@ -2,8 +2,9 @@ version: '3'
 services:
 
   web:
-    build: ./frontend
-    dockerfile: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-deploy
     ports:
       - "8080:8080"
     volumes:
@@ -12,7 +13,9 @@ services:
     hostname: frontend
 
   tagging-service:
-    build: ./tagging-service
+    build:
+      context: ./tagging-service
+      dockerfile: Dockerfile-deploy
     ports:
       - "5000:5000"
     volumes:

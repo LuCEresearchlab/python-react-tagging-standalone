@@ -33,7 +33,7 @@ docker-compose down
 In case there are issues due to dependencies try to rebuild the containers (will wipe tagged data) with
 
 ```
-docker-compose up --build  # rebuild
+docker-compose up --build tagging-service web # rebuild
 ```
 
 Notes:
@@ -42,7 +42,7 @@ Notes:
   for several minutes.
 - If the tagging-service is interrupted before completing the clustering it'll be necessary to manually log into the
   database and delete the object under `dataset_db/dataset` with `dataset_id` equal to the one that was interrupted.
-  
+
   If the entry is not deleted it'll be impossible to complete the clustering for it and the dataset will always result
   as loading.
 
@@ -52,6 +52,29 @@ clustering performance, to change the resources modify the environment variables
 ```
 NR_WORKERS=2 
 NR_THREADS=5
+```
+
+## Required data format for dataset
+
+```
+{
+  "name": "Experiment 123",
+  "dataset_id": "hex",
+  "questions": [
+    {
+      "question_id": "hex",
+      "text": "text of the question",
+      "answers": [
+        {
+          "answer_id": "hex",
+          "data": "actual answer",
+          "picked": false,
+          "matches_expected": true
+        }
+      ]
+    }
+  ]
+}
 ```
 
 ## Convert data from LUMI to required data format

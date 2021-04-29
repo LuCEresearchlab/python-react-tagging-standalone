@@ -18,7 +18,8 @@ DATASET_DESC = api.model('Dataset Description', {
     'name': fields.String(required=True, readonly=True, description='The name of the dataset'),
     'creation_data': fields.DateTime(required=True, readonly=True, description='The Date of the dataset creation'),
     'clusters_computed': fields.Integer(required=True, readonly=True, description='Number of computed clusters'),
-    'nr_questions': fields.Integer(required=True, readonly=True, description='Number of questions in dataset')
+    'nr_questions': fields.Integer(required=True, readonly=True, description='Number of questions in dataset'),
+    'finished_clustering': fields.Boolean(required=True, readonly=True, description='Is done clustering?')
 })
 
 ANSWER = api.model('Answer', {
@@ -99,7 +100,7 @@ class TaggedAnswersDownloadAPI(Resource):
 
         for tagged_answer in tagged_answers:
             question_id = tagged_answer['question_id']
-            answer_id = int(tagged_answer['answer_id'])
+            answer_id = tagged_answer['answer_id']
 
             tagged_answer['question_text'] = id_to_question_data[question_id]['text']
             tagged_answer['answer_text'] = id_to_answer_data[answer_id]['data']

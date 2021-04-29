@@ -8,6 +8,6 @@ COPY . /app
 
 RUN npm ci
 
-RUN ["npm", "build"]
+RUN npm run build
 
 CMD ["node", "server.js"]

@@ -10,7 +10,8 @@ export interface DatasetDesc {
     "creation_data": string,
     "dataset_id": string,
     "nr_questions": number,
-    "clusters_computed": number
+    "clusters_computed": number,
+    "finished_clustering": boolean
 }
 
 export interface Question {

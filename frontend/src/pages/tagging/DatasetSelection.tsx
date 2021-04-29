@@ -58,7 +58,7 @@ function DatasetSelection() {
                 </TableHead>
                 <TableBody>
                     {datasets.map((dataset: DatasetDesc) => {
-                        const loading_cluster = dataset.clusters_computed != dataset.nr_questions
+                        const loading_cluster = !dataset.finished_clustering
                         const needed_time_s = 1000 * 90 * dataset.nr_questions
                         const started = new Date(dataset.creation_data)
                         const now = new Date()
@@ -74,7 +74,7 @@ function DatasetSelection() {
                             '<1m' :
                             `~${time_left_minutes}:${time_left_seconds}`
 
-                        if (dataset.clusters_computed != dataset.nr_questions) {
+                        if (loading_cluster) {
                             return (
                                 <StyledTableRow key={dataset.dataset_id}>
                                     <StyledTableCell component={'th'} scope={'row'}>
