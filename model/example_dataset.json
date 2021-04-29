@@ -10,7 +10,8 @@
         {
           "answer_id": "hex",
           "data": "actual answer",
-          "user_id": "hex"
+          "picked": false,
+          "matches_expected": true
         }
       ]
     }
