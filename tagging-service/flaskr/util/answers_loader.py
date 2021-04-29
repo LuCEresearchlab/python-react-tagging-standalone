@@ -14,6 +14,6 @@ def populate_retrieving_maps(dataset):
         question_id = question['question_id']
         id_to_question_data[question['question_id']] = question
         for c in get_cluster(dataset_id=dataset_id, question_id=question_id, user_id='')[0]['clusters']:
-            for answer in c:
-                id_to_answer_data[answer['answer_id']] = answer
+            for answer in c['answers']:
+                id_to_answer_data[str(answer['answer_id'])] = answer
     return id_to_question_data, id_to_answer_data

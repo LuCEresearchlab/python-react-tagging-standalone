@@ -1,5 +1,6 @@
 import React from 'react';
-import {makeStyles, Link, Container, AppBar, Toolbar, List, ListItem, ListItemText, Box} from "@material-ui/core";
+import {makeStyles, Container, AppBar, Toolbar, List, ListItem, ListItemText, Box} from "@material-ui/core";
+import {Link} from 'react-router-dom';
 
 const useStyles = makeStyles({
     navDisplayFlex: {
@@ -30,7 +31,7 @@ function NavBar() {
                             aria-labelledby="main navigation"
                             className={classes.navDisplayFlex}>
                             {navLinks.map(({title, path}) => (
-                                <Link href={path} key={title} className={classes.linkText}>
+                                <Link to={path} key={title} className={classes.linkText}>
                                     <ListItem button>
                                         <ListItemText primary={title}/>
                                     </ListItem>
