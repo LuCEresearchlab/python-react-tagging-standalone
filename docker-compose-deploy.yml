@@ -1,0 +1,38 @@
+version: '3'
+services:
+
+  web:
+    build: ./frontend
+    dockerfile: ./frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/logs:/root/.npm/_logs
+    hostname: frontend
+
+  tagging-service:
+    build: ./tagging-service
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./tagging-service:/tagging_service
+    restart: on-failure
+    links:
+      - tagging-database
+    environment:
+      - FLASK_APP=${FLASK_APP}
+      - FLASK_ENV=${FLASK_ENV}
+      - NR_WORKERS=${NR_WORKERS}
+      - NR_THREADS=${NR_THREADS}
+    depends_on:
+      - tagging-database
+
+
+  tagging-database:
+    image: 'mongo:4.2.13-bionic'
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+

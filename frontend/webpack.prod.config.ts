@@ -7,11 +7,10 @@ import { CleanWebpackPlugin } from "clean-webpack-plugin";
 
 const config: webpack.Configuration = {
   mode: "production",
-  entry: "./src/client/index.js",
+  entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "build"),
-    filename: "[name].[contenthash].js",
-    publicPath: "",
+    filename: "[name].[contenthash].js"
   },
   module: {
     rules: [
@@ -37,6 +36,7 @@ const config: webpack.Configuration = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "src/index.html",
+      favicon: "src/images/icon/ms-icon-310x310.png"
     }),
     new ForkTsCheckerWebpackPlugin({
       async: false,
