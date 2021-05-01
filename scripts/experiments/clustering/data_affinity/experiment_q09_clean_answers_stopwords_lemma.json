@@ -1,0 +1,166 @@
+[
+  [
+    {
+      "data": "only return a function that needs a input x, so there's no value",
+      "idx": 342
+    }
+  ],
+  [
+    {
+      "data": "It returns a function that can be used to add one to a given value (technically it doesn't return a value but will return a function) ",
+      "idx": 344
+    },
+    {
+      "data": "It doesn't return a value but it will return a function.",
+      "idx": 346
+    },
+    {
+      "data": "It return a function",
+      "idx": 356
+    }
+  ],
+  [
+    {
+      "data": "It returns a function as a value. Since functions can be used as values, the statement is incorrect. ",
+      "idx": 358
+    }
+  ],
+  [
+    {
+      "data": "It actually returns a function: the lambda in the body of f.",
+      "idx": 359
+    },
+    {
+      "data": "It returns a function, which is a value. Remember higher-order functions and 'functions as values'? Here you have it. Though f does get any function as input!",
+      "idx": 364
+    },
+    {
+      "data": "It returns the function wich takes a argument 'x' and returns x + 1",
+      "idx": 366
+    },
+    {
+      "data": "It depends what you consider as 'value'. In my opinion, it returns a function as value, therefore the function f returns a value.",
+      "idx": 368
+    },
+    {
+      "data": "It returns a function which is also a value.",
+      "idx": 371
+    }
+  ],
+  [
+    {
+      "data": "It returns the wrapped function.",
+      "idx": 369
+    }
+  ],
+  [
+    {
+      "data": "f() returns a first class function",
+      "idx": 341
+    },
+    {
+      "data": "Calling f() returns an anonymous function (which can be stored in a variable or immediately be executed)",
+      "idx": 348
+    },
+    {
+      "data": "As said in HOF.1 a call of f() returns a Function.",
+      "idx": 353
+    }
+  ],
+  [
+    {
+      "data": "It returns a function. f()(2) will return a value.",
+      "idx": 351
+    }
+  ],
+  [
+    {
+      "data": "Calling f() actually returns a function that can be used. (e.g. let myf = f(); myf(10);). Functions can be treated as values as well.",
+      "idx": 355
+    }
+  ],
+  [
+    {
+      "data": "calling f() return a function",
+      "idx": 357
+    },
+    {
+      "data": "Calling `f()` returns a function.",
+      "idx": 361
+    },
+    {
+      "data": "Calling f() will return 'function(x)'.",
+      "idx": 367
+    },
+    {
+      "data": "any f call results in a function",
+      "idx": 370
+    },
+    {
+      "data": "Calling f() returns a function as a value",
+      "idx": 373
+    }
+  ],
+  [
+    {
+      "data": "Calling f() returns a function, specifically the function 'function(x) { return x + 1; }'",
+      "idx": 365
+    }
+  ],
+  [
+    {
+      "data": "It returns a function. In javascript, functions can be values. In this case calls to f yield the anonymous incrementer function.",
+      "idx": 343
+    },
+    {
+      "data": "f() does return a value and it is a function value. In this case it returns an anonymous function: function(x) {return x + 1;}",
+      "idx": 345
+    },
+    {
+      "data": "f() returns the inner anonymous function defined in the body of f();",
+      "idx": 349
+    }
+  ],
+  [
+    {
+      "data": "Returns a function.",
+      "idx": 347
+    }
+  ],
+  [
+    {
+      "data": "No it will return a function as a value.",
+      "idx": 352
+    }
+  ],
+  [
+    {
+      "data": "f() return the inner anonymous function",
+      "idx": 350
+    },
+    {
+      "data": "yes, it only returns the anonymous function inside f.",
+      "idx": 354
+    },
+    {
+      "data": "it should return an anonymous function",
+      "idx": 360
+    },
+    {
+      "data": "returns an anonymous function ",
+      "idx": 362
+    }
+  ],
+  [
+    {
+      "data": "there is no passing function",
+      "idx": 372
+    }
+  ],
+  [
+    {
+      "data": "it's not taking any parameter, so it will return nothing",
+      "idx": 363
+    }
+  ]
+]

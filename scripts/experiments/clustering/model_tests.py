@@ -7,7 +7,7 @@ import numpy as np
 import nltk
 
 from semantic_text_similarity.models import WebBertSimilarity
-from sklearn.cluster import SpectralClustering
+from sklearn.cluster import SpectralClustering, AffinityPropagation, AgglomerativeClustering
 
 from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import word_tokenize
@@ -32,6 +32,9 @@ nltk.download('punkt')
 stop_words = set(stopwords.words('english'))
 lemma = nltk.wordnet.WordNetLemmatizer()
 wordnet.ensure_loaded()
+
+easy_split = False
+algo = 'agglomerative'  # agglomerative | spectral | affinity
 
 
 def raw(answers):
@@ -110,16 +113,38 @@ def get_similarity_matrix(answers, clean_function):
 
 def _cluster(answers, clean_func):
     nr_answers = len(answers)
+    if nr_answers < 2:
+        return answers
     nr_clusters = max(int(math.ceil(nr_answers / 10)), 2)
 
     sim_matrix = get_similarity_matrix(answers, clean_func)
 
-    clustering = SpectralClustering(n_clusters=nr_clusters,
-                                    affinity='precomputed',
-                                    random_state=0,
-                                    n_init=50).fit(sim_matrix)
+    clustering = None
 
-    clusters = [[] for _ in range(nr_clusters)]
+    if algo == 'spectral':
+        clustering = SpectralClustering(n_clusters=nr_clusters,
+                                        affinity='precomputed',
+                                        random_state=0,
+                                        n_init=50).fit(sim_matrix)
+    elif algo == 'affinity':
+        clustering = AffinityPropagation(random_state=0, affinity='precomputed').fit(sim_matrix)
+    else:
+        # need distance matrix, convert
+        for i in range(len(answers)):
+            sim_matrix[i][i] = 0  #
+
+        maximal_value = np.max(sim_matrix)
+        sim_matrix = sim_matrix / maximal_value  # normalize
+        sim_matrix = 1 - sim_matrix
+
+        for i in range(len(answers)):
+            sim_matrix[i][i] = 0  #
+
+        clustering = AgglomerativeClustering(n_clusters=nr_clusters,
+                                             affinity='precomputed',
+                                             linkage='complete').fit(sim_matrix)
+
+    clusters = [[] for _ in range(np.max(clustering.labels_) + 1)]
     for idx, cluster_idx in enumerate(clustering.labels_):
         clusters[cluster_idx].append(answers[idx])
     return clusters
@@ -132,7 +157,11 @@ def cluster(answers, clean_func):
         if len(c) <= 5:
             final_clusters.append(c)
         else:
-            final_clusters.extend(cluster(c, clean_func))
+            if easy_split:
+                final_clusters.extend(cluster(c[:4], clean_func))
+                final_clusters.extend(cluster(c[4:], clean_func))
+            else:
+                final_clusters.extend(cluster(c, clean_func))
     return final_clusters
 
 
@@ -151,7 +180,7 @@ def compute_metrics(question_idx):
         if len(question_idx) < 2:
             question_idx = '0' + question_idx
 
-        with open(f"./data/experiment_q{question_idx}_{clean_functions[idx].__name__}.json", "w") as file:
+        with open(f"./data_{algo}/experiment_q{question_idx}_{clean_functions[idx].__name__}.json", "w") as file:
             cs = computed_clusters[idx]
             file.write('[\n')
             array_content = []

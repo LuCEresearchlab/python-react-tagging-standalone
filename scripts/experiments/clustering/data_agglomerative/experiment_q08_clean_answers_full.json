@@ -1,0 +1,154 @@
+[
+  [
+    {
+      "data": "This is indeed correct because we pass 10 as parameter to the function returned by f() which is the anonymous function.",
+      "idx": 311
+    },
+    {
+      "data": "The first call will return the lambda (function(x) {...}) while the second one will call the lambda with value 10.",
+      "idx": 325
+    },
+    {
+      "data": "first is called f() and then 10 is passed as parameter to function(x)",
+      "idx": 326
+    },
+    {
+      "data": "It is correct. f() returns a function and the further calling execute the inner function with the variable x set to 10",
+      "idx": 339
+    }
+  ],
+  [
+    {
+      "data": "f() returns the inner anonymous function, which is then called with 10 as argument, returning 11.",
+      "idx": 315
+    },
+    {
+      "data": "because f() is going to be the inner anonymous function and invoking it with parameter 10 will result in 11",
+      "idx": 316
+    },
+    {
+      "data": "outer function f takes no parameters and inner function 'function' takes one parameter, in this case 10, and returns 10+1.",
+      "idx": 333
+    }
+  ],
+  [
+    {
+      "data": "f() will return a function, this function when called with (10) will return 11, so calling f()(10) will execute f and the internal function",
+      "idx": 323
+    },
+    {
+      "data": "f() returns the internal function, and that internal function with input 10 will return 11.",
+      "idx": 324
+    },
+    {
+      "data": "By calling f() we get as result the inner function, which is invoked directly with the (10). Thus, it computes 10 + 1 which is 11",
+      "idx": 331
+    },
+    {
+      "data": "calling f() return the function, and calling f()(10) return the result of (10+1).",
+      "idx": 337
+    }
+  ],
+  [
+    {
+      "data": "Once f is called it will create a function with one input param. that will be passed with the second parenthesis(10) and will add that 10 to 1",
+      "idx": 310
+    }
+  ],
+  [
+    {
+      "data": "yes, is correct because because first we call f and then we pass the parameter to the anonymous function inside f.",
+      "idx": 320
+    },
+    {
+      "data": "Yes. The function f return an anonymous function which, when invoked, return the values taken in input, incremented by 1.",
+      "idx": 334
+    },
+    {
+      "data": "pass a function and return f+1",
+      "idx": 338
+    }
+  ],
+  [
+    {
+      "data": "Since it a curried function, meaning that in this case it needs two function calls, where the second one takes the parameter of the function returned by f().",
+      "idx": 313
+    },
+    {
+      "data": "Calling f() will return a function that takes an argument and returns the argument plus one.",
+      "idx": 321
+    },
+    {
+      "data": "in this way we are calling correctly the function that is returned by f, that simply increment with one its x argument",
+      "idx": 322
+    },
+    {
+      "data": "Calling the function returned by `f()` will yield a function summing its argument to 1. The result is therefore 2.",
+      "idx": 327
+    }
+  ],
+  [
+    {
+      "data": "Calling f() returns an anonymous function which can then be called with a numerical argument (e.g., 10) and will return its successor (e.g., 11).",
+      "idx": 314
+    },
+    {
+      "data": "Yes because f() will return a function. Calling that function with 10, it will return 11.",
+      "idx": 317
+    },
+    {
+      "data": "As said in the previous answer, f() returns a function that takes one argument and return that argument increased by one. Therefore calling f()(10) will increase 10 by 1 and return 11.",
+      "idx": 319
+    },
+    {
+      "data": "yes, this is the right way to call it, call f and passing to the function 10 will return 11.",
+      "idx": 329
+    },
+    {
+      "data": "yes, f return the function in which we apply the number 10 -> 10 + 1 == 11",
+      "idx": 335
+    }
+  ],
+  [
+    {
+      "data": "The first call to f() returns the anonymous function. The second part of the call: f()(10), provides 10 as input to the returned incrementer function. Incrementing 10 yields 11.",
+      "idx": 309
+    },
+    {
+      "data": "f returns a function that adds 1 to the parameter passed to it. We are passing 10. So, 10 + 1 = 11.",
+      "idx": 330
+    },
+    {
+      "data": "It first call f() wich return the function. With the (10), this function is called, so it returns 10 + 1 that is 11.",
+      "idx": 332
+    }
+  ],
+  [
+    {
+      "data": "This will correctly return 11 because the value is passed onto the function(x)",
+      "idx": 312
+    },
+    {
+      "data": "f() will return the anonymous function and this function takes x as input variable and returns x+1, so that it is 11.",
+      "idx": 318
+    }
+  ],
+  [
+    {
+      "data": "Just because",
+      "idx": 336
+    }
+  ],
+  [
+    {
+      "data": "we increment x, which is 10, by 1. ",
+      "idx": 328
+    }
+  ],
+  [
+    {
+      "data": "it's the regular expression",
+      "idx": 308
+    }
+  ]
+]

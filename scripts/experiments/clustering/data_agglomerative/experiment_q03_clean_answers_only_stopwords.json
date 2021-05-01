@@ -1,0 +1,154 @@
+[
+  [
+    {
+      "data": "The increment function changes the state of the object, as opposed to making a new copy of it. It is not immutable.",
+      "idx": 105
+    },
+    {
+      "data": "No, to be immutable the increment method should return a new object when the state is changed",
+      "idx": 119
+    },
+    {
+      "data": "Immutable object has no mutators",
+      "idx": 132
+    }
+  ],
+  [
+    {
+      "data": "if the method could change the counter class, then it's not immutable",
+      "idx": 104
+    },
+    {
+      "data": "If class Counter is really immutable, then it should not be possible to modify its field.",
+      "idx": 123
+    },
+    {
+      "data": "for a class to be immutable, we need to declare it as final, make fields private and final and cloning objects if we want to perform some type of modification. In this case we have a public method that increments a counter variable, which means the class is mutable.",
+      "idx": 125
+    },
+    {
+      "data": "There's no way of knowing that this class Counter is or not immutable without knowing how the properties of this class have been defined and how the increment method works. Apparently, it doesn't return anything, so I suppose it will make counter mutable, so it's true that the increment method could be used to increment the counter (which is the 'correct' part of this option), but I will mark this option as WRONG, because we probably would need to return something from increment to make this class immutable.",
+      "idx": 126
+    }
+  ],
+  [
+    {
+      "data": "If the class Counter is immutable, it can't have a mutable variable like counter",
+      "idx": 118
+    },
+    {
+      "data": "The class Counter is not immutable. It doesn't declared as final class",
+      "idx": 135
+    }
+  ],
+  [
+    {
+      "data": "class Counter is mutable. The only immutable classes in Java are the classes of primitive types, i.e. Integer, Double",
+      "idx": 129
+    }
+  ],
+  [
+    {
+      "data": "If counter is immutable it will not allow for changes of values in the increment function resulting in a useless counter.",
+      "idx": 106
+    },
+    {
+      "data": "increment is not void, because if we want to change an immutable object the only way is to returna another instance of the object. therefore increment will return a new instance of the counter, with the incremented value assigned.",
+      "idx": 116
+    },
+    {
+      "data": "because increment() has return type void and to be immutable should return some new value",
+      "idx": 122
+    },
+    {
+      "data": "increment() should return a copy of Counter if we want Counter to be immutable. ",
+      "idx": 124
+    },
+    {
+      "data": "The return type of incremental is void, if it is immutable should return the counter instead of void",
+      "idx": 131
+    }
+  ],
+  [
+    {
+      "data": "Increment() could construct a new instance of Counter with the new value, but since it returns void it is not possible.",
+      "idx": 103
+    },
+    {
+      "data": "Since it has a return type void. Which means we can modify the field counter, using the increment function.",
+      "idx": 109
+    },
+    {
+      "data": "If increment with void return type does increment the counter, it means it is modifying some value. To really be immutable, we would need an increment method that return a new Counter storing the new value.",
+      "idx": 111
+    },
+    {
+      "data": "increment has to return a new Counter object if it modify the state. In this case increment is void so it is mutable. ",
+      "idx": 113
+    }
+  ],
+  [
+    {
+      "data": "If the class counter is inmutable, their attributes should be inmutable aswell, so the method increment() wouldn't be able to modify this finals attributes.",
+      "idx": 128
+    }
+  ],
+  [
+    {
+      "data": "This is not immutable because class Counter is not final and thus can be extended. To fix this, one would need to change the signature of increment to return an object of type Counter instead of not returning anything.",
+      "idx": 107
+    },
+    {
+      "data": "It cannot be used to increment the counter held in the current instance of an object of class Counter, as the class is immutable. What we could do is to return a new object of class Counter with the incremented value, but for doing that we would need a different signature for the increment method (specifically, a different return type)",
+      "idx": 110
+    },
+    {
+      "data": "the method increment which changes the state of the object cannot return void as it implies a side effect mutating the internal state, rather than creating a new Counter with the updated field and returning it. Moreover the class could be further extended.",
+      "idx": 112
+    },
+    {
+      "data": "We could do so by returning a new counter. However, by its signature, method increment seems to modify a field of Counter.",
+      "idx": 121
+    },
+    {
+      "data": "Assuming that increment modifies the counter, then it is for sure not immutable. However, assuming that it does not modify the counter but it returns a new Counter, it would theoretically be immutable but the class is not declared as final, thus it could be extended by another class which have mutable fields.",
+      "idx": 127
+    }
+  ],
+  [
+    {
+      "data": "No, it does not contain a keyword final. also in order to increase the counter, in the method `increment` it should return a new Counter instance and in its constructer function input the current value.",
+      "idx": 114
+    }
+  ],
+  [
+    {
+      "data": "Since the class let the increment method public, anyone can alter the state of the class by invoking the increment method.",
+      "idx": 117
+    }
+  ],
+  [
+    {
+      "data": "No because the definition of of an immutable class requires that the class is labeled with 'final' (in this way no one can create subclasses of that class).",
+      "idx": 130
+    },
+    {
+      "data": "There is no final keyword before class definition.",
+      "idx": 133
+    }
+  ],
+  [
+    {
+      "data": "As the increment method can be used to increment the counter it is mutable.",
+      "idx": 108
+    },
+    {
+      "data": "We don't know enough of its implementation, e.g. Counter may have a public field counter and therefore being mutable.",
+      "idx": 115
+    },
+    {
+      "data": "If you can increment the counter, it implies that the counter is actually mutable. Also nothing in the Counter definition says it is immutable.",
+      "idx": 120
+    }
+  ]
+]

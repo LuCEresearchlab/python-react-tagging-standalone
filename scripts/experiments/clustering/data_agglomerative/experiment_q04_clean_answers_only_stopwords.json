@@ -1,0 +1,154 @@
+[
+  [
+    {
+      "data": "It produces a side effect.",
+      "idx": 158
+    },
+    {
+      "data": "Method say has side effect",
+      "idx": 166
+    },
+    {
+      "data": "probably create side effect then is not pure",
+      "idx": 168
+    }
+  ],
+  [
+    {
+      "data": "because it has side effect with print",
+      "idx": 138
+    },
+    {
+      "data": "The method is impure because it prints, thus producing a side effect.",
+      "idx": 155
+    },
+    {
+      "data": "This method has a side effect that is a screen print, so it cannot be consider a pure method.",
+      "idx": 162
+    }
+  ],
+  [
+    {
+      "data": "It has a side effect: it affects the program's output.",
+      "idx": 137
+    },
+    {
+      "data": "It results system output, which is a side-effect.",
+      "idx": 167
+    }
+  ],
+  [
+    {
+      "data": "It is impure because it uses the IO. IO is a side-effect.",
+      "idx": 139
+    },
+    {
+      "data": "This is impure since it does IO and therefore has side effects.",
+      "idx": 141
+    },
+    {
+      "data": "Because inside there is an IO action. This is a side effect",
+      "idx": 147
+    },
+    {
+      "data": "This method `say` has IO action, which is a kind of side effect.",
+      "idx": 148
+    }
+  ],
+  [
+    {
+      "data": "The method say is not pure because it can accesses System.out to print",
+      "idx": 140
+    },
+    {
+      "data": "It is using another method (System.out.println(text)) so it is not pure.",
+      "idx": 142
+    },
+    {
+      "data": "It writes to the standard output, i.e. it does IO, so it cannot be pure, given that it interacts with the output (of the function) world, by definition.",
+      "idx": 160
+    },
+    {
+      "data": "It is not pure as it prints something to the standard output",
+      "idx": 161
+    }
+  ],
+  [
+    {
+      "data": "The method say is not pure since it is doing an IO operation.",
+      "idx": 145
+    },
+    {
+      "data": "Pure methods does not allow IO. Say is printing the text.",
+      "idx": 149
+    },
+    {
+      "data": "Pure functions have no side effect. Method say print text variable that is a side effect (IO)",
+      "idx": 169
+    }
+  ],
+  [
+    {
+      "data": "since void say(String text) uses I/O operations it implies that it has side-effects which make it non-pure",
+      "idx": 146
+    },
+    {
+      "data": "No, is not pure because there is an output to the terminal, there is a side effect",
+      "idx": 150
+    },
+    {
+      "data": "say method is not pure because it have side effects: print variable text",
+      "idx": 152
+    }
+  ],
+  [
+    {
+      "data": "Pure functions don't have side effects, including IO (println does IO)",
+      "idx": 151
+    },
+    {
+      "data": "System.out.println() has a side effect (it outputs something). A pure function has no side effects, so say() is not pure.",
+      "idx": 154
+    },
+    {
+      "data": "println causes a side effect, which means say it's not pure.",
+      "idx": 159
+    },
+    {
+      "data": "Method say is not pure as it has IO side effect, it print to the console.",
+      "idx": 165
+    }
+  ],
+  [
+    {
+      "data": "Since say(String text) deals with an IO operation which is clearly impure.",
+      "idx": 143
+    },
+    {
+      "data": "Method say does I/O (specifically, outputs a string). I/O operations are impure, thus the method is not pure.",
+      "idx": 144
+    },
+    {
+      "data": "it output something on the system and that makes a function impure (accessing I/O).",
+      "idx": 153
+    },
+    {
+      "data": "The method is performing IO, modifying the global state of the program. ",
+      "idx": 157
+    },
+    {
+      "data": "Because the function does not alter the state of the program - it just takes an argument and produces an output using that argument.",
+      "idx": 163
+    }
+  ],
+  [
+    {
+      "data": "it prints on the output",
+      "idx": 156
+    },
+    {
+      "data": "No, because it performs an output operations (print a text)",
+      "idx": 164
+    }
+  ]
+]
