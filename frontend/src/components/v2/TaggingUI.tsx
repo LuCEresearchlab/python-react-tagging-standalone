@@ -74,7 +74,7 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
             const current_cluster = taggingClusterSession.currentCluster
             if (current_cluster + 1 < total_clusters) {
                 dispatchTaggingClusterSession(nextCluster())
-                setPage(current_cluster + 2)  // offset of 1
+                setPage(page + 1)  // offset of 1
             } else {
                 dispatchTaggingSession(nextQuestion())
                 dispatchTaggingClusterSession(setCurrentCluster(0))
@@ -82,6 +82,18 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
             }
         }
         if (command == 'c') setTab(tab == '1' ? '2' : '1')
+        if (command == 'b') {
+            const current_cluster = taggingClusterSession.currentCluster
+            if (current_cluster - 1 >= 0) {
+                dispatchTaggingClusterSession(setCurrentCluster(current_cluster - 1))
+                setPage(page - 1)
+            } else {
+                const previousQuestion = taggingSession.currentQuestion == 0 ? 0 : taggingSession.currentQuestion - 1
+                dispatchTaggingSession(setCurrentQuestion(previousQuestion))
+                dispatchTaggingClusterSession(setCurrentCluster(0))
+                setPage(1)
+            }
+        }
     })
 
 

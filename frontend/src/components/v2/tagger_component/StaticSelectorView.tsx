@@ -17,6 +17,7 @@ import {
 } from "../../../model/TaggingClusterSessionDispatch";
 import MisconceptionColorButton from "../../tagger_component/MisconceptionColorButton";
 import MisconceptionInfoButton from "../../tagger_component/MisconceptionInfoButton";
+import withKeyboard from "../../../util/withKeyboard";
 
 
 interface Input {
@@ -57,6 +58,36 @@ function StaticSelectorView({
         return new_ranges_list
     }
 
+
+    const onClickHandler = () => {
+        let new_tags = [...taggingClusterSession.tags]
+
+
+        dispatchTaggingClusterSession(setRangesList(getNewRangesList(misconception, handledIndex)))
+
+        if (isNoMisconception(misconception) && isSelected()) // deselecting NoMisconception
+            new_tags = initEmptyTagsList()
+        else {
+            if (taggingClusterSession.tags[0] != null)
+                new_tags[0] = null
+            new_tags[handledIndex] = isSelected() ? null : misconception
+        }
+        dispatchTaggingClusterSession(setCurrentColor(NO_COLOR))
+        dispatchTaggingClusterSession(setTags(new_tags))
+        dispatchTaggingClusterSession(clusterSessionPost())
+    }
+
+    withKeyboard(command => {
+        if (isNoMisconception(misconception) && command == 'n') onClickHandler()
+        if (command == ('' + handledIndex)) onClickHandler()
+
+        if (isNoMisconception(misconception) && command == ('nc'))
+            dispatchTaggingClusterSession(setCurrentColor(getColor(misconceptionsAvailable, misconception)))
+
+        if (command == ('' + handledIndex + 'c'))
+            dispatchTaggingClusterSession(setCurrentColor(getColor(misconceptionsAvailable, misconception)))
+    })
+
     return (
         <>
             <KeyIndication
@@ -73,27 +104,7 @@ function StaticSelectorView({
             <Button
                 type={"button"}
                 variant={'outlined'}
-                onClick={(e) => {
-                    e.preventDefault()
-                    let new_tags = [...taggingClusterSession.tags]
-
-
-                    dispatchTaggingClusterSession(setRangesList(getNewRangesList(misconception, handledIndex)))
-
-                    if (isNoMisconception(misconception) && isSelected()) // deselecting NoMisconception
-                        new_tags = initEmptyTagsList()
-                    else {
-                        if (taggingClusterSession.tags[0] != null)
-                            new_tags[0] = null
-                        new_tags[handledIndex] = isSelected() ? null : misconception
-                    }
-
-                    dispatchTaggingClusterSession(setCurrentColor(NO_COLOR))
-                    dispatchTaggingClusterSession(setTags(new_tags))
-                    dispatchTaggingClusterSession(clusterSessionPost())
-
-
-                }}
+                onClick={onClickHandler}
                 style={
                     {
                         backgroundColor: (isSelected() ? DARK_GREY : GREY),
