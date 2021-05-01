@@ -11,9 +11,10 @@ from model_tests import get_similarity_matrix, clean_answers_only_lowercase, \
 def get_key(x):
     return x['idx']
 
+algo = 'agglomerative'
 
 def load_cluster():
-    for root, directories, files in os.walk('./data'):
+    for root, directories, files in os.walk(f'data_{algo}'):
         for file in sorted(files):
             if file.startswith("experiment") and file.endswith(".json"):
                 file_name = os.path.join(root, file)

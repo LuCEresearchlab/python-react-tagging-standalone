@@ -1,0 +1,156 @@
+[
+  [
+    {
+      "data": "The function f takes no arguments, so the '1' will be ignored by JS and the inner anonymous function will be returned in the same way as just calling f()",
+      "idx": 281
+    },
+    {
+      "data": "Calling f(1) will return a function taking another argument which will be increased by one. So f1 will return a Function.",
+      "idx": 285
+    },
+    {
+      "data": "Calling f(1) produce an error, as the f function takes no arguments.",
+      "idx": 287
+    },
+    {
+      "data": "The function call is wrong. We should call f()(1). ",
+      "idx": 294
+    },
+    {
+      "data": "by calling f(1) the 1 all actually be ignored and it will return the inner function",
+      "idx": 297
+    }
+  ],
+  [
+    {
+      "data": "To return 2 f()(1) should be called.",
+      "idx": 273
+    },
+    {
+      "data": "Calling f returns a function (and not a numerical value); moreover f takes no parameters. To get 2, we would need to call f()(1)",
+      "idx": 280
+    },
+    {
+      "data": "f()(1) will return 2. f(1) return a function.",
+      "idx": 283
+    },
+    {
+      "data": "calling f() will return a function. To return 2 the call should be f()(1)",
+      "idx": 289
+    },
+    {
+      "data": "Calling f(1) will return a function. f()(1) will return 2",
+      "idx": 305
+    }
+  ],
+  [
+    {
+      "data": "Since it is a curried function, meaning that we need two function calls in this case, an example that will return 2 will be -> f()(1)",
+      "idx": 279
+    }
+  ],
+  [
+    {
+      "data": "No it will return an error, to return a value of two the correct syntax would be f()(1) or let a=f() and a(1)",
+      "idx": 276
+    }
+  ],
+  [
+    {
+      "data": "it should be f()(1)",
+      "idx": 292
+    },
+    {
+      "data": "you can't passe x as argument like that, it needs to be something like f()(1).",
+      "idx": 295
+    }
+  ],
+  [
+    {
+      "data": "it will return the anonymous incrementer function we see in the method body.",
+      "idx": 275
+    },
+    {
+      "data": "No, it will return the internal anonymous function (function(x) {...}).",
+      "idx": 291
+    },
+    {
+      "data": "It returns the wrapped function",
+      "idx": 301
+    }
+  ],
+  [
+    {
+      "data": "no, because f takes no parameters, it returns only a function.",
+      "idx": 286
+    },
+    {
+      "data": "function 'f' takes no parameters.",
+      "idx": 299
+    },
+    {
+      "data": "f(1) returns function of 'number -> number'",
+      "idx": 302
+    },
+    {
+      "data": "return another function",
+      "idx": 304
+    }
+  ],
+  [
+    {
+      "data": "It will return a function, and also it contains an error because `f` does not accept the input variable.",
+      "idx": 284
+    },
+    {
+      "data": "f does not accept any parameter, but the function it returns accepts it. So, calling f(1) should produce an error in any decent language, but not in JS, because JS doesn't protect the programmer (usually). In any case, calling f will return a function.",
+      "idx": 296
+    },
+    {
+      "data": "No. Probably will experience an error because the function f does not require a parameter in input. Anyway, the function f does not return a value but an anonymous function.",
+      "idx": 300
+    }
+  ],
+  [
+    {
+      "data": "Function f doesn't take any arguments.",
+      "idx": 277
+    },
+    {
+      "data": "f does not accept arguments, and furthermore it returns a function not a number value ",
+      "idx": 288
+    },
+    {
+      "data": "The function `f` does not take any argument. The function returned by `f()` returns a function taking a single argument. ",
+      "idx": 293
+    }
+  ],
+  [
+    {
+      "data": "the value 1 is not passed to the function which returns x+1",
+      "idx": 274
+    },
+    {
+      "data": "f(1) returns a new function that still has to be invoked so: f(1) = function(x) { return x+1; }",
+      "idx": 282
+    },
+    {
+      "data": "f() takes no input. It will return: function(x) {return x+1;}.",
+      "idx": 290
+    },
+    {
+      "data": "That will return just the function(x) {return x + 1}",
+      "idx": 298
+    },
+    {
+      "data": "It will return a function which will return x+1 when its called with the parameter x.",
+      "idx": 303
+    }
+  ],
+  [
+    {
+      "data": "This will return a function(x) but not 2",
+      "idx": 278
+    }
+  ]
+]

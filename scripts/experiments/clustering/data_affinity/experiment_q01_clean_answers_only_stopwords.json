@@ -1,0 +1,164 @@
+[
+  [
+    {
+      "data": "Using Math.random() we obtain a random double value. Once assigned to the probability variable it can not be modified.",
+      "idx": 37
+    },
+    {
+      "data": "Once assigned a random number, we cannot re-assign the variable.",
+      "idx": 49
+    },
+    {
+      "data": "math.random() will generate a random number, which is stored in the immutable variable probability.",
+      "idx": 57
+    }
+  ],
+  [
+    {
+      "data": "Since it is declared final we cannot modify it.",
+      "idx": 41
+    },
+    {
+      "data": "Here it uses the `final` word so that it cannot be changed.",
+      "idx": 46
+    },
+    {
+      "data": "Yes, since it is declared final this variable cannot be changed",
+      "idx": 51
+    }
+  ],
+  [
+    {
+      "data": "Once the variable is created it will receive a value from the random call and it will not be possible to change it at a later stage",
+      "idx": 38
+    },
+    {
+      "data": "The variable probability is final and thus we cannot change its value after assigning something to it.",
+      "idx": 42
+    },
+    {
+      "data": "The variable is immutable, it's value cannot be changed after this assignment.",
+      "idx": 43
+    },
+    {
+      "data": "once assigned it cannot be reassigned or changed in any way",
+      "idx": 44
+    },
+    {
+      "data": "As I said for option 1, probability cannot be changed after this point, i.e. we cannot reassign to it, so it's immutable (with the final keyword).",
+      "idx": 58
+    }
+  ],
+  [
+    {
+      "data": "It is declared as final",
+      "idx": 35
+    },
+    {
+      "data": "Because it is declared as final",
+      "idx": 45
+    }
+  ],
+  [
+    {
+      "data": "Because probability variable is declared with the final keyword",
+      "idx": 50
+    },
+    {
+      "data": "The variable is declared as final.",
+      "idx": 53
+    }
+  ],
+  [
+    {
+      "data": "Because the Math.random returns an integer which is stored in a variable declared with the label 'final'",
+      "idx": 62
+    }
+  ],
+  [
+    {
+      "data": "the variable is final",
+      "idx": 54
+    },
+    {
+      "data": "the variable is defined as final, moreover the double type is not an heap object, implying that it will not be changed during runtime.",
+      "idx": 55
+    },
+    {
+      "data": "The variable is final therefore cannot be changed.",
+      "idx": 63
+    }
+  ],
+  [
+    {
+      "data": "there's a final keyword so once assigned a value, it won't change",
+      "idx": 36
+    },
+    {
+      "data": "Final means that you can't change the reference of probability but it's actual value can change",
+      "idx": 47
+    }
+  ],
+  [
+    {
+      "data": "yes, the variable is immutable, this value can't be modified anymore",
+      "idx": 48
+    },
+    {
+      "data": "the variable is defined as final and can't be modified",
+      "idx": 52
+    }
+  ],
+  [
+    {
+      "data": "As it is created as a final variable, it value can't be change after it's creation.",
+      "idx": 60
+    }
+  ],
+  [
+    {
+      "data": "The variable probability can't be changed after initialization",
+      "idx": 65
+    }
+  ],
+  [
+    {
+      "data": "Once the variable has been assigned to for the first time it cannot be mutated due to the final keyword.",
+      "idx": 39
+    }
+  ],
+  [
+    {
+      "data": "This is immutable as the probability variable is final",
+      "idx": 40
+    },
+    {
+      "data": "It is marked with keyword final.",
+      "idx": 56
+    },
+    {
+      "data": "It is immutable as it starts with the keyword 'final'",
+      "idx": 59
+    }
+  ],
+  [
+    {
+      "data": "since the final keyword is used, the variable 'probability' will be assigned to a random double and will not be subject to changes (will be immutable)",
+      "idx": 61
+    },
+    {
+      "data": "The variable is immutable because of final keyword with assign",
+      "idx": 64
+    },
+    {
+      "data": "final variable are immutable in java",
+      "idx": 67
+    }
+  ],
+  [
+    {
+      "data": "there is a final, then also call method Math.random() is immutable.",
+      "idx": 66
+    }
+  ]
+]
