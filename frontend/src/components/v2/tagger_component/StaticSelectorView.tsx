@@ -91,7 +91,7 @@ function StaticSelectorView({
     return (
         <>
             <KeyIndication
-                displayKey={"" + (handledIndex + 1)}
+                displayKey={isNoMisconception(misconception) ? 'n' : "" + (handledIndex + 1)}
             />
             <MisconceptionColorButton
                 key={"MisconceptionColorButton|" + misconception}

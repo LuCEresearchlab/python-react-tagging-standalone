@@ -106,7 +106,7 @@ function MisconceptionView(
         <div className={classes.root}>
             <>
                 <div className={classes.divLine}>
-                    <KeyIndication displayKey={"1"}/>
+                    <KeyIndication displayKey={"t"}/>
                     <MisconceptionColorButton
                         color={getColor(misconceptionsAvailable, tags[FIRST_DYNAMIC_INDEX])}
                         current_color={currentColor}
