@@ -12,9 +12,12 @@ function withKeyboard(action: (command: string) => void) {
 
             const func = (event: KeyboardEvent) => {
 
+                const target: any = event.target
+
                 if (
                     document.activeElement != null &&
-                    document.activeElement.localName != 'body'
+                    document.activeElement.localName != 'body' ||
+                    (target != null && target.id != 'body')
                 ) return  // some element is selected (typing)
 
                 event.preventDefault() // prevent scroll on space in case of scrollable page
