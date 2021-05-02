@@ -11,6 +11,12 @@ function withKeyboard(action: (command: string) => void) {
     useEffect(() => {
 
             const func = (event: KeyboardEvent) => {
+
+                if (
+                    document.activeElement != null &&
+                    document.activeElement.localName != 'body'
+                ) return  // some element is selected (typing)
+
                 event.preventDefault() // prevent scroll on space in case of scrollable page
                 const key = event.key
                 console.log(key)

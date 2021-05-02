@@ -44,6 +44,10 @@ function SingleTagSelector({misconceptions_available, enabled, handled_element, 
     return (
         <Autocomplete
             className={classes.root}
+            autoComplete={true}
+            autoHighlight={true}
+            blurOnSelect={true}
+            clearOnEscape={true}
             options={misconceptions_available}
             disabled={!enabled}
             value={tags[handled_element]}

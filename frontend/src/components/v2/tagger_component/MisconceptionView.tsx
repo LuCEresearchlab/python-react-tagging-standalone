@@ -3,7 +3,7 @@ import SingleTagSelector from "./SingleTagSelector";
 import {
     filteredMisconceptions,
     getColor,
-    highlightRangesColorUpdating
+    highlightRangesColorUpdating, NO_COLOR
 } from "../../../helpers/Util";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import {
@@ -23,6 +23,7 @@ import {
 import MisconceptionColorButton from "../../tagger_component/MisconceptionColorButton";
 import MisconceptionInfoButton from "../../tagger_component/MisconceptionInfoButton";
 import MisconceptionNoteButton from "../../tagger_component/MisconceptionNoteButton";
+import stringEquals from "../../../util/StringEquals";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -75,7 +76,12 @@ function MisconceptionView(
     const tags = taggingClusterSession.tags
 
 
-    const set_current_color = (color: string) => dispatchTaggingClusterSession(setCurrentColor(color))
+    const set_current_color = (color: string) => {
+        if (stringEquals(taggingClusterSession.currentColor, color))
+            dispatchTaggingClusterSession(setCurrentColor(NO_COLOR))
+        else
+            dispatchTaggingClusterSession(setCurrentColor(color))
+    }
 
 
     const getNewRangesList = (element: (string | null), index: number) => {
