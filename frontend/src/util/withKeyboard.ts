@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react";
 
 
+const allowedInputs = /^[0-9a-zA-Z]$/.compile();
+
 function withKeyboard(action: (command: string) => void) {
 
     const [command, setCommand] = useState<string>("")
@@ -9,6 +11,7 @@ function withKeyboard(action: (command: string) => void) {
     useEffect(() => {
 
             const func = (event: KeyboardEvent) => {
+                event.preventDefault() // prevent scroll on space in case of scrollable page
                 const key = event.key
                 console.log(key)
                 if (key == 'Enter' || key == ' ') {
@@ -16,7 +19,7 @@ function withKeyboard(action: (command: string) => void) {
                     setCommand('')
                 } else if (key === "Backspace" || key === "Delete") {
                     setCommand('')
-                } else {
+                } else if (key.length == 1 && allowedInputs.test(key)) {
                     setCommand(command + key)
                 }
             }

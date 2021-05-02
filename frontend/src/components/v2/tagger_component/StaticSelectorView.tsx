@@ -98,7 +98,12 @@ function StaticSelectorView({
                 color={getColor(misconceptionsAvailable, misconception)}
                 enabled={isSelected()}
                 current_color={taggingClusterSession.currentColor}
-                setColor={(color: string) => dispatchTaggingClusterSession(setCurrentColor(color))}
+                setColor={(color: string) => {
+                    if (stringEquals(taggingClusterSession.currentColor, color))
+                        dispatchTaggingClusterSession(setCurrentColor(NO_COLOR))
+                    else
+                        dispatchTaggingClusterSession(setCurrentColor(color))
+                }}
                 staticColor={true}
             />
             <Button
