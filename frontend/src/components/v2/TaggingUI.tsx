@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {Grid, Paper, Tab} from "@material-ui/core";
-import {useFetch} from "../../helpers/LoaderHelper";
 import {StyledPagination} from "../styled/StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {TabContext, TabList, TabPanel} from "@material-ui/lab";
@@ -22,7 +21,8 @@ import {
     setCurrentCluster
 } from "../../model/TaggingClusterSessionDispatch";
 import ClusterHandler from "./cluster_handler_component/ClusterHandler";
-import withKeyboard from "../../util/withKeyboard";
+import withKeyboard from "../../hooks/withKeyboard";
+import {useFetch} from "../../hooks/useFetch";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 

@@ -17,7 +17,7 @@ import {
 } from "../../../model/TaggingClusterSessionDispatch";
 import MisconceptionColorButton from "../../tagger_component/MisconceptionColorButton";
 import MisconceptionInfoButton from "../../tagger_component/MisconceptionInfoButton";
-import withKeyboard from "../../../util/withKeyboard";
+import withKeyboard from "../../../hooks/withKeyboard";
 
 
 interface Input {

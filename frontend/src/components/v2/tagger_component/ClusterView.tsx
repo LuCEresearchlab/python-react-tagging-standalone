@@ -9,7 +9,6 @@ import {GREY} from "../../../util/Colors"
 import Highlightable from "highlightable";
 
 import {TaggedAnswer} from "../../../interfaces/TaggedAnswer";
-import {useFetch} from "../../../helpers/LoaderHelper";
 import {
     getCurrentCluster, getCurrentMisconception,
     getRanges, isUsingDefaultColor,
@@ -21,6 +20,7 @@ import {clusterSessionPost, setRanges, setTagsAndRanges} from "../../../model/Ta
 import TruthCircle from "../../tagger_component/TruthCircle";
 import {FormatColorReset} from "@material-ui/icons";
 import {highlightStyle} from "../../../helpers/Util";
+import {useFetch} from "../../../hooks/useFetch";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
@@ -32,7 +32,6 @@ interface Input {
 function ClusterView({taggingClusterSession, dispatchTaggingClusterSession}: Input) {
 
     const currentCluster: Cluster = getCurrentCluster(taggingClusterSession)
-    // TODO: use name field
 
     return (
         <div>
