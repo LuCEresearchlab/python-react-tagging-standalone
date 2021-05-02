@@ -1,8 +1,9 @@
-import React, {useState} from "react"
+import React, {useEffect, useRef, useState} from "react"
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Chip, Popover} from "@material-ui/core";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
+import {getHistory, MAX_HISTORY_SIZE, TaggingClusterSession} from "../../../model/TaggingClusterSession";
 
 
 const useStyles = makeStyles(() =>
@@ -18,16 +19,25 @@ interface Input {
     enabled: boolean,
     handled_element: number,
     tags: (string | null)[],
+    taggingClusterSession: TaggingClusterSession,
 
     setTagElement(element: (string | null), index: number): void,
 }
 
 
-function SingleTagSelector({misconceptions_available, enabled, handled_element, tags, setTagElement}: Input) {
+function SingleTagSelector({
+                               misconceptions_available, enabled, handled_element, tags, setTagElement,
+                               taggingClusterSession
+                           }: Input) {
     const classes = useStyles()
 
     // popup stuff
     const [anchorEl, setAnchorEl] = useState(null);
+    const value = useRef<string | null>(tags[handled_element])
+
+    useEffect(() => {
+        value.current = tags[handled_element]
+    }, [tags, handled_element])
 
     const handle_click_popup = (event: any) => {
         setAnchorEl(event.currentTarget);
@@ -49,11 +59,14 @@ function SingleTagSelector({misconceptions_available, enabled, handled_element, 
             clearOnBlur={true}
             options={misconceptions_available}
             disabled={!enabled}
-            value={tags[handled_element]}
+            value={value.current}
             renderInput={(params) => (
                 <TextField {...params} variant="outlined" label="Misconceptions" placeholder="Misconceptions"/>
             )}
             onChange={(_, tag) => {
+                if (getHistory(taggingClusterSession).length != MAX_HISTORY_SIZE)
+                    value.current = ""
+
                 setTagElement(tag, handled_element)
             }}
             renderTags={(tagValue, getTagProps) =>
