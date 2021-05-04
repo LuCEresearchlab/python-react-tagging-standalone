@@ -80,7 +80,7 @@ function SingleTagSelector({
             blurOnSelect={true}
             clearOnBlur={true}
             options={misconceptions_available}
-            value={value.current}
+            value={value.current == "" ? null : value.current}
             disabled={!enabled}
             renderInput={(params) => (
                 <TextField {...params}

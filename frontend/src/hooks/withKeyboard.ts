@@ -26,11 +26,13 @@ function withKeyboard(action: (command: string) => void) {
                 event.preventDefault() // prevent scroll on space in case of scrollable page
                 const key = event.key
                 console.log(key)
-                if (key == 'Enter' || key == ' ') {
+                if (key == 'Escape') {
+                    setCommand('')
+                } else if (key == 'Enter' || key == ' ') {
                     action(command)
                     setCommand('')
                 } else if (key === "Backspace" || key === "Delete") {
-                    setCommand('')
+                    setCommand(command.substring(0, command.length - 1))
                 } else if (key.length == 1 && allowedInputs.test(key)) {
                     setCommand(command + key)
                 }

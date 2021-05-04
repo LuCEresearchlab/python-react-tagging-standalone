@@ -19,8 +19,9 @@ import KeyIndication from "./KeyIndication";
 import {clusterSessionPost, setRanges, setTagsAndRanges} from "../../../model/TaggingClusterSessionDispatch";
 import TruthCircle from "../../tagger_component/TruthCircle";
 import {FormatColorReset} from "@material-ui/icons";
-import {highlightStyle} from "../../../helpers/Util";
+import {highlightStyle, nthIndex} from "../../../helpers/Util";
 import {useFetch} from "../../../hooks/useFetch";
+import withKeyboard from "../../../hooks/withKeyboard";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
@@ -112,6 +113,38 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
         dispatchTaggingClusterSession(setRanges(answer, []))
         dispatchTaggingClusterSession(clusterSessionPost())
     }
+
+
+    withKeyboard((command: string) => {
+        const is_multiple = () => {
+            return command.indexOf('-') != -1
+        }
+
+        if (command.startsWith(`${displayKey}h`) && command.length > 2) {
+            if (!is_multiple()) {
+                const word_number: number = parseInt(command.slice(2))
+                console.log(word_number)
+            } else {
+                const split_index: number = command.indexOf('-')
+                const from: number = parseInt(command.slice(2, split_index)) - 1
+                const to: number = parseInt(command.slice(split_index + 1))
+
+                if (isNaN(from) || isNaN(to)) return
+
+                let relative_start = nthIndex(answer.data, ' ', from)
+                relative_start = relative_start == -1 ? 0 : relative_start
+
+                let relative_end = nthIndex(answer.data, ' ', to)
+                relative_end = relative_end == -1 ? answer.data.length : relative_end - 1
+
+                onTextHighlighted({
+                    start: relative_start,
+                    end: relative_end
+                })
+                console.log(answer.data.slice(relative_start, relative_end))
+            }
+        }
+    })
 
     if (isLoading) return <div>Loading...</div>
 
