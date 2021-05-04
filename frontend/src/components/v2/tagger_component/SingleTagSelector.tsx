@@ -4,8 +4,6 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Chip, Popover} from "@material-ui/core";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {
-    getHistory,
-    MAX_HISTORY_SIZE,
     PRE_DYNAMIC_SIZE,
     TaggingClusterSession
 } from "../../../model/TaggingClusterSession";
@@ -32,8 +30,7 @@ interface Input {
 
 
 function SingleTagSelector({
-                               misconceptions_available, enabled, handled_element, tags, setTagElement,
-                               taggingClusterSession
+                               misconceptions_available, enabled, handled_element, tags, setTagElement
                            }: Input) {
     const classes = useStyles()
 
@@ -67,7 +64,7 @@ function SingleTagSelector({
     };
 
     const onChange = (_: any, tag: any) => {
-        if (getHistory(taggingClusterSession).length != MAX_HISTORY_SIZE) value.current = ""
+        value.current = ""
 
         setTagElement(tag, handled_element)
     }
@@ -83,7 +80,6 @@ function SingleTagSelector({
             blurOnSelect={true}
             clearOnBlur={true}
             options={misconceptions_available}
-            inputValue={value.current}
             value={value.current}
             disabled={!enabled}
             renderInput={(params) => (
