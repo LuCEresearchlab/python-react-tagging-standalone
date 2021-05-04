@@ -37,7 +37,6 @@ function withKeyboard(action: (command: string) => void) {
                 } else if (key === "Backspace" || key === "Delete") {
                     setCommand(command.substring(0, command.length - 1))
                 } else if (key.length == 1 && allowedInputs.test(key)) {
-                    console.log(key, allowedInputs.test(key))
                     setCommand(command + key)
                 } else setCommand('')
             }
