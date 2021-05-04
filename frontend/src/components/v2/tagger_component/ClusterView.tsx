@@ -30,6 +30,8 @@ interface Input {
     dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>
 }
 
+const regExp = new RegExp(/^[1-9]h[1-9](:?-[1-9]\d*)?$/)
+
 function ClusterView({taggingClusterSession, dispatchTaggingClusterSession}: Input) {
 
     const currentCluster: Cluster = getCurrentCluster(taggingClusterSession)
@@ -116,7 +118,7 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
 
 
     withKeyboard((command: string) => {
-        if (command.startsWith("" + displayKey + "h") && command.length > 2) {
+        if (command.startsWith("" + displayKey) && regExp.test(command)) {
             if (command.indexOf('-') == -1) {
                 const from: number = parseInt(command.slice(2)) - 1
 

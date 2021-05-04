@@ -29,19 +29,24 @@ function withKeyboard(action: (command: string) => void) {
                 if (key == 'Escape') {
                     setCommand('')
                 } else if (key == 'Enter' || key == ' ') {
-                    action(command)
+                    try {
+                        action(command)
+                    } catch (e) {
+                        console.log(e)
+                    }
                     setCommand('')
                 } else if (key === "Backspace" || key === "Delete") {
                     setCommand(command.substring(0, command.length - 1))
                 } else if (key.length == 1 && allowedInputs.test(key)) {
+                    console.log(key, allowedInputs.test(key))
                     setCommand(command + key)
-                }
+                } else setCommand('')
             }
 
-            window.addEventListener('keydown', func)
+            document.addEventListener('keydown', func)
 
             return () => {
-                window.removeEventListener('keydown', func)
+                document.removeEventListener('keydown', func)
             }
         },
         [action])
