@@ -122,8 +122,20 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
 
         if (command.startsWith(`${displayKey}h`) && command.length > 2) {
             if (!is_multiple()) {
-                const word_number: number = parseInt(command.slice(2))
-                console.log(word_number)
+                const from: number = parseInt(command.slice(2)) - 1
+
+                if (isNaN(from)) return
+
+                let relative_start = nthIndex(answer.data, ' ', from)
+                relative_start = relative_start == -1 ? 0 : relative_start
+
+                let relative_end = nthIndex(answer.data, ' ', from + 1)
+                relative_end = relative_end == -1 ? answer.data.length : relative_end - 1
+
+                onTextHighlighted({
+                    start: relative_start,
+                    end: relative_end
+                })
             } else {
                 const split_index: number = command.indexOf('-')
                 const from: number = parseInt(command.slice(2, split_index)) - 1
@@ -141,7 +153,6 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
                     start: relative_start,
                     end: relative_end
                 })
-                console.log(answer.data.slice(relative_start, relative_end))
             }
         }
     })
