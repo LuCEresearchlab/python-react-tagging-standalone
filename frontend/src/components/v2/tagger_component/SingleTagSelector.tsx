@@ -41,10 +41,12 @@ function SingleTagSelector({
 
     withKeyboard((command: string) => {
         if (command == 't' + (handled_element - PRE_DYNAMIC_SIZE)) {
-            console.log(autocomplete.current?.parentElement)
             const input: any = autocomplete.current?.childNodes?.item(1)?.firstChild
             input.focus()
             input.select()
+        }
+        if (command == 't' + (handled_element - PRE_DYNAMIC_SIZE) + 'c') {
+            onChange(null, null)
         }
     })
 
@@ -63,6 +65,12 @@ function SingleTagSelector({
     const handle_close_popup = () => {
         setAnchorEl(null);
     };
+
+    const onChange = (_: any, tag: any) => {
+        if (getHistory(taggingClusterSession).length != MAX_HISTORY_SIZE) value.current = ""
+
+        setTagElement(tag, handled_element)
+    }
 
     const open = Boolean(anchorEl);
     const id = open ? "simple-popover" : undefined;
@@ -86,11 +94,7 @@ function SingleTagSelector({
                            placeholder="Misconceptions"
                 />
             )}
-            onChange={(_, tag) => {
-                if (getHistory(taggingClusterSession).length != MAX_HISTORY_SIZE) value.current = ""
-
-                setTagElement(tag, handled_element)
-            }}
+            onChange={onChange}
             renderTags={(tagValue, getTagProps) =>
                 tagValue.map((option, index) => (
                     <div key={option}>
