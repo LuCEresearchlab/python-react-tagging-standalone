@@ -1,9 +1,15 @@
-import React, {useEffect, useRef, useState} from "react"
+import React, {useRef, useState} from "react"
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Chip, Popover} from "@material-ui/core";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
-import {getHistory, MAX_HISTORY_SIZE, TaggingClusterSession} from "../../../model/TaggingClusterSession";
+import {
+    getHistory,
+    MAX_HISTORY_SIZE,
+    PRE_DYNAMIC_SIZE,
+    TaggingClusterSession
+} from "../../../model/TaggingClusterSession";
+import withKeyboard from "../../../hooks/withKeyboard";
 
 
 const useStyles = makeStyles(() =>
@@ -31,13 +37,24 @@ function SingleTagSelector({
                            }: Input) {
     const classes = useStyles()
 
+    const autocomplete = useRef<HTMLDivElement>(null)
+
+    withKeyboard((command: string) => {
+        if (command == 't' + (handled_element - PRE_DYNAMIC_SIZE)) {
+            console.log(autocomplete.current?.parentElement)
+            const input: any = autocomplete.current?.childNodes?.item(1)?.firstChild
+            input.focus()
+            input.select()
+        }
+    })
+
     // popup stuff
     const [anchorEl, setAnchorEl] = useState(null);
-    const value = useRef<string | null>(tags[handled_element])
+    const value = useRef<string>("")
 
-    useEffect(() => {
-        value.current = tags[handled_element]
-    }, [tags, handled_element])
+
+    const new_value = tags[handled_element]  // garbage type-checker
+    value.current = new_value == null ? "" : new_value
 
     const handle_click_popup = (event: any) => {
         setAnchorEl(event.currentTarget);
@@ -53,19 +70,24 @@ function SingleTagSelector({
 
     return (
         <Autocomplete
-            key={'autocomplete|' + tags[handled_element]}
+            key={'autocomplete|' + handled_element + value.current}
             className={classes.root}
             blurOnSelect={true}
             clearOnBlur={true}
             options={misconceptions_available}
-            disabled={!enabled}
+            inputValue={value.current}
             value={value.current}
+            disabled={!enabled}
             renderInput={(params) => (
-                <TextField {...params} variant="outlined" label="Misconceptions" placeholder="Misconceptions"/>
+                <TextField {...params}
+                           ref={autocomplete}
+                           variant="outlined"
+                           label="Misconceptions"
+                           placeholder="Misconceptions"
+                />
             )}
             onChange={(_, tag) => {
-                if (getHistory(taggingClusterSession).length != MAX_HISTORY_SIZE)
-                    value.current = ""
+                if (getHistory(taggingClusterSession).length != MAX_HISTORY_SIZE) value.current = ""
 
                 setTagElement(tag, handled_element)
             }}

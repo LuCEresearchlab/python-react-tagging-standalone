@@ -112,7 +112,7 @@ function MisconceptionView(
         <div className={classes.root}>
             <>
                 <div className={classes.divLine}>
-                    <KeyIndication displayKey={"t"}/>
+                    <KeyIndication displayKey={"t" + 1}/>
                     <MisconceptionColorButton
                         color={getColor(misconceptionsAvailable, tags[FIRST_DYNAMIC_INDEX])}
                         current_color={currentColor}
@@ -143,7 +143,7 @@ function MisconceptionView(
                             const handled_element = PRE_DYNAMIC_SIZE + index + 2 // +2 = NoMisc and default add above
                             return (
                                 <div key={"tag-selector-" + handled_element} className={classes.divLine}>
-                                    <KeyIndication displayKey={"" + (handled_element - PRE_DYNAMIC_SIZE)}/>
+                                    <KeyIndication displayKey={"t" + (handled_element - PRE_DYNAMIC_SIZE)}/>
                                     <MisconceptionColorButton
                                         color={(() => getColor(misconceptionsAvailable, tags[handled_element]))()}
                                         current_color={currentColor}
