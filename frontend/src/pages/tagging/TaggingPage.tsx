@@ -33,7 +33,6 @@ function TaggingPage() {
     )
 
     if (!isLoading && taggingSession.isLoading) {
-        console.log(taggingClusterSession)
         dispatchTaggingSession({type: TaggingSessionActions.INIT, payload: data})
     }
 
