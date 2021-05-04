@@ -25,7 +25,7 @@ function withKeyboard(action: (command: string) => void) {
 
                 event.preventDefault() // prevent scroll on space in case of scrollable page
                 const key = event.key
-                console.log(key)
+                console.log(command + key)
                 if (key == 'Escape') {
                     setCommand('')
                 } else if (key == 'Enter' || key == ' ') {

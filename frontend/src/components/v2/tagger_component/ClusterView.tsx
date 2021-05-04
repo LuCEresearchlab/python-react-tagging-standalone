@@ -116,12 +116,8 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
 
 
     withKeyboard((command: string) => {
-        const is_multiple = () => {
-            return command.indexOf('-') != -1
-        }
-
-        if (command.startsWith(`${displayKey}h`) && command.length > 2) {
-            if (!is_multiple()) {
+        if (command.startsWith("" + displayKey + "h") && command.length > 2) {
+            if (command.indexOf('-') == -1) {
                 const from: number = parseInt(command.slice(2)) - 1
 
                 if (isNaN(from)) return
