@@ -29,11 +29,12 @@ function withKeyboard(action: (command: string) => void) {
                     setCommand('')
                 } else if (key == 'Enter' || key == ' ') {
                     try {
-                        action(command)
+                        const c_copy = command
+                        setTimeout(() => action(c_copy), 0)
                     } catch (e) {
                         console.log(e)
                     }
-                    setCommand('')
+                    setTimeout(() => setCommand(''), 0)
                 } else if (key === "Backspace" || key === "Delete") {
                     setCommand(command.substring(0, command.length - 1))
                 } else if (key.length == 1 && allowedInputs.test(key)) {
