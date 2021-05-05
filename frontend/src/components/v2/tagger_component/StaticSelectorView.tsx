@@ -124,6 +124,7 @@ function StaticSelectorView({
             <MisconceptionInfoButton
                 handled_element={0}
                 tags={[misconception]}
+                keyboardIndex={'' + handledIndex}
             />
         </>
     )

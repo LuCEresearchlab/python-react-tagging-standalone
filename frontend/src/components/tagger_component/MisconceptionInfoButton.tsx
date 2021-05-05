@@ -1,9 +1,10 @@
-import React, {useState} from "react"
+import React, {useRef, useState} from "react"
 import HelpIcon from "@material-ui/icons/Help";
 import {Button, Popover} from "@material-ui/core";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import stringEquals from "../../util/StringEquals";
 import NoMisconception from "../../util/NoMisconception";
+import withKeyboard from "../../hooks/withKeyboard";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -16,11 +17,13 @@ const useStyles = makeStyles(() =>
 interface Input {
     handled_element: number,
     tags: (string | null)[],
+    keyboardIndex?: string
 }
 
-function MisconceptionInfoButton({tags, handled_element}: Input){
-
+function MisconceptionInfoButton({tags, handled_element, keyboardIndex}: Input) {
     const classes = useStyles()
+
+    const ref = useRef<HTMLButtonElement>(null)
 
     const tag: (string | null) = tags[handled_element]
 
@@ -43,6 +46,12 @@ function MisconceptionInfoButton({tags, handled_element}: Input){
     const id = open ? "simple-popover" : undefined;
     // end popup stuff
 
+    withKeyboard((command => {
+        if (keyboardIndex != undefined && (command == '' + keyboardIndex + 'h')) {
+            ref.current?.click()
+        }
+    }))
+
     return (
         !should_display() ?
             <>
@@ -50,7 +59,7 @@ function MisconceptionInfoButton({tags, handled_element}: Input){
                 </Button>
             </> :
             <>
-                <Button title={"Definition"} onClick={handle_click_popup} className={classes.root}>
+                <Button title={"Definition"} ref={ref} onClick={handle_click_popup} className={classes.root}>
                     <HelpIcon/>
                 </Button>
                 <Popover
