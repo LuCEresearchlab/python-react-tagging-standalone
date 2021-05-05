@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {Grid, Paper, Tab} from "@material-ui/core";
-import {useFetch} from "../../helpers/LoaderHelper";
 import {StyledPagination} from "../styled/StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {TabContext, TabList, TabPanel} from "@material-ui/lab";
@@ -10,13 +9,20 @@ import TagView from "./tagger_component/TagView";
 import ClusterView from "./tagger_component/ClusterView";
 
 import {LIGHT_GREY} from "../../util/Colors"
-import {setCurrentQuestion} from "../../model/TaggingSessionDispatch";
+import {nextQuestion, setCurrentQuestion} from "../../model/TaggingSessionDispatch";
 import {
     TaggingClusterSession, TaggingClusterSessionDispatch,
 } from "../../model/TaggingClusterSession";
 import {TaggingSession, TaggingSessionDispatch} from "../../model/TaggingSession";
-import {setAvailableMisconceptions, setClusters, setCurrentCluster} from "../../model/TaggingClusterSessionDispatch";
+import {
+    nextCluster,
+    setAvailableMisconceptions,
+    setClusters,
+    setCurrentCluster
+} from "../../model/TaggingClusterSessionDispatch";
 import ClusterHandler from "./cluster_handler_component/ClusterHandler";
+import withKeyboard from "../../hooks/withKeyboard";
+import {useFetch} from "../../hooks/useFetch";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
@@ -60,6 +66,37 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
     const [tab, setTab] = useState<string>('1')
 
 
+    const total_clusters = taggingClusterSession.clusters.length
+
+    const [keyHistory] = withKeyboard((command: string) => {
+        if (command == '') // two spaces or enter in a row
+        {
+            const current_cluster = taggingClusterSession.currentCluster
+            if (current_cluster + 1 < total_clusters) {
+                dispatchTaggingClusterSession(nextCluster())
+                setPage(page + 1)  // offset of 1
+            } else {
+                dispatchTaggingSession(nextQuestion())
+                dispatchTaggingClusterSession(setCurrentCluster(0))
+                setPage(1)
+            }
+        }
+        if (command == 'c') setTab(tab == '1' ? '2' : '1')
+        if (command == 'b') {
+            const current_cluster = taggingClusterSession.currentCluster
+            if (current_cluster - 1 >= 0) {
+                dispatchTaggingClusterSession(setCurrentCluster(current_cluster - 1))
+                setPage(page - 1)
+            } else {
+                const previousQuestion = taggingSession.currentQuestion == 0 ? 0 : taggingSession.currentQuestion - 1
+                dispatchTaggingSession(setCurrentQuestion(previousQuestion))
+                dispatchTaggingClusterSession(setCurrentCluster(0))
+                setPage(1)
+            }
+        }
+    })
+
+
     const paginationChange = (event: any, value: number) => {
         dispatchTaggingClusterSession(setCurrentCluster(value - 1))
         setPage(value);
@@ -78,8 +115,6 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
     const clustersData = clusterFetch.data
     const isLoadingClusters = clusterFetch.isLoading
 
-
-    const total_clusters = taggingClusterSession.clusters.length
 
     useEffect(() => {
         if (!isLoadingClusters) dispatchTaggingClusterSession(setClusters(clustersData.clusters))
@@ -157,9 +192,17 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
                         />
                     </TabPanel>
                 </TabContext>
+                <div>
+                    {
+                        keyHistory == '' ?
+                            'space: next cluster, c: cluster view / tagging view' :
+                            'command: ' + keyHistory
+                    }
+                </div>
             </Grid>
         </Grid>
     )
+
 }
 
 export default TaggingUI

@@ -1,12 +1,12 @@
 import React, {useContext} from 'react';
 import {Container} from "@material-ui/core";
-import {useFetch} from '../../helpers/LoaderHelper';
 import {useHistory, useParams} from "react-router-dom";
 import TaggingUI from '../../components/v2/TaggingUI'
 import {Dataset} from "../../interfaces/Dataset";
 import useTaggingSession, {TaggingSessionActions} from "../../model/TaggingSession";
 import useTaggingClusterSession from "../../model/TaggingClusterSession";
 import {userContext} from "../../util/UserContext";
+import {useFetch} from "../../hooks/useFetch";
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
 
@@ -33,7 +33,6 @@ function TaggingPage() {
     )
 
     if (!isLoading && taggingSession.isLoading) {
-        console.log(taggingClusterSession)
         dispatchTaggingSession({type: TaggingSessionActions.INIT, payload: data})
     }
 

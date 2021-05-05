@@ -9,7 +9,6 @@ import {GREY} from "../../../util/Colors"
 import Highlightable from "highlightable";
 
 import {TaggedAnswer} from "../../../interfaces/TaggedAnswer";
-import {useFetch} from "../../../helpers/LoaderHelper";
 import {
     getCurrentCluster, getCurrentMisconception,
     getRanges, isUsingDefaultColor,
@@ -20,7 +19,10 @@ import KeyIndication from "./KeyIndication";
 import {clusterSessionPost, setRanges, setTagsAndRanges} from "../../../model/TaggingClusterSessionDispatch";
 import TruthCircle from "../../tagger_component/TruthCircle";
 import {FormatColorReset} from "@material-ui/icons";
-import {highlightStyle} from "../../../helpers/Util";
+import {highlightStyle, nthIndex} from "../../../helpers/Util";
+import {useFetch} from "../../../hooks/useFetch";
+import withKeyboard from "../../../hooks/withKeyboard";
+import stringEquals from "../../../util/StringEquals";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
@@ -29,10 +31,11 @@ interface Input {
     dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>
 }
 
+const regExp = new RegExp(/^[1-9]h[1-9](:?-[1-9]\d*)?$/)
+
 function ClusterView({taggingClusterSession, dispatchTaggingClusterSession}: Input) {
 
     const currentCluster: Cluster = getCurrentCluster(taggingClusterSession)
-    // TODO: use name field
 
     return (
         <div>
@@ -110,9 +113,57 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
     }
 
     const clear = () => {
-        dispatchTaggingClusterSession(setRanges(answer, []))
+        if (isUsingDefaultColor(taggingClusterSession)) dispatchTaggingClusterSession(setRanges(answer, []))
+        else {
+            dispatchTaggingClusterSession(setRanges(answer,
+                ranges.filter(range => !stringEquals(range.color, taggingClusterSession.currentColor))
+            ))
+        }
+
         dispatchTaggingClusterSession(clusterSessionPost())
     }
+
+
+    withKeyboard((command: string) => {
+        if (command.startsWith("" + displayKey) && regExp.test(command)) {
+            if (command.indexOf('-') == -1) {
+                const from: number = parseInt(command.slice(2)) - 1
+
+                if (isNaN(from)) return
+
+                let relative_start = nthIndex(answer.data, ' ', from)
+                relative_start = relative_start == -1 ? 0 : relative_start
+
+                let relative_end = nthIndex(answer.data, ' ', from + 1)
+                relative_end = relative_end == -1 ? answer.data.length : relative_end - 1
+
+                onTextHighlighted({
+                    start: relative_start,
+                    end: relative_end
+                })
+            } else {
+                const split_index: number = command.indexOf('-')
+                const from: number = parseInt(command.slice(2, split_index)) - 1
+                const to: number = parseInt(command.slice(split_index + 1))
+
+                if (isNaN(from) || isNaN(to)) return
+
+                let relative_start = nthIndex(answer.data, ' ', from)
+                relative_start = relative_start == -1 ? 0 : relative_start
+
+                let relative_end = nthIndex(answer.data, ' ', to)
+                relative_end = relative_end == -1 ? answer.data.length : relative_end - 1
+
+                onTextHighlighted({
+                    start: relative_start,
+                    end: relative_end
+                })
+            }
+        }
+        if (command == "" + displayKey + 'rc') {
+            clear()
+        }
+    })
 
     if (isLoading) return <div>Loading...</div>
 

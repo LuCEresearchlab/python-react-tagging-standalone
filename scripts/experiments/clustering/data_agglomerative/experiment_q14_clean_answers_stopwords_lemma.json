@@ -1,0 +1,156 @@
+[
+  [
+    {
+      "data": "This code is curried as it returns a function, which returns a.",
+      "idx": 584
+    },
+    {
+      "data": "Not properly because the original function doesn't need to be curried since it takes only one argument",
+      "idx": 594
+    },
+    {
+      "data": "the uncurried function is not uncurried. It take 1 arguments, while an uncurried function would have at least 2 arguments and would then be curried in multiple functions with 1 arguments each",
+      "idx": 595
+    },
+    {
+      "data": "The 'curried' version adds an unnecessary call which is not the purpose of currying.",
+      "idx": 597
+    },
+    {
+      "data": "The curried version doesn't add a new function with a parameter. ",
+      "idx": 611
+    }
+  ],
+  [
+    {
+      "data": "The 'uncurried' version already has only one parameter and there is no point in currying it further.",
+      "idx": 586
+    },
+    {
+      "data": "Currying is multiple functions with one parameter. Since it only needs one input parameter, the former version is enough.",
+      "idx": 590
+    },
+    {
+      "data": "In both instances we will pass only one parameter to function f(a), which is not what currying tries to achieve.",
+      "idx": 605
+    },
+    {
+      "data": "currying is a technique to decompose a function in a sequence of n function",
+      "idx": 610
+    }
+  ],
+  [
+    {
+      "data": "Currying is the technique of transforming one function with multiple arguments into a sequence of functions with a single argument. If this premise does not hold since there is only a single argument, there is no currying.",
+      "idx": 579
+    },
+    {
+      "data": "Currying is used to transform a function with many arguments into many functions with one argument. This is not a useful example of currying ",
+      "idx": 582
+    },
+    {
+      "data": "I think we defined currying as 'turning a multiple argument function into a single argument one', so when the function already has a single argument we cannot curry it.",
+      "idx": 587
+    },
+    {
+      "data": "F is a function with just one parameter, and currying is used to convert multiple argument function into a sequences of one argument functions.",
+      "idx": 604
+    },
+    {
+      "data": "Currying is used when there are multiple argument and not a single one",
+      "idx": 607
+    }
+  ],
+  [
+    {
+      "data": "Currying is used to split a multi-argument function into multiple functions. This looks like a curryied function but has no purpose. ",
+      "idx": 600
+    },
+    {
+      "data": "We are not splitting parameters into multiple functions, we are just adding a function that returns a and takes no argument, which is not the goal of currying.",
+      "idx": 603
+    }
+  ],
+  [
+    {
+      "data": "currying is used in order to avoid passing multiple arguments to a function but in this case is not needed.",
+      "idx": 588
+    },
+    {
+      "data": "Currying reduces the number of arguments of a function and nests them into other new functions. In this case we already have a single-parameter function, so it's not curryable.",
+      "idx": 593
+    }
+  ],
+  [
+    {
+      "data": "f takes only one arguments so currying is unuseful. Instead of returning directly the value it return a function that, if invoked, returns the value.",
+      "idx": 589
+    },
+    {
+      "data": "Currying allows you to partially evaluate a function, not evaluating one of its arguments. In the code above f takes an argument and the curried version takes the same argument, returning a lambda that returns the value instead of returning the value directly. A better curried version of f would be for example function f() {return a => a}",
+      "idx": 591
+    },
+    {
+      "data": "Currying is typically used when a function accepts more than 1 parameter, so this is a TRICKY question, but I would say that the bottom/second version is currying, because it returns a function that returns some value and it only returns that value when we call that function returned.",
+      "idx": 602
+    }
+  ],
+  [
+    {
+      "data": "Curry splits args; there is only one arg; this is more like lazy value evaluation",
+      "idx": 608
+    }
+  ],
+  [
+    {
+      "data": "There is no point in currying the identity function. In this case the second function isn't really needed and thus this example doesn't *properly* respresent currying.",
+      "idx": 583
+    },
+    {
+      "data": "no, in the first one we don't use it, in the second one is not being used correctly",
+      "idx": 592
+    }
+  ],
+  [
+    {
+      "data": "only has one parameter",
+      "idx": 580
+    },
+    {
+      "data": "It should, but it seem pointless to have the internal step with no parameters, because it means that the internal function binds the 'return a;' function to an empty environment.",
+      "idx": 596
+    },
+    {
+      "data": "Yes, because we store the environment (the state of a variable) inside a function that we returns.",
+      "idx": 606
+    },
+    {
+      "data": "It takes a parameter and returns a function which take no parameter.",
+      "idx": 609
+    }
+  ],
+  [
+    {
+      "data": "An identity function is not equivalent to a generator.",
+      "idx": 581
+    },
+    {
+      "data": "The returned function doesn't take any arguments at all.",
+      "idx": 585
+    },
+    {
+      "data": "because function() take no params so it's not useful",
+      "idx": 598
+    },
+    {
+      "data": "The function already takes only one argument ",
+      "idx": 599
+    }
+  ],
+  [
+    {
+      "data": "yes, from directly returning a, we are going through an intermediary step, but in this case it's quite trivial and not meaningful.",
+      "idx": 601
+    }
+  ]
+]

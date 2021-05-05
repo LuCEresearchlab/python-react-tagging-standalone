@@ -3,7 +3,7 @@ import SingleTagSelector from "./SingleTagSelector";
 import {
     filteredMisconceptions,
     getColor,
-    highlightRangesColorUpdating
+    highlightRangesColorUpdating, NO_COLOR
 } from "../../../helpers/Util";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import {
@@ -23,6 +23,7 @@ import {
 import MisconceptionColorButton from "../../tagger_component/MisconceptionColorButton";
 import MisconceptionInfoButton from "../../tagger_component/MisconceptionInfoButton";
 import MisconceptionNoteButton from "../../tagger_component/MisconceptionNoteButton";
+import stringEquals from "../../../util/StringEquals";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -75,7 +76,12 @@ function MisconceptionView(
     const tags = taggingClusterSession.tags
 
 
-    const set_current_color = (color: string) => dispatchTaggingClusterSession(setCurrentColor(color))
+    const set_current_color = (color: string) => {
+        if (stringEquals(taggingClusterSession.currentColor, color))
+            dispatchTaggingClusterSession(setCurrentColor(NO_COLOR))
+        else
+            dispatchTaggingClusterSession(setCurrentColor(color))
+    }
 
 
     const getNewRangesList = (element: (string | null), index: number) => {
@@ -106,7 +112,7 @@ function MisconceptionView(
         <div className={classes.root}>
             <>
                 <div className={classes.divLine}>
-                    <KeyIndication displayKey={"1"}/>
+                    <KeyIndication displayKey={"t" + 1}/>
                     <MisconceptionColorButton
                         color={getColor(misconceptionsAvailable, tags[FIRST_DYNAMIC_INDEX])}
                         current_color={currentColor}
@@ -116,6 +122,7 @@ function MisconceptionView(
                     />
                     <SingleTagSelector
                         key={"tag-selector-0"}
+                        taggingClusterSession={taggingClusterSession}
                         misconceptions_available={
                             filteredMisconceptions(tags, misconceptions_string_list, FIRST_DYNAMIC_INDEX)
                         }
@@ -136,7 +143,7 @@ function MisconceptionView(
                             const handled_element = PRE_DYNAMIC_SIZE + index + 2 // +2 = NoMisc and default add above
                             return (
                                 <div key={"tag-selector-" + handled_element} className={classes.divLine}>
-                                    <KeyIndication displayKey={"" + (handled_element - PRE_DYNAMIC_SIZE)}/>
+                                    <KeyIndication displayKey={"t" + (handled_element - PRE_DYNAMIC_SIZE)}/>
                                     <MisconceptionColorButton
                                         color={(() => getColor(misconceptionsAvailable, tags[handled_element]))()}
                                         current_color={currentColor}
@@ -145,14 +152,15 @@ function MisconceptionView(
                                         staticColor={true}
                                     />
                                     <SingleTagSelector
-                                            misconceptions_available={
-                                                filteredMisconceptions(tags, misconceptions_string_list, handled_element)
-                                            }
-                                            handled_element={handled_element}
-                                            tags={tags}
-                                            setTagElement={setTagElementHandle}
-                                            enabled={true}
-                                        />
+                                        taggingClusterSession={taggingClusterSession}
+                                        misconceptions_available={
+                                            filteredMisconceptions(tags, misconceptions_string_list, handled_element)
+                                        }
+                                        handled_element={handled_element}
+                                        tags={tags}
+                                        setTagElement={setTagElementHandle}
+                                        enabled={true}
+                                    />
                                     <MisconceptionInfoButton
                                         tags={tags}
                                         handled_element={handled_element}

@@ -9,7 +9,7 @@ import NoMisconception from "../util/NoMisconception";
 import {Dispatch, ReducerAction, ReducerState, useReducer} from "react";
 import {MisconceptionElement} from "../interfaces/MisconceptionElement";
 
-const MAX_HISTORY_SIZE: number = 4
+export const MAX_HISTORY_SIZE: number = 4
 export const PRE_DYNAMIC_SIZE: number = MAX_HISTORY_SIZE
 const MIN_LENGTH: number = 1 + PRE_DYNAMIC_SIZE + 1
 

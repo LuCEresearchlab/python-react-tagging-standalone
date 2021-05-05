@@ -35,6 +35,7 @@ const initClusterSession = (dataset_id: string,
 const setClusters = (clusters: Cluster[]) => basic(TaggingClusterSessionActions.SET_CLUSTERS, clusters)
 const setCurrentCluster = (idx: number) => basic(TaggingClusterSessionActions.SET_CURRENT_CLUSTER, idx)
 const popAnswer = (idx: number) => basic(TaggingClusterSessionActions.POP_ANSWER, idx)
+const nextCluster = () => basic(TaggingClusterSessionActions.NEXT_CLUSTER, null)
 
 
 export {
@@ -48,5 +49,6 @@ export {
     setTagsAndRanges,
     clusterSessionPost,
     initClusterSession,
-    popAnswer
+    popAnswer,
+    nextCluster
 }

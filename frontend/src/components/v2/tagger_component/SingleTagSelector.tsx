@@ -1,8 +1,13 @@
-import React, {useState} from "react"
+import React, {useRef, useState} from "react"
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Chip, Popover} from "@material-ui/core";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
+import {
+    PRE_DYNAMIC_SIZE,
+    TaggingClusterSession
+} from "../../../model/TaggingClusterSession";
+import withKeyboard from "../../../hooks/withKeyboard";
 
 
 const useStyles = makeStyles(() =>
@@ -18,16 +23,37 @@ interface Input {
     enabled: boolean,
     handled_element: number,
     tags: (string | null)[],
+    taggingClusterSession: TaggingClusterSession,
 
     setTagElement(element: (string | null), index: number): void,
 }
 
 
-function SingleTagSelector({misconceptions_available, enabled, handled_element, tags, setTagElement}: Input) {
+function SingleTagSelector({
+                               misconceptions_available, enabled, handled_element, tags, setTagElement
+                           }: Input) {
     const classes = useStyles()
+
+    const autocomplete = useRef<HTMLDivElement>(null)
+
+    withKeyboard((command: string) => {
+        if (command == 't' + (handled_element - PRE_DYNAMIC_SIZE)) {
+            const input: any = autocomplete.current?.childNodes?.item(1)?.firstChild
+            input.focus()
+            input.select()
+        }
+        if (command == 't' + (handled_element - PRE_DYNAMIC_SIZE) + 'c') {
+            onChange(null, null)
+        }
+    })
 
     // popup stuff
     const [anchorEl, setAnchorEl] = useState(null);
+    const value = useRef<string>("")
+
+
+    const new_value = tags[handled_element]  // garbage type-checker
+    value.current = new_value == null ? "" : new_value
 
     const handle_click_popup = (event: any) => {
         setAnchorEl(event.currentTarget);
@@ -37,22 +63,34 @@ function SingleTagSelector({misconceptions_available, enabled, handled_element, 
         setAnchorEl(null);
     };
 
+    const onChange = (_: any, tag: any) => {
+        value.current = ""
+
+        setTagElement(tag, handled_element)
+    }
+
     const open = Boolean(anchorEl);
     const id = open ? "simple-popover" : undefined;
     // end popup stuff
 
     return (
         <Autocomplete
+            key={'autocomplete|' + handled_element + value.current}
             className={classes.root}
+            blurOnSelect={true}
+            clearOnBlur={true}
             options={misconceptions_available}
+            value={value.current == "" ? null : value.current}
             disabled={!enabled}
-            value={tags[handled_element]}
             renderInput={(params) => (
-                <TextField {...params} variant="outlined" label="Misconceptions" placeholder="Misconceptions"/>
+                <TextField {...params}
+                           ref={autocomplete}
+                           variant="outlined"
+                           label="Misconceptions"
+                           placeholder="Misconceptions"
+                />
             )}
-            onChange={(_, tag) => {
-                setTagElement(tag, handled_element)
-            }}
+            onChange={onChange}
             renderTags={(tagValue, getTagProps) =>
                 tagValue.map((option, index) => (
                     <div key={option}>

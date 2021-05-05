@@ -88,6 +88,16 @@ function highlightStyle(range: HighlightRange, availableMisconceptions: Misconce
     }
 }
 
+// https://stackoverflow.com/questions/14480345/how-to-get-the-nth-occurrence-in-a-string
+function nthIndex(str: string, pat: string, n: number) {
+    let L = str.length, i = -1;
+    while (n-- && i++ < L) {
+        i = str.indexOf(pat, i);
+        if (i < 0) break;
+    }
+    return i;
+}
+
 export {
     NO_COLOR,
     isUsingDefaultColor,
@@ -97,5 +107,6 @@ export {
     filteredMisconceptions,
     getColor,
     highlightStyle,
-    highlightRangeToColor
+    highlightRangeToColor,
+    nthIndex
 }

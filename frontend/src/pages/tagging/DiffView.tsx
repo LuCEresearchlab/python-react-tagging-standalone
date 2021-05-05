@@ -2,11 +2,11 @@ import React, {useState} from "react";
 import {useParams} from "react-router-dom";
 import {Container, Grid} from "@material-ui/core";
 import {Dataset} from "../../interfaces/Dataset";
-import {useFetch} from "../../helpers/LoaderHelper";
 import QuestionSelect from "../../components/question_component/QuestionSelect";
 import AnswersMerger from "../../components/diff_component/AnswersMerger";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
+import {useFetch} from "../../hooks/useFetch";
 
 
 const {TAGGING_SERVICE_URL} = require('../../../config.json')
