@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Grid, Paper, Tab} from "@material-ui/core";
+import {Button, Collapse, Grid, Paper, Tab} from "@material-ui/core";
 import {StyledPagination} from "../styled/StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
 import {TabContext, TabList, TabPanel} from "@material-ui/lab";
@@ -41,7 +41,8 @@ const useStyles = makeStyles(() =>
             justifyContent: 'center',
             position: 'sticky',
             top: '100px',
-            flexGrow: 1
+            flexGrow: 1,
+            margin: 0
         },
         taggingMiscBlock: {
             width: '100%',
@@ -64,6 +65,7 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
 
     const [page, setPage] = useState<number>(1)
     const [tab, setTab] = useState<string>('1')
+    const [showQuestion, setShowQuestion] = useState<boolean>(true)
 
 
     const total_clusters = taggingClusterSession.clusters.length
@@ -93,6 +95,9 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
                 dispatchTaggingClusterSession(setCurrentCluster(0))
                 setPage(1)
             }
+        }
+        if (command == 'q') {
+            setShowQuestion(!showQuestion)
         }
     })
 
@@ -130,13 +135,18 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
 
     return (
         <Grid container direction={'row'} className={classes.root} spacing={10}>
-            <Grid item xs={4}>
-                <QuestionSelect
-                    questions={taggingSession.questions}
-                    selectedQuestion={taggingSession.currentQuestion}
-                    setQuestionSelect={selectedChange}/>
+            <Grid item xs={showQuestion ? 4 : 1}>
+                <Button onClick={() => {
+                    setShowQuestion(!showQuestion)
+                }}>Q</Button>
+                <Collapse in={showQuestion}>
+                    <QuestionSelect
+                        questions={taggingSession.questions}
+                        selectedQuestion={taggingSession.currentQuestion}
+                        setQuestionSelect={selectedChange}/>
+                </Collapse>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={showQuestion ? 8 : 10}>
                 <TabContext value={tab}>
                     <TabList
                         indicatorColor='primary'
@@ -200,6 +210,7 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
                     }
                 </div>
             </Grid>
+            <Grid item xs={showQuestion ? undefined : 1}/>
         </Grid>
     )
 
