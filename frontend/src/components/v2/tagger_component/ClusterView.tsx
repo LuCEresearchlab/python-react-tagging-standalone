@@ -22,6 +22,7 @@ import {FormatColorReset} from "@material-ui/icons";
 import {highlightStyle, nthIndex} from "../../../helpers/Util";
 import {useFetch} from "../../../hooks/useFetch";
 import withKeyboard from "../../../hooks/withKeyboard";
+import stringEquals from "../../../util/StringEquals";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
@@ -112,8 +113,14 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
     }
 
     const clear = () => {
-        dispatchTaggingClusterSession(setRanges(answer, []))
-        dispatchTaggingClusterSession(clusterSessionPost())
+        if (isUsingDefaultColor(taggingClusterSession))
+            clear()
+        else {
+            dispatchTaggingClusterSession(setRanges(answer,
+                ranges.filter(range => !stringEquals(range.color, taggingClusterSession.currentColor))
+            ))
+            dispatchTaggingClusterSession(clusterSessionPost())
+        }
     }
 
 
