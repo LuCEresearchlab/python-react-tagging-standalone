@@ -153,6 +153,9 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
                 })
             }
         }
+        if (command == "" + displayKey + 'rc') {
+            clear()
+        }
     })
 
     if (isLoading) return <div>Loading...</div>
