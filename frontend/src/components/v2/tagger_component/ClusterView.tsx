@@ -113,14 +113,14 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
     }
 
     const clear = () => {
-        if (isUsingDefaultColor(taggingClusterSession))
-            clear()
+        if (isUsingDefaultColor(taggingClusterSession)) dispatchTaggingClusterSession(setRanges(answer, []))
         else {
             dispatchTaggingClusterSession(setRanges(answer,
                 ranges.filter(range => !stringEquals(range.color, taggingClusterSession.currentColor))
             ))
-            dispatchTaggingClusterSession(clusterSessionPost())
         }
+
+        dispatchTaggingClusterSession(clusterSessionPost())
     }
 
 

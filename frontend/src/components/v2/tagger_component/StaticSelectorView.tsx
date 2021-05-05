@@ -77,15 +77,22 @@ function StaticSelectorView({
         dispatchTaggingClusterSession(clusterSessionPost())
     }
 
+    const setColor = (color: string) => {
+        if (stringEquals(taggingClusterSession.currentColor, color))
+            dispatchTaggingClusterSession(setCurrentColor(NO_COLOR))
+        else
+            dispatchTaggingClusterSession(setCurrentColor(color))
+    }
+
     withKeyboard(command => {
         if (isNoMisconception(misconception) && command == 'n') onClickHandler()
         if (command == ('' + handledIndex)) onClickHandler()
 
         if (isNoMisconception(misconception) && command == ('nc'))
-            dispatchTaggingClusterSession(setCurrentColor(getColor(misconceptionsAvailable, misconception)))
+            setColor(getColor(misconceptionsAvailable, misconception))
 
         if (command == ('' + handledIndex + 'c'))
-            dispatchTaggingClusterSession(setCurrentColor(getColor(misconceptionsAvailable, misconception)))
+            setColor(getColor(misconceptionsAvailable, misconception))
     })
 
     return (
@@ -98,12 +105,7 @@ function StaticSelectorView({
                 color={getColor(misconceptionsAvailable, misconception)}
                 enabled={isSelected()}
                 current_color={taggingClusterSession.currentColor}
-                setColor={(color: string) => {
-                    if (stringEquals(taggingClusterSession.currentColor, color))
-                        dispatchTaggingClusterSession(setCurrentColor(NO_COLOR))
-                    else
-                        dispatchTaggingClusterSession(setCurrentColor(color))
-                }}
+                setColor={setColor}
                 staticColor={true}
             />
             <Button
