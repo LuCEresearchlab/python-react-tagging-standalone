@@ -34,7 +34,7 @@ lemma = nltk.wordnet.WordNetLemmatizer()
 wordnet.ensure_loaded()
 
 easy_split = False
-algo = 'agglomerative'  # agglomerative | spectral | affinity
+algo = 'agglomerative_average'  # agglomerative | spectral | affinity | agglomerative_average
 
 
 def raw(answers):
@@ -140,9 +140,14 @@ def _cluster(answers, clean_func):
         for i in range(len(answers)):
             sim_matrix[i][i] = 0  #
 
-        clustering = AgglomerativeClustering(n_clusters=nr_clusters,
-                                             affinity='precomputed',
-                                             linkage='complete').fit(sim_matrix)
+        if algo == 'agglomerative':
+            clustering = AgglomerativeClustering(n_clusters=nr_clusters,
+                                                 affinity='precomputed',
+                                                 linkage='complete').fit(sim_matrix)
+        else:
+            clustering = AgglomerativeClustering(n_clusters=nr_clusters,
+                                                 affinity='precomputed',
+                                                 linkage='average').fit(sim_matrix)
 
     clusters = [[] for _ in range(np.max(clustering.labels_) + 1)]
     for idx, cluster_idx in enumerate(clustering.labels_):

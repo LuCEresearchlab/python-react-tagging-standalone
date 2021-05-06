@@ -11,7 +11,7 @@ from model_tests import get_similarity_matrix, clean_answers_only_lowercase, \
 def get_key(x):
     return x['idx']
 
-algo = 'agglomerative'
+algo = 'agglomerative_average'
 
 def load_cluster():
     for root, directories, files in os.walk(f'data_{algo}'):

@@ -1,0 +1,162 @@
+[
+  [
+    {
+      "data": "The field position inside objects of class Sprite is indeed immutabile, but position's fields are not final (and thus not immutable). This means that the object pointed to by variable s is only shallowly immutable and not deeply immutable.",
+      "idx": 76
+    },
+    {
+      "data": "An Object is deeply immutable if all its referred object are theirselves immutable. In this case the class Position is't immutable. Because it has public fields, it has to be final.",
+      "idx": 79
+    },
+    {
+      "data": "to make it deeply immutable, we need to make x and y in class position private and final as well",
+      "idx": 91
+    }
+  ],
+  [
+    {
+      "data": "It is shallow immutable. We can't modify the sprite object itself, but we can modify the Position object.",
+      "idx": 71
+    },
+    {
+      "data": "The elements of Position are not immutable and Sprite contains a Position therefore it is shallow immutable.",
+      "idx": 73
+    }
+  ],
+  [
+    {
+      "data": "The object pointed to by variable s is shallowly immutable, because the Position object is mutable ",
+      "idx": 69
+    },
+    {
+      "data": "It is shallow immutable, since the element pointed by Position p (i.e. x and y) are mutable.",
+      "idx": 75
+    },
+    {
+      "data": "Even though the pointer to Sprite and Position objects are immutable and the field of Sprite is immutable as well, the Position class is a mutable one and since Sprite uses it, it cannot be deeply immutable.",
+      "idx": 78
+    },
+    {
+      "data": "it's shallow immutable since Sprite points to mutable object Position",
+      "idx": 88
+    }
+  ],
+  [
+    {
+      "data": "it is wrong because in deep immutability every object are immutable, also the objects inside other objects. this is a case of shallow immutability.",
+      "idx": 82
+    }
+  ],
+  [
+    {
+      "data": "It is not deeply immutable. The reference of `s.position` is immutable but we still can change the deeper variables `x` and `y`, like s.position.x = 1;",
+      "idx": 80
+    },
+    {
+      "data": "No, to have deep immutability also the object p should be immutable. In our case p.x and p.y can be changed",
+      "idx": 85
+    },
+    {
+      "data": "It is not deeply immutable, because we create the object p and we pass it as s. Since Position is not immutable, then we can modify the values of x or y inside p, which modifies the values of s.position.x/y, since they are the same reference",
+      "idx": 93
+    },
+    {
+      "data": "p as a field of s could change its field x and y,  so its not deeply immutable.",
+      "idx": 99
+    }
+  ],
+  [
+    {
+      "data": "The object is not immutable, the argument of sprite is immutable when passed to Sprite, the value of position inside of the newly created Sprite object is immutable, the variable s is immutable but it points to a mutable new Sprite object",
+      "idx": 72
+    },
+    {
+      "data": "As the position p is a constant and it is creating a sprite with that position p it is deeply immutable",
+      "idx": 74
+    },
+    {
+      "data": "Although the p passed as constructor argument is final, and the position field of the Sprite class is final too, we could still modify the x and y values. For example we could access p.x (public and mutable) and assing a new value to it.",
+      "idx": 77
+    },
+    {
+      "data": "Sprite is immutable and has no public fields",
+      "idx": 81
+    },
+    {
+      "data": "The class Position is not immutable because its fields can change once they have been initialised (they are even public!). However, here, we are creating a variable of time Position p that cannot be changed (because of the final keyword), i.e. we cannot reassign to p any other object of class Position. However, we could pass another object of type Position, with different values for x and y (than the values of x and y of p), to a Sprite object. Moreover, if p was not final, we could change the properties of p, after s has been initialised, and this would be reflected in s, so s is not deeply immutable.",
+      "idx": 92
+    }
+  ],
+  [
+    {
+      "data": "Since x and y are not final, their value could still be changed if they could be accessed. The fact that the reference to an object is final doesn't mean that the referenced object is immutable.",
+      "idx": 86
+    },
+    {
+      "data": "No because the pointer to the Position object is final (therefore position cannot change the pointer), but the instance of object Position is not immutable, and so the x and y variable can change.",
+      "idx": 96
+    }
+  ],
+  [
+    {
+      "data": "it's a immutable object pointing to mutable object, even tho u can't change s, but u can change p.x and p.y",
+      "idx": 70
+    }
+  ],
+  [
+    {
+      "data": "The sprite can be modified by modifying the p variable (e.g. p.x = 3;). The reference to the p reference it's final, not it's inner state.",
+      "idx": 83
+    },
+    {
+      "data": "Yes, 's' it's itselfs final, so it's inmutable. Also, the Sprite attribute is inmutable and also the position p, so you wouldn't be able to change s or the attribute Position in it.",
+      "idx": 94
+    },
+    {
+      "data": "The object pointed to by variable s is an instance of the class Position (p) which is declared as final in the class Sprite.",
+      "idx": 95
+    },
+    {
+      "data": "The reference object is final and we can also not change the final position of class sprite",
+      "idx": 97
+    },
+    {
+      "data": "in Sprite position object is Final and also the call of s is final than can't mutate.",
+      "idx": 100
+    }
+  ],
+  [
+    {
+      "data": "Because values x and y of Position object can be changed after the Sprite object construction. Like p.x = 100; after the last line of code",
+      "idx": 84
+    }
+  ],
+  [
+    {
+      "data": "s uses p which is of type Position. Position is not immutable because its field are accessible and mutable.",
+      "idx": 87
+    },
+    {
+      "data": "Position fields are mutable, since java does not allocate objects inside objects",
+      "idx": 98
+    }
+  ],
+  [
+    {
+      "data": "Is wrong because s is declared as final too. ",
+      "idx": 101
+    }
+  ],
+  [
+    {
+      "data": "The final keyword makes it impossible to reinitialize the p and s variables. The variables only contain the reference values to the objects, implying that the objects will still be modifiable. ",
+      "idx": 89
+    }
+  ],
+  [
+    {
+      "data": "class should be marked as final to avoid override of methods by subclasses. ",
+      "idx": 90
+    }
+  ]
+]

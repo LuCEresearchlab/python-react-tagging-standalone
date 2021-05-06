@@ -1,0 +1,134 @@
+[
+  [
+    {
+      "data": "second argument should be ft1 ",
+      "idx": 852
+    },
+    {
+      "data": "Because after printing a1, the function passed to a is invoked. This will print ft1.",
+      "idx": 861
+    },
+    {
+      "data": "after a1 is printed, ft1 is printed as the lambda is invoked by a just after a1 is printed.",
+      "idx": 865
+    },
+    {
+      "data": "after printing 'a1' the program call the lambda passed as argument, and this would print 'ft1'.",
+      "idx": 867
+    },
+    {
+      "data": "the anonymous function passed to `a`, first prints ft1 which is not in the given output log.",
+      "idx": 871
+    }
+  ],
+  [
+    {
+      "data": "This is wrong as it never prints out ft1",
+      "idx": 856
+    }
+  ],
+  [
+    {
+      "data": "'ft1' and 'ff1' are not printed and 'c2', 'b2' and 'a2' should not",
+      "idx": 851
+    },
+    {
+      "data": "Here it does not print the `ft1` and `ff1`.",
+      "idx": 862
+    },
+    {
+      "data": "console.log('ft1') and console.log('ff1') should be execute",
+      "idx": 870
+    }
+  ],
+  [
+    {
+      "data": "It doesn't print ft1 nor ff1 and also should never reach c2",
+      "idx": 854
+    },
+    {
+      "data": "ft1 will be printed always before b1, ff1 befor c1 and after c1 the program will end.",
+      "idx": 876
+    },
+    {
+      "data": "The same reason. We call alternatively a1,ft1,b1,ff1,c1. the other are reached after the function c ends (continuation calls), but ic terminate the program.",
+      "idx": 878
+    },
+    {
+      "data": "the first function evaluated  is a (a1) which takes another function and than console.log('ft1'), then b is evaluated (b1) which thake another function and then console.log(ff1) and final c it is evaluated (c1) which reach the process.exit(1) and terminateds",
+      "idx": 879
+    }
+  ],
+  [
+    {
+      "data": "This shows only the lines printed by the a,b and c function and not those printed when calling the actual continuations.",
+      "idx": 859
+    },
+    {
+      "data": "The logs of the continuation functions are missing, and after c1 nothing else can be printed since the program exits.",
+      "idx": 869
+    }
+  ],
+  [
+    {
+      "data": "The output is missing the ft.. outputs.",
+      "idx": 863
+    }
+  ],
+  [
+    {
+      "data": "The option ignores the anonymous functions that glue together the three stages and that contain log statements. Moreover, as in Option 2 it doesn't handle correctly the abrupt termination inside stage c().",
+      "idx": 858
+    },
+    {
+      "data": "The function a performs k(arg+1) before it logs 'a2', and the program is terminated during performing k(arg+1), so there is no chance to log 'a2'.",
+      "idx": 881
+    }
+  ],
+  [
+    {
+      "data": "There can only be one correct solution and that is option 1 (since the code doesn't change).",
+      "idx": 855
+    },
+    {
+      "data": "Since, we saw already that the first option was correct, and the program is always the same.",
+      "idx": 857
+    },
+    {
+      "data": "no time to type in the explanation, but the correct output is in the first option",
+      "idx": 873
+    },
+    {
+      "data": "It is the same code and since the first option was right this one can not output something different.",
+      "idx": 875
+    },
+    {
+      "data": "not correct",
+      "idx": 882
+    }
+  ],
+  [
+    {
+      "data": "See Option 1.",
+      "idx": 853
+    },
+    {
+      "data": "the option 1 was right",
+      "idx": 860
+    },
+    {
+      "data": "Option 1 is the correct answer.",
+      "idx": 872
+    },
+    {
+      "data": "No, the correct execution is listed in Option 1",
+      "idx": 883
+    }
+  ],
+  [
+    {
+      "data": "Letter functions call lambdas, so seq here is incorrect",
+      "idx": 880
+    }
+  ]
+]

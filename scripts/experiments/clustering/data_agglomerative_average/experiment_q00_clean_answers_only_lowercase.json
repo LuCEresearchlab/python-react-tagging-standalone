@@ -1,0 +1,160 @@
+[
+  [
+    {
+      "data": "The variable is actually mutable, because it is not a constant and can be changed.",
+      "idx": 6
+    },
+    {
+      "data": "It is mutable, since we can change the Object String to which the variable name points to, but not modifying the String itself.",
+      "idx": 7
+    }
+  ],
+  [
+    {
+      "data": "In order to be immutable it has to be declared as final. String object is immutable, not the variable.",
+      "idx": 11
+    },
+    {
+      "data": "No, even if 'String' is immutable the variable name must be declared final to be immutable. This variable can be reassigned",
+      "idx": 17
+    },
+    {
+      "data": "String are immutable object in java but not the variable, it should be declared as final.",
+      "idx": 29
+    },
+    {
+      "data": "The object under name is immutable; the reference to it is mutable",
+      "idx": 30
+    }
+  ],
+  [
+    {
+      "data": "the variable is immutable because we can't change the object itself, but only the reference to the object",
+      "idx": 14
+    }
+  ],
+  [
+    {
+      "data": "The variable can be mutated simply by assigning something else to it.",
+      "idx": 5
+    },
+    {
+      "data": "The variable is mutable (it's vaule can be changed) even if the String type its immutable",
+      "idx": 9
+    },
+    {
+      "data": "Immutability implies that the variable cannot be reinitialized or modified after the first initialization. In this case name can be reinitialized multiple times, moreover the String object can also be modified in memory.",
+      "idx": 21
+    }
+  ],
+  [
+    {
+      "data": "if there is a final keyword it would be immutable",
+      "idx": 2
+    },
+    {
+      "data": "Because it is missing the final keyword before the type",
+      "idx": 16
+    },
+    {
+      "data": "It is not marked final, therefore it is mutable. ",
+      "idx": 22
+    },
+    {
+      "data": "To make it immutable it should have the final keyword",
+      "idx": 25
+    },
+    {
+      "data": "Its mutable. Final keyword is necessary for immutable variables",
+      "idx": 31
+    }
+  ],
+  [
+    {
+      "data": "it requires the keyword final to be immutable.",
+      "idx": 23
+    }
+  ],
+  [
+    {
+      "data": "The final keyword is needed to make a Java variable final. However, since I do not see any code modifying the variable, I may be able to assume that it is 'effectively final'.",
+      "idx": 3
+    },
+    {
+      "data": "Java strings are immutable, when you try to edit them a new String in created.",
+      "idx": 13
+    },
+    {
+      "data": "No. To be immutable, the keyword 'final' is needed (e.g. 'final String name;')",
+      "idx": 15
+    },
+    {
+      "data": "We need the final keyword to make this variable immutable, i.e. not change after it's been initialized. Right now, we could change its value as many time as we want.",
+      "idx": 24
+    },
+    {
+      "data": "the 'final' keyword needs to be used in java to make the variable immutable.",
+      "idx": 27
+    }
+  ],
+  [
+    {
+      "data": "The variable name is not final, thus it is mutable",
+      "idx": 8
+    },
+    {
+      "data": "The variable is not declared as final. ",
+      "idx": 19
+    },
+    {
+      "data": "To be immutable should have final",
+      "idx": 20
+    },
+    {
+      "data": "To be immutable the variable must be declared as 'final'",
+      "idx": 28
+    }
+  ],
+  [
+    {
+      "data": "The variable can be changed(the pointer can change)",
+      "idx": 4
+    },
+    {
+      "data": "The variable 'name' can be assigned and changed. It would need to be a final String to be immutable.",
+      "idx": 18
+    }
+  ],
+  [
+    {
+      "data": "It is not declared as final",
+      "idx": 1
+    },
+    {
+      "data": "it is not declared as final",
+      "idx": 10
+    }
+  ],
+  [
+    {
+      "data": "You can change the variable name for another string.",
+      "idx": 26
+    },
+    {
+      "data": "The variable is mutable, can change, no final for example.",
+      "idx": 32
+    }
+  ],
+  [
+    {
+      "data": "A variable can change his state many times. Only final variable can have 1 state ",
+      "idx": 33
+    }
+  ],
+  [
+    {
+      "data": "In Java, the ummutable variable should be with the key word `final`.",
+      "idx": 12
+    }
+  ]
+]
