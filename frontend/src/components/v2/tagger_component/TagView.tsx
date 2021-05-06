@@ -26,7 +26,10 @@ function TagView({misconceptionsAvailable, taggingClusterSession, dispatchTaggin
     )
 
     return (
-        <Paper style={{padding: '1em', backgroundColor: GREY, marginTop: '2em', paddingTop: 0}}>
+        <Paper style={{
+            padding: '1em', backgroundColor: GREY, marginTop: '2em', paddingTop: 0, position: 'sticky',
+            top: '10em'
+        }}>
             <Table>
                 <TableBody>
                     <TableRow>

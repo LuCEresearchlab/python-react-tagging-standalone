@@ -134,84 +134,86 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
     if (isLoading || isLoadingClusters) return (<>Loading...</>)
 
     return (
-        <Grid container direction={'row'} className={classes.root} spacing={10}>
-            <Grid item xs={showQuestion ? 4 : 1}>
-                <Button onClick={() => {
-                    setShowQuestion(!showQuestion)
-                }}>Q</Button>
-                <Collapse in={showQuestion}>
-                    <QuestionSelect
-                        questions={taggingSession.questions}
-                        selectedQuestion={taggingSession.currentQuestion}
-                        setQuestionSelect={selectedChange}/>
-                </Collapse>
-            </Grid>
-            <Grid item xs={showQuestion ? 8 : 10}>
-                <TabContext value={tab}>
-                    <TabList
-                        indicatorColor='primary'
-                        textColor='primary'
-                        centered={true}
-                        onChange={(_, e: string) => {
-                            setTab(e)
-                        }}
-                    >
-                        <Tab
-                            label={'Tagging'}
-                            value={'1'}
-                        />
-                        <Tab
-                            label={'Clusters'}
-                            value={'2'}
-                        />
-                    </TabList>
-                    <TabPanel value={'1'}>
-                        <Grid container direction={'row'} className={classes.taggingMiscBlock} spacing={2}
-                              component={Paper}
-                              style={{backgroundColor: LIGHT_GREY}}>
-                            <Grid item xs={8}>
-                                <ClusterView
-                                    taggingClusterSession={taggingClusterSession}
-                                    dispatchTaggingClusterSession={dispatchTaggingClusterSession}
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TagView
-                                    misconceptionsAvailable={data}
-                                    taggingClusterSession={taggingClusterSession}
-                                    dispatchTaggingClusterSession={dispatchTaggingClusterSession}
-                                />
-                            </Grid>
-                            <StyledPagination
-                                count={total_clusters}
-                                page={page}
-                                onChange={paginationChange}
-                                siblingCount={5}
-                            />
-                        </Grid>
-                    </TabPanel>
-                    <TabPanel value={'2'}>
-                        <ClusterHandler
-                            taggingSession={taggingSession}
-                            taggingClusterSession={taggingClusterSession}
-                            dispatchTaggingClusterSession={dispatchTaggingClusterSession}
-                            setCluster={(value: number) => {
-                                setTab('1')
-                                paginationChange(null, value)
+        <>
+            <div style={{position: 'sticky', margin: '-0.5em', marginLeft: '77%', top: '6em', zIndex: 1}}>
+                {
+                    keyHistory == '' ?
+                        'space: next cluster, c: cluster view / tagging view' :
+                        'command: ' + keyHistory
+                }
+            </div>
+            <Grid container direction={'row'} className={classes.root} spacing={10}>
+                <Grid item xs={showQuestion ? 4 : 1}>
+                    <Button onClick={() => {
+                        setShowQuestion(!showQuestion)
+                    }}>Q</Button>
+                    <Collapse in={showQuestion}>
+                        <QuestionSelect
+                            questions={taggingSession.questions}
+                            selectedQuestion={taggingSession.currentQuestion}
+                            setQuestionSelect={selectedChange}/>
+                    </Collapse>
+                </Grid>
+                <Grid item xs={showQuestion ? 8 : 10}>
+                    <TabContext value={tab}>
+                        <TabList
+                            indicatorColor='primary'
+                            textColor='primary'
+                            centered={true}
+                            onChange={(_, e: string) => {
+                                setTab(e)
                             }}
-                        />
-                    </TabPanel>
-                </TabContext>
-                <div>
-                    {
-                        keyHistory == '' ?
-                            'space: next cluster, c: cluster view / tagging view' :
-                            'command: ' + keyHistory
-                    }
-                </div>
+                        >
+                            <Tab
+                                label={'Tagging'}
+                                value={'1'}
+                            />
+                            <Tab
+                                label={'Clusters'}
+                                value={'2'}
+                            />
+                        </TabList>
+                        <TabPanel value={'1'}>
+                            <Grid container direction={'row'} className={classes.taggingMiscBlock} spacing={2}
+                                  component={Paper}
+                                  style={{backgroundColor: LIGHT_GREY}}>
+                                <Grid item xs={8}>
+                                    <ClusterView
+                                        taggingClusterSession={taggingClusterSession}
+                                        dispatchTaggingClusterSession={dispatchTaggingClusterSession}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TagView
+                                        misconceptionsAvailable={data}
+                                        taggingClusterSession={taggingClusterSession}
+                                        dispatchTaggingClusterSession={dispatchTaggingClusterSession}
+                                    />
+                                </Grid>
+                                <StyledPagination
+                                    count={total_clusters}
+                                    page={page}
+                                    onChange={paginationChange}
+                                    siblingCount={5}
+                                />
+                            </Grid>
+                        </TabPanel>
+                        <TabPanel value={'2'}>
+                            <ClusterHandler
+                                taggingSession={taggingSession}
+                                taggingClusterSession={taggingClusterSession}
+                                dispatchTaggingClusterSession={dispatchTaggingClusterSession}
+                                setCluster={(value: number) => {
+                                    setTab('1')
+                                    paginationChange(null, value)
+                                }}
+                            />
+                        </TabPanel>
+                    </TabContext>
+                </Grid>
+                <Grid item xs={showQuestion ? undefined : 1}/>
             </Grid>
-            <Grid item xs={showQuestion ? undefined : 1}/>
-        </Grid>
+        </>
     )
 
 }
