@@ -1,0 +1,150 @@
+[
+  [
+    {
+      "data": "The execution stops after process.exit(1) when function c is called.",
+      "idx": 783
+    },
+    {
+      "data": "I am not sure what kind of explanation I should give here since this is the way the code is executed. We begin with function a() then its continuation which calls function b and then we call the continuation of b and that calls c which calls process.exit() and then the program terminated.",
+      "idx": 787
+    },
+    {
+      "data": "This is correct as the program is terminated on process.exit(1).",
+      "idx": 788
+    },
+    {
+      "data": "the first execution is a, followed by the body of the function as second parameter, followed by b, followed by its body, followed by c, which terminates after process.exit(1)",
+      "idx": 792
+    },
+    {
+      "data": "The program is terminated in function c.",
+      "idx": 813
+    }
+  ],
+  [
+    {
+      "data": "a is called with 1 and logs 'a1', then calls the function passed as a second parameter with argument 2. This function logs 'ft1' and then calls b with 2. Function logs 'b1' and then calls the function passed as a second parameter with argument 2+2=4. That function logs 'ff1' and then calls c passing 4 as argument. C logs 'c1' and then terminates the program.",
+      "idx": 790
+    },
+    {
+      "data": "console.log('a1'), console.log('ft1'), console.log('b1'), console.log('ff1'), console.log('c1'), process.exit(1)",
+      "idx": 802
+    }
+  ],
+  [
+    {
+      "data": "It is correct a prints a1 then calls function(two) that first prints ft1 then calls b that prints b1 and then calls function(four) that prints ff1 and calls c that prints c1 and terminates",
+      "idx": 786
+    },
+    {
+      "data": "because it starts by executing a. It prints a1 then call the function passed to a. This prints ft1 that execute b. This prints b1 than call the function passed to b. It prints ff1 than call c. This prints c1 than the process exit.",
+      "idx": 793
+    },
+    {
+      "data": "First you call function a, which prints a1. Then you have the continuation with (arg+1). The continuation prints ft1. Then it calls b which prints b1. The continuation is called which prints ff1. Then c is called which prints c1 and then process.exit(1) terminates the program.",
+      "idx": 801
+    },
+    {
+      "data": "a first prints a1 and then applies the anonymous function which prints ft1 and calls b. b first prints b1 and then calls the anonymous function which prints ff1 and calls c. c prints c1 and   terminates the execution of the program.",
+      "idx": 803
+    }
+  ],
+  [
+    {
+      "data": "We start by invoking a, and print 'a1', we continue into an anonymous function printing 'ft1', then go into b printing 'b1', then into the other anonymous function printing 'ff1', then we invoke c and print 'c1'. After said print we reach process.exit and the program terminates.",
+      "idx": 785
+    },
+    {
+      "data": "It start by calling a, so ti prints 'a1'. Then it logs 'ft1' inside k. Then it calls b, which prints 'b1'. Then k inside b is evaluated, which prints 'ff1'. It call c which prints 'c1' and then it exits with code 1, thus it stops printing.",
+      "idx": 807
+    }
+  ],
+  [
+    {
+      "data": "the first function evaluated  is a (a1) which takes another function and than console.log('ft1'), then b is evaluated (b1) which thake another function and then console.log(ff1) and final c it is evaluated (c1) which reach the process.exit(1) and terminateds",
+      "idx": 811
+    }
+  ],
+  [
+    {
+      "data": "Because when function c is called we print 'c1' and then process.exit(1) terminates the program.",
+      "idx": 804
+    },
+    {
+      "data": "Because after the console.log('c1'); the process.exit(1); will terminate the program, so the rest of console.log that remain won't be executed.",
+      "idx": 808
+    }
+  ],
+  [
+    {
+      "data": "This a case of kick-forward style where where the pipeline stages are glued together with lambdas, and the program will stop when logging c1.",
+      "idx": 789
+    }
+  ],
+  [
+    {
+      "data": "Yes. The stacktrace for this code would be a (first two instructions with k=1) -> b (first two instructions with k=2) -> c (first two instructions with k=4). After that instruction, the program is interrupted.",
+      "idx": 797
+    },
+    {
+      "data": "The stack call is: a -> function(two, ...) -> b -> function(four, ...) -> c -> exit. Since the program exit after printing 'c1' the output is correct.",
+      "idx": 799
+    },
+    {
+      "data": "I think this is correct because c calls exist, so we will not be printing anything after that, including what comes after the calls to k.",
+      "idx": 806
+    }
+  ],
+  [
+    {
+      "data": "The process exits inside the call to c, therefore all the remaining console logs arent executed",
+      "idx": 791
+    },
+    {
+      "data": "The output is missing the second console.log of each function.",
+      "idx": 795
+    },
+    {
+      "data": "Yes. At any invocation we call the console.log inside the function (a,b,c) and the console.log inside the callback alternatively.",
+      "idx": 810
+    }
+  ],
+  [
+    {
+      "data": "By the invocation, first is a, then anonymous function 1, then b then anonymous function 2 then c. So that the sequence is `a(1,f1)->f1(2)->b(2,f2)->f2(4)`",
+      "idx": 794
+    }
+  ],
+  [
+    {
+      "data": "the output is correct.",
+      "idx": 805
+    },
+    {
+      "data": "Seq is correct, c call kills program, so no function returns and logs '...2'",
+      "idx": 812
+    },
+    {
+      "data": "Yes it's correct.",
+      "idx": 815
+    }
+  ],
+  [
+    {
+      "data": "Because after a1 and ft1 ",
+      "idx": 809
+    }
+  ],
+  [
+    {
+      "data": "it follows the CPS expression",
+      "idx": 784
+    }
+  ],
+  [
+    {
+      "data": "print that",
+      "idx": 814
+    }
+  ]
+]

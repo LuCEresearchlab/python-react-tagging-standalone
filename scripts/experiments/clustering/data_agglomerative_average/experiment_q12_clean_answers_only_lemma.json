@@ -1,0 +1,158 @@
+[
+  [
+    {
+      "data": "This is a valid way to define and then invoke an arrow function in JS",
+      "idx": 485
+    },
+    {
+      "data": "yes, it does the same operation as above, but with an arrow function",
+      "idx": 490
+    },
+    {
+      "data": "I think the internal part is the correct JavaScript syntax for arrow functions. And the rest of the assignment and passing the parameter are also correct.",
+      "idx": 494
+    },
+    {
+      "data": "You can write a lambda with arrow syntax and then directly call it.",
+      "idx": 495
+    }
+  ],
+  [
+    {
+      "data": "The arrow function is immediately invoked with the argument 3. The body of the arrow function is an expression, which is allowed in JavaScript. At the end of the assignment, r will contain the value 4.",
+      "idx": 484
+    },
+    {
+      "data": "Also in this case it's correct, you can use the arrow function and produce the same result, which is 4.",
+      "idx": 499
+    },
+    {
+      "data": "Same as before, the function is correct, as the arrow function is immediately invoked and 'r' will contain the value 4.",
+      "idx": 501
+    },
+    {
+      "data": "It's an IIFE arrow function and will assign r to 4. ",
+      "idx": 503
+    },
+    {
+      "data": "Yes it's correct. Variable r will contains the value 4. This time the function is defined with arrow expression but the meaning is the same as the previous option.",
+      "idx": 509
+    }
+  ],
+  [
+    {
+      "data": "It omits the return keyword and uses the arrow operator. Here the function is (x=>x+1) and inputs the 3 so that the finally r is 4.",
+      "idx": 488
+    }
+  ],
+  [
+    {
+      "data": "This is correct as it uses a lambda expression where x is set to 3 and r will be set to 4.",
+      "idx": 482
+    },
+    {
+      "data": "it uses the arrow function which is equivalent to the standard function declaration to define a lambda which is then invoked with parameter 3, result again in 4",
+      "idx": 486
+    },
+    {
+      "data": "Like before, it use an anonymous function, in this case a lambda, and immediately invoke it with 3. r now is 4.",
+      "idx": 487
+    },
+    {
+      "data": "Yes, again it's a call of a lambda increasing the argument by one. Being called on 3 the value of r is 4. Just the notation for the lambda is changed.",
+      "idx": 489
+    }
+  ],
+  [
+    {
+      "data": "r will be 4, the lambda is created and called ",
+      "idx": 480
+    },
+    {
+      "data": "Yes. In this case, we are immediately calling (just after its definition) a lambda that increments its argument by one. r will contain the number 4.",
+      "idx": 491
+    }
+  ],
+  [
+    {
+      "data": "This is a basic lambda function that is additionally called with the parameter 3 in the same line.",
+      "idx": 481
+    },
+    {
+      "data": "In this case we already evaluate the lambda function, by passing at the end x = 3 and assign the result to r.",
+      "idx": 483
+    },
+    {
+      "data": "in the right hand of the assignment we define a new function summing 1 to its argument. We subsequently apply 3 to this function.",
+      "idx": 497
+    },
+    {
+      "data": "It is correct, 3 is applied to anonymous function and saved to r",
+      "idx": 505
+    },
+    {
+      "data": "it applys a lambda function on parameter 3. ",
+      "idx": 507
+    }
+  ],
+  [
+    {
+      "data": "Is the correct  way to declare a lambda expression and use it immediately",
+      "idx": 492
+    },
+    {
+      "data": "the immediately called function is written as a lambda and this is a valid and correct way to write it. The function will be invoked immediately and return 4",
+      "idx": 493
+    },
+    {
+      "data": "it's a lambda definition and then invoked",
+      "idx": 496
+    },
+    {
+      "data": "when writing lambdas on a single line and with a single argument parenthesis and `return` can be left out. ",
+      "idx": 498
+    },
+    {
+      "data": "Similarly to the previous Option 1, I think it is licit in JavaScript to define a lambda function, wrap it inside paranthesis and call it immediately (this is the definition of lambda function, I suppose). In this case, at the end of the statement r is queal to 4.",
+      "idx": 504
+    }
+  ],
+  [
+    {
+      "data": "Same as Option 1, except now we use lambdas.",
+      "idx": 479
+    },
+    {
+      "data": "Same as before, but just another syntax to write lambdas in JS, so this code should also be valid JS code.",
+      "idx": 500
+    },
+    {
+      "data": "The same case as in the option 1, but this time with a lambda. Will be saved the value 4 in r;",
+      "idx": 502
+    }
+  ],
+  [
+    {
+      "data": "the expression is wrong since let is a javascript keyword, and this lambda expression is in scala",
+      "idx": 478
+    }
+  ],
+  [
+    {
+      "data": "do not recall nothing",
+      "idx": 508
+    }
+  ],
+  [
+    {
+      "data": "Same as previous",
+      "idx": 506
+    }
+  ],
+  [
+    {
+      "data": "r yields 4",
+      "idx": 477
+    }
+  ]
+]

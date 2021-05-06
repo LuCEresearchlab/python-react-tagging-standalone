@@ -1,0 +1,158 @@
+[
+  [
+    {
+      "data": "The first x contains the value 2, and the second x contains a function (if f(1) does not throw an exception because f does not accept arguments)",
+      "idx": 390
+    },
+    {
+      "data": "No, the first x stores the value 2, while the second x stores the internal lambda of f. ",
+      "idx": 393
+    },
+    {
+      "data": "No. The first x will be 2 (because of currying). The second f will just be a function (as said before), no matter what we pass to f, provided JS doesn't crash (as it actually should), when passing an argument to a function that accepts not argument (i.e. f).",
+      "idx": 398
+    }
+  ],
+  [
+    {
+      "data": "No, it would be the same if the last statement was x = g(1), in the code above the second x contains a Function taking an argument and increasing it by one; the first x instead contains 2.",
+      "idx": 387
+    },
+    {
+      "data": "x will contain 2, as f()(1) returns 2. g will contain a function that increments the argument by one, and the second x will either make the code crash (as f doesn't take arguments) or assign the same function. To have the two x equals, the last piece of code should be 'let x = g(1)'.",
+      "idx": 389
+    },
+    {
+      "data": "In the first case the `x = 2`. In the second case, we try to apply one argument to a function with no arguments.",
+      "idx": 395
+    }
+  ],
+  [
+    {
+      "data": "because in f(1) the first argument is ignored, yielding a function",
+      "idx": 375
+    },
+    {
+      "data": "No. In the second case we expect an error, because as in Option 1 we call f, passing a value to the function, but function f does not require a parameter. I don't remember exactly how JavaScript manage this situation, if it throws an exception or it don't care about the passed argument (I expect it throws an error), but in the second case it returns a function not a value (while x = f()(1) returns a value... 2).",
+      "idx": 402
+    }
+  ],
+  [
+    {
+      "data": "No that is not correct. This code is not valid because f(1) shouldn't take parameters. Instead it would be the same value (i.e. the value would be 2) if the second case was let g = f(); let x = g(1)",
+      "idx": 379
+    },
+    {
+      "data": "g=function(x){return x+1;}; and x=function(x){return x+1;}; since f doesn't take parameters. It would be correct if x=g(1) instead of x=f(1).",
+      "idx": 392
+    },
+    {
+      "data": "Its correct if change 'let x = f(1)' to 'let x = g(1)'",
+      "idx": 405
+    }
+  ],
+  [
+    {
+      "data": "After let x = f()(1), x contains 2. After let g = f(), g contains the function that returns the successor. After let x = f(1), x contains the same value of g, i.e. a function (the extra parameter passed to f is ignored).",
+      "idx": 382
+    },
+    {
+      "data": "No, in the first case x contains the value 2, while in the second g is not used and f(1) returns a function which is stored in the variable x.",
+      "idx": 383
+    },
+    {
+      "data": "The variable contains the same value as after let g = f(); let x = g(1); g(1) will return 2, not f(1)",
+      "idx": 385
+    },
+    {
+      "data": "after x = f()(1) the value would be 2. After the other calls the value of x would be a function",
+      "idx": 391
+    },
+    {
+      "data": "x will be assigned to 2 first, and then it will be assigned to 'function(x)'. We must've let x = g(1) if we wanted the same value.",
+      "idx": 401
+    }
+  ],
+  [
+    {
+      "data": "In order for it to contain the same value, we need to change the second part to: let g = f(); let x = g(1);",
+      "idx": 377
+    },
+    {
+      "data": "After let g = f() it will contain the same value but after let x = f(1) the value will change",
+      "idx": 380
+    },
+    {
+      "data": "It would contain the same value if: let g = f(); let x = g(1); ",
+      "idx": 400
+    }
+  ],
+  [
+    {
+      "data": "x will contain a reference to the inner anonymous function",
+      "idx": 384
+    },
+    {
+      "data": "Well, assuming there are no typos in the text, then the first x would contain 2, while the second one would contain the inner function.",
+      "idx": 399
+    }
+  ],
+  [
+    {
+      "data": "no, x contains 2, while the second x contains an anonymous function",
+      "idx": 388
+    },
+    {
+      "data": "x in the second case it's an anonymous function",
+      "idx": 394
+    },
+    {
+      "data": "both g and (second) x hold the anonymous function. (first) x holds the 2.",
+      "idx": 396
+    },
+    {
+      "data": "In first case x is equal to the value 2 but in the second case x contains a reference to a function",
+      "idx": 407
+    }
+  ],
+  [
+    {
+      "data": "Since, x will have just a reference to function f.",
+      "idx": 381
+    }
+  ],
+  [
+    {
+      "data": "No, the result of the former code  2 but in the last code, `g` is a function but then it invokes the `f`, no the `g`.",
+      "idx": 386
+    }
+  ],
+  [
+    {
+      "data": "If the question was expected to be: let g = f(); let x = g(1) then yes they would. In this case after declaring g, x is assigned to f(1) with would yield an error in the same manner as in question one.",
+      "idx": 378
+    },
+    {
+      "data": "not sure if it's type correctly, if we had x = g(1) then yes, the result would be the same, this way, though, its not.",
+      "idx": 397
+    }
+  ],
+  [
+    {
+      "data": "Just because",
+      "idx": 404
+    }
+  ],
+  [
+    {
+      "data": "1 is not passed to g",
+      "idx": 376
+    }
+  ],
+  [
+    {
+      "data": "The first one returns an integer, the second time return the wrapped function (argument 1 is not read)",
+      "idx": 403
+    }
+  ]
+]
