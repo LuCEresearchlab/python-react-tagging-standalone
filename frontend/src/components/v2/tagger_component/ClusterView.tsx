@@ -2,7 +2,7 @@ import React, {useEffect} from "react"
 import {Answer, Cluster} from "../../../interfaces/Dataset";
 import {rangesCompressor} from "../../../util/RangeCompressor";
 import {HighlightRange, HighlightRangeColor} from "../../../interfaces/HighlightRange";
-import {Button, Paper} from "@material-ui/core";
+import {Button, Paper, TextField} from "@material-ui/core";
 import {GREY} from "../../../util/Colors"
 
 // @ts-ignore
@@ -16,13 +16,19 @@ import {
     TaggingClusterSessionDispatch
 } from "../../../model/TaggingClusterSession";
 import KeyIndication from "./KeyIndication";
-import {clusterSessionPost, setRanges, setTagsAndRanges} from "../../../model/TaggingClusterSessionDispatch";
+import {
+    clusterSessionPost,
+    setClusters,
+    setRanges,
+    setTagsAndRanges
+} from "../../../model/TaggingClusterSessionDispatch";
 import TruthCircle from "../../tagger_component/TruthCircle";
 import {FormatColorReset} from "@material-ui/icons";
 import {highlightStyle, nthIndex} from "../../../helpers/Util";
 import {useFetch} from "../../../hooks/useFetch";
 import withKeyboard from "../../../hooks/withKeyboard";
 import stringEquals from "../../../util/StringEquals";
+import {postClusters} from "../../../helpers/PostHelper";
 
 const {TAGGING_SERVICE_URL} = require('../../../../config.json')
 
@@ -39,6 +45,19 @@ function ClusterView({taggingClusterSession, dispatchTaggingClusterSession}: Inp
 
     return (
         <div>
+            <TextField value={currentCluster.name}
+                       InputProps={{disableUnderline: true}}
+                       onChange={(e) => {
+                           const clusters = taggingClusterSession.clusters
+                           clusters[taggingClusterSession.currentCluster].name = e.target.value
+                           postClusters(
+                               taggingClusterSession.dataset_id,
+                               taggingClusterSession.question_id,
+                               taggingClusterSession.user_id,
+                               [...clusters]
+                           )
+                           dispatchTaggingClusterSession(setClusters([...clusters]))
+                       }}/>
             {
                 currentCluster
                     .answers
@@ -170,8 +189,8 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
 
     return (
         <Paper style={{
-            padding: '1em', backgroundColor: GREY, display: 'flex', flexDirection: 'row',
-            marginBottom: '2em'
+            padding: '0.5em', backgroundColor: GREY, display: 'flex', flexDirection: 'row',
+            marginBottom: '1em'
         }}>
             <KeyIndication displayKey={"" + displayKey}/>
             <TruthCircle value={answer.picked}/>
