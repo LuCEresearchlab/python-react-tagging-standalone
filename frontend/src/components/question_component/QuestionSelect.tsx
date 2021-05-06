@@ -16,13 +16,10 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             width: '100%',
             justifyContent: 'center',
-            position: 'sticky',
-            top: '100px',
             flexGrow: 1
         },
         paper: {
             padding: theme.spacing(2),
-            position: 'sticky',
             textAlign: 'left',
             marginLeft: 'auto',
             marginRight: 'auto',

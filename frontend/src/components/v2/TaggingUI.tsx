@@ -144,10 +144,12 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
             </div>
             <Grid container direction={'row'} className={classes.root} spacing={10}>
                 <Grid item xs={showQuestion ? 4 : 1}>
-                    <Button onClick={() => {
-                        setShowQuestion(!showQuestion)
-                    }}>Q</Button>
-                    <Collapse in={showQuestion}>
+                    <Button
+                        style={{position: 'sticky', top: '1em'}}
+                        onClick={() => {
+                            setShowQuestion(!showQuestion)
+                        }}>Q</Button>
+                    <Collapse in={showQuestion} style={{position: 'sticky', top: '1em'}}>
                         <QuestionSelect
                             questions={taggingSession.questions}
                             selectedQuestion={taggingSession.currentQuestion}
