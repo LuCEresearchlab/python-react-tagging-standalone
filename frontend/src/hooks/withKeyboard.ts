@@ -40,7 +40,7 @@ function withKeyboard(action: (command: string) => void) {
                     setCommand(command.substring(0, command.length - 1))
                 } else if (key.length == 1 && allowedInputs.test(key)) {
                     setCommand(command + key)
-                } else setCommand('')
+                }
             }
 
             document.addEventListener('keydown', func)

@@ -47,7 +47,7 @@ function MisconceptionInfoButton({tags, handled_element, keyboardIndex}: Input) 
     // end popup stuff
 
     withKeyboard((command => {
-        if (keyboardIndex != undefined && (command == '' + keyboardIndex + 'h')) {
+        if (keyboardIndex != undefined && (command == '' + keyboardIndex + '?')) {
             ref.current?.click()
         }
     }))
