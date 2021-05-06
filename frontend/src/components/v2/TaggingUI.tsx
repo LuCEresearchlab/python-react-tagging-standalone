@@ -145,7 +145,7 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
             <Grid container direction={'row'} className={classes.root} spacing={10}>
                 <Grid item xs={showQuestion ? 4 : 1}>
                     <Button
-                        style={{position: 'sticky', top: '1em'}}
+                        style={{position: 'sticky', top: '1em', zIndex: 2}}
                         onClick={() => {
                             setShowQuestion(!showQuestion)
                         }}>Q</Button>
