@@ -22,7 +22,6 @@ import {
 } from "../../../model/TaggingClusterSessionDispatch";
 import MisconceptionColorButton from "../../tagger_component/MisconceptionColorButton";
 import MisconceptionInfoButton from "../../tagger_component/MisconceptionInfoButton";
-import MisconceptionNoteButton from "../../tagger_component/MisconceptionNoteButton";
 import stringEquals from "../../../util/StringEquals";
 
 
@@ -135,7 +134,6 @@ function MisconceptionView(
                         tags={tags}
                         handled_element={FIRST_DYNAMIC_INDEX}
                     />
-                    <MisconceptionNoteButton/>
                 </div>
                 {
                     [...Array(Math.max(tags.length - PRE_DYNAMIC_SIZE - 2, 0))]
@@ -165,7 +163,6 @@ function MisconceptionView(
                                         tags={tags}
                                         handled_element={handled_element}
                                     />
-                                    <MisconceptionNoteButton/>
                                 </div>)
                             }
                         )

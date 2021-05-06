@@ -169,13 +169,13 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
                         <Grid container direction={'row'} className={classes.taggingMiscBlock} spacing={2}
                               component={Paper}
                               style={{backgroundColor: LIGHT_GREY}}>
-                            <Grid item xs={6}>
+                            <Grid item xs={8}>
                                 <ClusterView
                                     taggingClusterSession={taggingClusterSession}
                                     dispatchTaggingClusterSession={dispatchTaggingClusterSession}
                                 />
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={4}>
                                 <TagView
                                     misconceptionsAvailable={data}
                                     taggingClusterSession={taggingClusterSession}
