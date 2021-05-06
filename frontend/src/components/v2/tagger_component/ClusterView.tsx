@@ -46,6 +46,7 @@ function ClusterView({taggingClusterSession, dispatchTaggingClusterSession}: Inp
     return (
         <div>
             <TextField value={currentCluster.name}
+                       InputProps={{disableUnderline: true}}
                        onChange={(e) => {
                            const clusters = taggingClusterSession.clusters
                            clusters[taggingClusterSession.currentCluster].name = e.target.value
