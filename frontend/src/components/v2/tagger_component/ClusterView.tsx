@@ -37,7 +37,8 @@ interface Input {
     dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>
 }
 
-const regExp = new RegExp(/^[1-9]h[1-9](:?-[1-9]\d*)?$/)
+const sep: string = 'h'
+const regExp = new RegExp(/^[1-9]\d*h[1-9](:?-[1-9]\d*)?$/)
 
 function ClusterView({taggingClusterSession, dispatchTaggingClusterSession}: Input) {
 
@@ -144,9 +145,9 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
 
 
     withKeyboard((command: string) => {
-        if (command.startsWith("" + displayKey) && regExp.test(command)) {
+        if (command.startsWith("" + displayKey + sep) && regExp.test(command)) {
             if (command.indexOf('-') == -1) {
-                const from: number = parseInt(command.slice(2)) - 1
+                const from: number = parseInt(command.slice(('' + displayKey).length + 1)) - 1
 
                 if (isNaN(from)) return
 
@@ -162,7 +163,7 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
                 })
             } else {
                 const split_index: number = command.indexOf('-')
-                const from: number = parseInt(command.slice(2, split_index)) - 1
+                const from: number = parseInt(command.slice(('' + displayKey).length + 1, split_index)) - 1
                 const to: number = parseInt(command.slice(split_index + 1))
 
                 if (isNaN(from) || isNaN(to)) return
