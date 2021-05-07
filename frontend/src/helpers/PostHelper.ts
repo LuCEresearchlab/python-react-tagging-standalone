@@ -2,7 +2,7 @@ import {HighlightRange} from "../interfaces/HighlightRange";
 import {Cluster} from "../interfaces/Dataset";
 
 
-const {TAGGING_SERVICE_URL} = require('../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 const post_answer_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer'
 

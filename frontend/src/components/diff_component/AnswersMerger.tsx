@@ -7,7 +7,7 @@ import stringEquals from "../../util/StringEquals";
 import {useFetch} from "../../hooks/useFetch";
 
 
-const {TAGGING_SERVICE_URL} = require('../../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 interface Input {
     dataset_id: string,

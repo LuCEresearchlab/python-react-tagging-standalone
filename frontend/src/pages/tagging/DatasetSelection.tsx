@@ -9,7 +9,7 @@ import {DatasetDesc} from "../../interfaces/Dataset";
 import {userContext} from "../../util/UserContext";
 
 
-const {TAGGING_SERVICE_URL} = require('../../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 
 const redirect = (id: string, url: string, user_id: string, router: any) => {

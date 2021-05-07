@@ -21,7 +21,7 @@ import {setClusters} from "../../../model/TaggingClusterSessionDispatch";
 import {Clear, Search} from "@material-ui/icons";
 import DroppableCluster from "./DroppableCluster";
 
-const {TAGGING_SERVICE_URL} = require('../../../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 interface Input {
     taggingSession: TaggingSession,
