@@ -9,7 +9,7 @@ import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
 import {useFetch} from "../../hooks/useFetch";
 
 
-const {TAGGING_SERVICE_URL} = require('../../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 
 const useStyles = makeStyles(() =>

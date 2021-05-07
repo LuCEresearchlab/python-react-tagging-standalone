@@ -5,7 +5,7 @@ import {User, userContext} from "../../util/UserContext";
 import {FiberManualRecord} from "@material-ui/icons";
 import {useHistory} from "react-router-dom";
 
-const {TAGGING_SERVICE_URL} = require('../../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 interface Input {
     setSession(session: User): void

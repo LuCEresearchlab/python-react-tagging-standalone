@@ -30,7 +30,7 @@ import withKeyboard from "../../../hooks/withKeyboard";
 import stringEquals from "../../../util/StringEquals";
 import {postClusters} from "../../../helpers/PostHelper";
 
-const {TAGGING_SERVICE_URL} = require('../../../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 interface Input {
     taggingClusterSession: TaggingClusterSession,

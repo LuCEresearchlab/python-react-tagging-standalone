@@ -22,7 +22,7 @@ import NoMisconception from "../../util/NoMisconception";
 import {FormatColorReset} from "@material-ui/icons";
 import {highlightRangeToColor, highlightStyle} from "../../helpers/Util";
 
-const {TAGGING_SERVICE_URL} = require('../../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

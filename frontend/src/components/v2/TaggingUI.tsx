@@ -24,7 +24,7 @@ import ClusterHandler from "./cluster_handler_component/ClusterHandler";
 import withKeyboard from "../../hooks/withKeyboard";
 import {useFetch} from "../../hooks/useFetch";
 
-const {TAGGING_SERVICE_URL} = require('../../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 interface Input {
     taggingSession: TaggingSession,

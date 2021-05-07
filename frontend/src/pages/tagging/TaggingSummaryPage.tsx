@@ -6,7 +6,7 @@ import {Paper, Table, TableBody, TableContainer, TableHead, TableRow} from "@mat
 import {StyledTableCell, StyledTableRow, useStyles} from "../../components/styled/StyledTable";
 
 
-const {TAGGING_SERVICE_URL} = require('../../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 interface Stats {
     count: number,

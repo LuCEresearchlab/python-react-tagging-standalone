@@ -8,7 +8,7 @@ import {StyledTableCell, StyledTableRow, useStyles} from "../../components/style
 // @ts-ignore
 import Highlightable from "highlightable";
 
-const {TAGGING_SERVICE_URL} = require('../../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 function TaggingDetailPage() {
 

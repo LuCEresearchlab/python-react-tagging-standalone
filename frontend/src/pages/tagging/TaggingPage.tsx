@@ -8,7 +8,7 @@ import useTaggingClusterSession from "../../model/TaggingClusterSession";
 import {userContext} from "../../util/UserContext";
 import {useFetch} from "../../hooks/useFetch";
 
-const {TAGGING_SERVICE_URL} = require('../../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 function TaggingPage() {
 

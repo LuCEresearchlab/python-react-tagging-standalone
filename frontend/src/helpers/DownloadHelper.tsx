@@ -1,4 +1,4 @@
-const {TAGGING_SERVICE_URL} = require('../../config.json')
+const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 const download_url = TAGGING_SERVICE_URL + '/datasets/download/dataset/'
 
 // https://www.codevoila.com/post/30/export-json-data-to-downloadable-file-using-javascript

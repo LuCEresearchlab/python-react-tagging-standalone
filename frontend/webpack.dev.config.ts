@@ -4,6 +4,8 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import ESLintPlugin from "eslint-webpack-plugin";
 
+require('dotenv').config();
+
 const config: webpack.Configuration = {
   mode: "development",
   output: {
@@ -42,6 +44,9 @@ const config: webpack.Configuration = {
     }),
     new ESLintPlugin({
       extensions: ["js", "jsx", "ts", "tsx"],
+    }),
+    new webpack.DefinePlugin({
+      'process.env.TAGGING_SERVICE_URL': 'http://localhost:5000'
     }),
   ],
   devtool: "inline-source-map",
