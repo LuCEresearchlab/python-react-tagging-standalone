@@ -14,15 +14,20 @@ this will allow for a more scalable tagging experience.
 - mongodb: Dockerfile for MongoDB server
 - tagging service: Python Flask server
 
-
 ## Usage
+
 The application is entirely dockerized and as such can be run as long as Docker is installed, to run it:
+
 ```
 cd python-react-tagging-standalone
 docker-compose up -d                               # development
 docker-compose -f docker-compose-deploy.yml up -d  # deployment
 ```
+
 then connect to http://localhost:8080/
+
+In the case of deploying the application it is required to set
+`TAGGING_SERVICE_URL=<host-url>:5000` inside the file `frontend/.env.prod`.
 
 To stop the containers
 
