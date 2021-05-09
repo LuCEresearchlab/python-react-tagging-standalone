@@ -46,7 +46,7 @@ const config: webpack.Configuration = {
       extensions: ["js", "jsx", "ts", "tsx"],
     }),
     new webpack.DefinePlugin({
-      'process.env.TAGGING_SERVICE_URL': 'http://localhost:5000'
+      'process.env.TAGGING_SERVICE_URL': JSON.stringify('http://localhost:5000')
     }),
   ],
   devtool: "inline-source-map",
