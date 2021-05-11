@@ -87,9 +87,7 @@ function StaticSelectorView({
     }
 
     const keyboardAction = useMemo(() => {
-        console.log('memo called')
         return function (command: string) {
-            console.log('StaticSelectorView ', command)
             if (isNoMisconception(misconception) && command == 'n') onClickHandler()
             if (command == ('' + handledIndex)) onClickHandler()
 
