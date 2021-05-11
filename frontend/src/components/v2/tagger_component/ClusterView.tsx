@@ -3,7 +3,7 @@ import {Answer, Cluster} from "../../../interfaces/Dataset";
 import {rangesCompressor} from "../../../util/RangeCompressor";
 import {HighlightRange, HighlightRangeColor} from "../../../interfaces/HighlightRange";
 import {Button, Paper, TextField} from "@material-ui/core";
-import {GREY} from "../../../util/Colors"
+import {GREY, HIGHLIGHT_COLOR_ELEMENT} from "../../../util/Colors"
 
 // @ts-ignore
 import Highlightable from "highlightable";
@@ -222,7 +222,12 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
                 }
                 style={{padding: 'inherit'}}
             />
-            <Button style={{marginLeft: 'auto'}} onClick={clear} title={'Clear highlighting'}>
+            <Button style={{
+                marginLeft: 'auto',
+                backgroundColor: stringEquals('' + displayKey + 'rc', localCommand) ?
+                    HIGHLIGHT_COLOR_ELEMENT : ''
+            }}
+                    onClick={clear} title={'Clear highlighting'}>
                 <FormatColorReset/>
             </Button>
 
