@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useMemo} from "react"
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import {
     TaggingClusterSession,
@@ -21,9 +21,9 @@ interface Input {
 function TagView({misconceptionsAvailable, taggingClusterSession, dispatchTaggingClusterSession}: Input) {
 
 
-    const misconceptionsAvailableNoMisc = misconceptionsAvailable.filter(
+    const misconceptionsAvailableNoMisc = useMemo(() => misconceptionsAvailable.filter(
         misc => !stringEquals(misc.name, NoMisconception)
-    )
+    ), [misconceptionsAvailable])
 
     return (
         <Paper style={{

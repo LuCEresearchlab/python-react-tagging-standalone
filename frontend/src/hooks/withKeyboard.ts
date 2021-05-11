@@ -19,15 +19,17 @@ function withKeyboard(action: (command: string) => void) {
                     document.activeElement.localName != 'body' ||
                     (target != null && target.id != 'body')
                 ) {
-                    setCommand('')
+                    setTimeout(() => setCommand(''), 0)
                     return
                 }  // some element is selected (typing)
 
                 const key = event.key
+
+                console.log('withKeyboard', command + key)
                 if (key == ' ') event.preventDefault() // prevent scroll on space in case of scrollable page
 
                 if (key == 'Escape') {
-                    setCommand('')
+                    setTimeout(() => setCommand(''), 0)
                 } else if (key == 'Enter' || key == ' ') {
                     try {
                         const c_copy = command
@@ -37,9 +39,9 @@ function withKeyboard(action: (command: string) => void) {
                     }
                     setTimeout(() => setCommand(''), 0)
                 } else if (key === "Backspace" || key === "Delete") {
-                    setCommand(command.substring(0, command.length - 1))
+                    setTimeout(() => setCommand(command.substring(0, command.length - 1)), 0)
                 } else if (key.length == 1 && allowedInputs.test(key)) {
-                    setCommand(command + key)
+                    setTimeout(() => setCommand(command + key), 0)
                 }
             }
 
