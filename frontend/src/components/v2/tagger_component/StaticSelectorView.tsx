@@ -108,8 +108,6 @@ function StaticSelectorView({
         }
     }, [misconception, handledIndex])
 
-    console.log('local', localCommand)
-
     withActiveKeyboard(command => activeKeyboardAction(command))
 
     const displayKey = useMemo(
