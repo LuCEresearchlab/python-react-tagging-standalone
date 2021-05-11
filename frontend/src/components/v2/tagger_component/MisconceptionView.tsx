@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useMemo} from "react"
 import SingleTagSelector from "./SingleTagSelector";
 import {
     filteredMisconceptions,
@@ -69,7 +69,10 @@ function MisconceptionView(
 
     const classes = useStyles()
 
-    const misconceptions_string_list: string[] = misconceptionsAvailable.map<string>(misc => misc.name)
+    const misconceptions_string_list: string[] = useMemo(
+        () => misconceptionsAvailable.map<string>(misc => misc.name),
+        [misconceptionsAvailable]
+    )
 
     const currentColor: string = taggingClusterSession.currentColor
     const tags = taggingClusterSession.tags

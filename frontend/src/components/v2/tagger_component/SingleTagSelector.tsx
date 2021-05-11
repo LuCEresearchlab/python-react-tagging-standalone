@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react"
+import React, {useMemo, useRef, useState} from "react"
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Chip, Popover} from "@material-ui/core";
@@ -36,16 +36,20 @@ function SingleTagSelector({
 
     const autocomplete = useRef<HTMLDivElement>(null)
 
-    withKeyboard((command: string) => {
-        if (command == 't' + (handled_element - PRE_DYNAMIC_SIZE)) {
-            const input: any = autocomplete.current?.childNodes?.item(1)?.firstChild
-            input.focus()
-            input.select()
+    const keyboardAction = useMemo(() => {
+        return function (command: string) {
+            if (command == 't' + (handled_element - PRE_DYNAMIC_SIZE)) {
+                const input: any = autocomplete.current?.childNodes?.item(1)?.firstChild
+                input.focus()
+                input.select()
+            }
+            if (command == 't' + (handled_element - PRE_DYNAMIC_SIZE) + 'c') {
+                onChange(null, null)
+            }
         }
-        if (command == 't' + (handled_element - PRE_DYNAMIC_SIZE) + 'c') {
-            onChange(null, null)
-        }
-    })
+    }, [])
+
+    withKeyboard((command: string) => keyboardAction(command))
 
     // popup stuff
     const [anchorEl, setAnchorEl] = useState(null);

@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react"
+import React, {useMemo, useRef, useState} from "react"
 import HelpIcon from "@material-ui/icons/Help";
 import {Button, Popover} from "@material-ui/core";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
@@ -46,11 +46,14 @@ function MisconceptionInfoButton({tags, handled_element, keyboardIndex}: Input) 
     const id = open ? "simple-popover" : undefined;
     // end popup stuff
 
-    withKeyboard((command => {
-        if (keyboardIndex != undefined && (command == '' + keyboardIndex + '?')) {
-            ref.current?.click()
-        }
-    }))
+    const keyboardAction = useMemo(() => {
+            return function (command: string) {
+                if (keyboardIndex != undefined && (command == '' + keyboardIndex + '?')) ref.current?.click()
+            }
+        },
+        [keyboardIndex])
+
+    withKeyboard((command: string) => keyboardAction(command))
 
     return (
         !should_display() ?

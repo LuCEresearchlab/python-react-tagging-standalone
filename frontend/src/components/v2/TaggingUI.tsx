@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Button, Collapse, Grid, Paper, Tab} from "@material-ui/core";
 import {StyledPagination} from "../styled/StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
@@ -70,36 +70,40 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
 
     const total_clusters = taggingClusterSession.clusters.length
 
-    const [keyHistory] = withKeyboard((command: string) => {
-        if (command == '') // two spaces or enter in a row
-        {
-            const current_cluster = taggingClusterSession.currentCluster
-            if (current_cluster + 1 < total_clusters) {
-                dispatchTaggingClusterSession(nextCluster())
-                setPage(page + 1)  // offset of 1
-            } else {
-                dispatchTaggingSession(nextQuestion())
-                dispatchTaggingClusterSession(setCurrentCluster(0))
-                setPage(1)
+    const keyboardAction = useMemo(() => {
+        return function (command: string) {
+            if (command == '') // two spaces or enter in a row
+            {
+                const current_cluster = taggingClusterSession.currentCluster
+                if (current_cluster + 1 < total_clusters) {
+                    dispatchTaggingClusterSession(nextCluster())
+                    setPage(page + 1)  // offset of 1
+                } else {
+                    dispatchTaggingSession(nextQuestion())
+                    dispatchTaggingClusterSession(setCurrentCluster(0))
+                    setPage(1)
+                }
+            }
+            if (command == 'c') setTab(tab == '1' ? '2' : '1')
+            if (command == 'b') {
+                const current_cluster = taggingClusterSession.currentCluster
+                if (current_cluster - 1 >= 0) {
+                    dispatchTaggingClusterSession(setCurrentCluster(current_cluster - 1))
+                    setPage(page - 1)
+                } else {
+                    const previousQuestion = taggingSession.currentQuestion == 0 ? 0 : taggingSession.currentQuestion - 1
+                    dispatchTaggingSession(setCurrentQuestion(previousQuestion))
+                    dispatchTaggingClusterSession(setCurrentCluster(0))
+                    setPage(1)
+                }
+            }
+            if (command == 'q') {
+                setShowQuestion(!showQuestion)
             }
         }
-        if (command == 'c') setTab(tab == '1' ? '2' : '1')
-        if (command == 'b') {
-            const current_cluster = taggingClusterSession.currentCluster
-            if (current_cluster - 1 >= 0) {
-                dispatchTaggingClusterSession(setCurrentCluster(current_cluster - 1))
-                setPage(page - 1)
-            } else {
-                const previousQuestion = taggingSession.currentQuestion == 0 ? 0 : taggingSession.currentQuestion - 1
-                dispatchTaggingSession(setCurrentQuestion(previousQuestion))
-                dispatchTaggingClusterSession(setCurrentCluster(0))
-                setPage(1)
-            }
-        }
-        if (command == 'q') {
-            setShowQuestion(!showQuestion)
-        }
-    })
+    }, [taggingClusterSession.currentCluster, taggingSession.currentQuestion, page])
+
+    const [keyHistory] = withKeyboard((command: string) => keyboardAction(command))
 
 
     const paginationChange = (event: any, value: number) => {

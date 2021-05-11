@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useMemo} from "react"
 import {TableCell} from "@material-ui/core";
 import StaticSelectorView from "./StaticSelectorView";
 import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
@@ -13,8 +13,8 @@ interface Input {
 function HistoryView({taggingClusterSession, dispatchTaggingClusterSession, misconceptionsAvailable}: Input) {
 
     const history = getHistory(taggingClusterSession)
-    const historyPart1 = history.slice(0, history.length - 1)
-    const historyPart2 = history.slice(history.length - 1)
+    const historyPart1 = useMemo(() => history.slice(0, history.length - 1), [history])
+    const historyPart2 = useMemo(() => history.slice(history.length - 1), [history])
 
     if (history.length === 0) return (<TableCell>Empty History</TableCell>)
 

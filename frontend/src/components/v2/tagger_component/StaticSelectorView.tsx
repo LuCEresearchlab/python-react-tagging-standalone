@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useMemo} from "react"
 import {
     getCurrentCluster,
     initEmptyTagsList, TaggingClusterSession, TaggingClusterSessionDispatch
@@ -18,6 +18,7 @@ import {
 import MisconceptionColorButton from "../../tagger_component/MisconceptionColorButton";
 import MisconceptionInfoButton from "../../tagger_component/MisconceptionInfoButton";
 import withKeyboard from "../../../hooks/withKeyboard";
+import withActiveKeyboard from "../../../hooks/withActiveKeyboard";
 
 
 interface Input {
@@ -35,6 +36,7 @@ function StaticSelectorView({
                                 misconception,
                                 handledIndex
                             }: Input) {
+
 
     const isSelected = () => taggingClusterSession.tags.findIndex(tag => stringEquals(tag, misconception)) !== -1
 
@@ -84,15 +86,23 @@ function StaticSelectorView({
             dispatchTaggingClusterSession(setCurrentColor(color))
     }
 
-    withKeyboard(command => {
-        if (isNoMisconception(misconception) && command == 'n') onClickHandler()
-        if (command == ('' + handledIndex)) onClickHandler()
+    const keyboardAction = useMemo(() => {
+        return function (command: string) {
+            if (isNoMisconception(misconception) && command == 'n') onClickHandler()
+            if (command == ('' + handledIndex)) onClickHandler()
 
-        if (isNoMisconception(misconception) && command == ('nc'))
-            setColor(getColor(misconceptionsAvailable, misconception))
+            if (isNoMisconception(misconception) && command == 'nc')
+                setColor(getColor(misconceptionsAvailable, misconception))
 
-        if (command == ('' + handledIndex + 'c'))
-            setColor(getColor(misconceptionsAvailable, misconception))
+            if (command == ('' + handledIndex + 'c'))
+                setColor(getColor(misconceptionsAvailable, misconception))
+        }
+    }, [misconception, taggingClusterSession.currentColor, taggingClusterSession.tags, misconceptionsAvailable])
+
+    withKeyboard((command: string) => keyboardAction(command))
+
+    withActiveKeyboard(command => {
+        console.log('active', command)
     })
 
     return (
