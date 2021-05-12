@@ -123,7 +123,7 @@ function MisconceptionView(
                         staticColor={true}
                     />
                     <SingleTagSelector
-                        key={"tag-selector-0"}
+                        key={"tag-selector-0" + tags}
                         taggingClusterSession={taggingClusterSession}
                         misconceptions_available={
                             filteredMisconceptions(tags, misconceptions_string_list, FIRST_DYNAMIC_INDEX)
@@ -153,6 +153,7 @@ function MisconceptionView(
                                         staticColor={true}
                                     />
                                     <SingleTagSelector
+                                        key={"tag-selector-" + handled_element + tags}
                                         taggingClusterSession={taggingClusterSession}
                                         misconceptions_available={
                                             filteredMisconceptions(tags, misconceptions_string_list, handled_element)

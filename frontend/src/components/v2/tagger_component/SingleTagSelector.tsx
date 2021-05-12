@@ -76,10 +76,12 @@ function SingleTagSelector({
     const open = Boolean(anchorEl);
     const id = open ? "simple-popover" : undefined;
     // end popup stuff
+    // autocomplete.current?.focus()
+    // autocomplete.current?.blur()
 
     return (
         <Autocomplete
-            key={'autocomplete|' + handled_element + value.current}
+            key={'autocomplete|' + handled_element + new_value}
             className={classes.root}
             blurOnSelect={true}
             clearOnBlur={true}
@@ -89,6 +91,7 @@ function SingleTagSelector({
             renderInput={(params) => (
                 <TextField {...params}
                            ref={autocomplete}
+                    // value={value.current}
                            variant="outlined"
                            label="Misconceptions"
                            placeholder="Misconceptions"
