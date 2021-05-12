@@ -194,6 +194,32 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
     const activeKeyboardAction = useMemo(() => {
         return function (command: string) {
             setLocalCommand(command)
+            const my_div = document.getElementById("Highlightable|" + displayKey)
+            const letters = my_div?.firstChild?.childNodes
+            if (letters == undefined) return
+
+            // hack to support indexes for words
+            if (command.startsWith('' + displayKey + 'h')) {
+
+                let counter: number = 0
+                letters.forEach(letter => {
+                    const content = letter.textContent
+                    if (content == ' ') {
+                        counter++
+                        console.log(letter, counter)
+                        letter.textContent = `[${counter}] `
+                    }
+                    console.log(content)
+                })
+            } else {
+                letters.forEach(letter => {
+                    const content = letter.textContent
+                    if (content?.indexOf(' ') != -1) {
+                        letter.textContent = ' '
+                    }
+                })
+            }
+
         }
     }, [displayKey, answer])
 
@@ -212,16 +238,19 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
                 highlighted={stringEquals('' + displayKey + 'h', localCommand)}
             />
             <TruthCircle value={answer.picked}/>
-            <Highlightable
-                ranges={ranges}
-                enabled={true}
-                onTextHighlighted={onTextHighlighted}
-                text={answer.data}
-                highlightStyle={(range: HighlightRange) =>
-                    highlightStyle(range, taggingClusterSession.availableMisconceptions)
-                }
-                style={{padding: 'inherit'}}
-            />
+            <div id={"Highlightable|" + displayKey} style={{padding: 'inherit'}}>
+                <Highlightable
+                    ranges={ranges}
+                    enabled={true}
+                    onTextHighlighted={onTextHighlighted}
+                    text={answer.data}
+                    highlightStyle={(range: HighlightRange) =>
+                        highlightStyle(range, taggingClusterSession.availableMisconceptions)
+                    }
+                    style={{padding: 'inherit'}}
+                />
+            </div>
+
             <Button style={{
                 marginLeft: 'auto',
                 backgroundColor: stringEquals('' + displayKey + 'rc', localCommand) ?

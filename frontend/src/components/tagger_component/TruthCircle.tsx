@@ -11,9 +11,9 @@ function TruthCircle({value}: Input) {
 
     return (
         <div title={"Student Answer: " + value} style={
-            {width: "inherit", paddingTop: 'inherit', paddingBottom: 'inherit'}
+            {width: "inherit", paddingTop: 'inherit', paddingBottom: 'inherit', display: 'flex'}
         }>
-            <FiberManualRecord style={{color: color, float: "left"}}/>
+            <FiberManualRecord style={{color: color, float: "left", alignSelf: 'center'}}/>
         </div>
     )
 
