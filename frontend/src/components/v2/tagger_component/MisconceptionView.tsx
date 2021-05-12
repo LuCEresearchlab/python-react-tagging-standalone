@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from "react"
+import React, {useCallback, useMemo, useState} from "react"
 import SingleTagSelector from "./SingleTagSelector";
 import {
     filteredMisconceptions,
@@ -111,11 +111,11 @@ function MisconceptionView(
         dispatchTaggingClusterSession(clusterSessionPost())
     }
 
-    const activeKeyboardAction = useMemo(() => {
-        return function (command: string) {
+    const activeKeyboardAction = useCallback((command: string) => {
             setLocalCommand(command)
-        }
-    }, [misconceptionsAvailable])
+        },
+        [misconceptionsAvailable]
+    )
 
     withActiveKeyboard(command => activeKeyboardAction(command))
 

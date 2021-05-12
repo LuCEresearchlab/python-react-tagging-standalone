@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from "react"
+import React, {useCallback, useMemo, useState} from "react"
 import {
     getCurrentCluster,
     initEmptyTagsList, TaggingClusterSession, TaggingClusterSessionDispatch
@@ -87,8 +87,7 @@ function StaticSelectorView({
             dispatchTaggingClusterSession(setCurrentColor(color))
     }
 
-    const keyboardAction = useMemo(() => {
-        return function (command: string) {
+    const keyboardAction = useCallback((command: string) => {
             if (isNoMisconception(misconception) && command == 'n') onClickHandler()
             if (command == ('' + handledIndex)) onClickHandler()
 
@@ -97,8 +96,10 @@ function StaticSelectorView({
 
             if (command == ('' + handledIndex + 'c'))
                 setColor(getColor(misconceptionsAvailable, misconception))
-        }
-    }, [misconception, taggingClusterSession.currentColor, taggingClusterSession.tags, misconceptionsAvailable])
+
+        },
+        [misconception, taggingClusterSession.currentColor, taggingClusterSession.tags, misconceptionsAvailable]
+    )
 
     withKeyboard((command: string) => keyboardAction(command))
 

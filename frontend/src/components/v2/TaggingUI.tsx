@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {Button, Collapse, Grid, Paper, Tab} from "@material-ui/core";
 import {StyledPagination} from "../styled/StyledPagination";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
@@ -70,8 +70,7 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
 
     const total_clusters = taggingClusterSession.clusters.length
 
-    const keyboardAction = useMemo(() => {
-        return function (command: string) {
+    const keyboardAction = useCallback((command: string) => {
             if (command == '') // two spaces or enter in a row
             {
                 const current_cluster = taggingClusterSession.currentCluster
@@ -100,8 +99,9 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
             if (command == 'q') {
                 setShowQuestion(!showQuestion)
             }
-        }
-    }, [taggingClusterSession.currentCluster, taggingSession.currentQuestion, page])
+        },
+        [taggingClusterSession.currentCluster, taggingSession.currentQuestion, page]
+    )
 
     const [keyHistory] = withKeyboard((command: string) => keyboardAction(command))
 

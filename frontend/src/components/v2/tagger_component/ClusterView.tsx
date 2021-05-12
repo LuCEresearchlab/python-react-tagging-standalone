@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react"
+import React, {useCallback, useEffect, useState} from "react"
 import {Answer, Cluster} from "../../../interfaces/Dataset";
 import {rangesCompressor} from "../../../util/RangeCompressor";
 import {HighlightRange, HighlightRangeColor} from "../../../interfaces/HighlightRange";
@@ -145,8 +145,7 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
         dispatchTaggingClusterSession(clusterSessionPost())
     }
 
-    const keyboardAction = useMemo(() => {
-        return function (command: string) {
+    const keyboardAction = useCallback((command: string) => {
             if (command.startsWith("" + displayKey + sep) && regExp.test(command)) {
                 if (command.indexOf('-') == -1) {
                     const from: number = parseInt(command.slice(('' + displayKey).length + 1)) - 1
@@ -185,41 +184,36 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
             if (command == "" + displayKey + 'rc') {
                 clear()
             }
-        }
-    }, [displayKey, regExp, answer, onTextHighlighted])
+        },
+        [displayKey, regExp, answer, onTextHighlighted]
+    )
 
 
     withKeyboard((command: string) => keyboardAction(command))
 
-    const activeKeyboardAction = useMemo(() => {
-        return function (command: string) {
-            setLocalCommand(command)
-            const my_div = document.getElementById("Highlightable|" + displayKey)
-            const letters = my_div?.firstChild?.childNodes
-            if (letters == undefined) return
+    const activeKeyboardAction = useCallback((command: string) => {
+        setLocalCommand(command)
+        const my_div = document.getElementById("Highlightable|" + displayKey)
+        const letters = my_div?.firstChild?.childNodes
+        if (letters == undefined) return
 
-            // hack to support indexes for words
-            if (command.startsWith('' + displayKey + 'h')) {
-
-                let counter: number = 0
-                letters.forEach(letter => {
-                    const content = letter.textContent
-                    if (content == ' ') {
-                        counter++
-                        console.log(letter, counter)
-                        letter.textContent = `[${counter}] `
-                    }
-                    console.log(content)
-                })
-            } else {
-                letters.forEach(letter => {
-                    const content = letter.textContent
-                    if (content?.indexOf(' ') != -1) {
-                        letter.textContent = ' '
-                    }
-                })
-            }
-
+        // hack to support indexes for words
+        if (command.startsWith('' + displayKey + 'h')) {
+            let counter: number = 0
+            letters.forEach(letter => {
+                const content = letter.textContent
+                if (content == ' ') {
+                    counter++
+                    letter.textContent = `[${counter}] `
+                }
+            })
+        } else {
+            letters.forEach(letter => {
+                const content = letter.textContent
+                if (content?.indexOf(' ') != -1) {
+                    letter.textContent = ' '
+                }
+            })
         }
     }, [displayKey, answer])
 

@@ -1,4 +1,4 @@
-import React, {useMemo, useRef, useState} from "react"
+import React, {useCallback, useRef, useState} from "react"
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Chip, Popover} from "@material-ui/core";
@@ -36,8 +36,7 @@ function SingleTagSelector({
 
     const autocomplete = useRef<HTMLDivElement>(null)
 
-    const keyboardAction = useMemo(() => {
-        return function (command: string) {
+    const keyboardAction = useCallback((command: string) => {
             if (command == 't' + (handled_element - PRE_DYNAMIC_SIZE)) {
                 const input: any = autocomplete.current?.childNodes?.item(1)?.firstChild
                 input.focus()
@@ -46,8 +45,9 @@ function SingleTagSelector({
             if (command == 't' + (handled_element - PRE_DYNAMIC_SIZE) + 'c') {
                 onChange(null, null)
             }
-        }
-    }, [])
+        },
+        []
+    )
 
     withKeyboard((command: string) => keyboardAction(command))
 
