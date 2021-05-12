@@ -1,0 +1,260 @@
+question 1
+raw
+clustering time (ms): 144982144
+clean_answers_only_lowercase
+clustering time (ms): 367153989
+clean_answers_only_stopwords
+clustering time (ms): 99361230
+clean_answers_only_lemma
+clustering time (ms): 135008744
+clean_answers_stopwords_lemma
+clustering time (ms): 100691433
+clean_answers_full
+clustering time (ms): 100632470
+question 2
+raw
+clustering time (ms): 141286090
+clean_answers_only_lowercase
+clustering time (ms): 333695182
+clean_answers_only_stopwords
+clustering time (ms): 97840499
+clean_answers_only_lemma
+clustering time (ms): 104738212
+clean_answers_stopwords_lemma
+clustering time (ms): 97200784
+clean_answers_full
+clustering time (ms): 97301939
+question 3
+raw
+clustering time (ms): 229803613
+clean_answers_only_lowercase
+clustering time (ms): 434324586
+clean_answers_only_stopwords
+clustering time (ms): 249222603
+clean_answers_only_lemma
+clustering time (ms): 293996777
+clean_answers_stopwords_lemma
+clustering time (ms): 181773075
+clean_answers_full
+clustering time (ms): 201261934
+question 4
+raw
+clustering time (ms): 261972929
+clean_answers_only_lowercase
+clustering time (ms): 413271395
+clean_answers_only_stopwords
+clustering time (ms): 210457477
+clean_answers_only_lemma
+clustering time (ms): 261880250
+clean_answers_stopwords_lemma
+clustering time (ms): 205797167
+clean_answers_full
+clustering time (ms): 205762455
+question 5
+raw
+clustering time (ms): 139835552
+clean_answers_only_lowercase
+clustering time (ms): 412950668
+clean_answers_only_stopwords
+clustering time (ms): 99518278
+clean_answers_only_lemma
+clustering time (ms): 133020332
+clean_answers_stopwords_lemma
+clustering time (ms): 86530430
+clean_answers_full
+clustering time (ms): 86595154
+question 6
+raw
+clustering time (ms): 191631077
+clean_answers_only_lowercase
+clustering time (ms): 520505801
+clean_answers_only_stopwords
+clustering time (ms): 164209147
+clean_answers_only_lemma
+clustering time (ms): 230734653
+clean_answers_stopwords_lemma
+clustering time (ms): 159629068
+clean_answers_full
+clustering time (ms): 159632466
+question 7
+raw
+clustering time (ms): 195900189
+clean_answers_only_lowercase
+clustering time (ms): 578169428
+clean_answers_only_stopwords
+clustering time (ms): 142047436
+clean_answers_only_lemma
+clustering time (ms): 244330284
+clean_answers_stopwords_lemma
+clustering time (ms): 131261693
+clean_answers_full
+clustering time (ms): 134982824
+question 8
+raw
+clustering time (ms): 150635896
+clean_answers_only_lowercase
+clustering time (ms): 319900072
+clean_answers_only_stopwords
+clustering time (ms): 125858303
+clean_answers_only_lemma
+clustering time (ms): 172207507
+clean_answers_stopwords_lemma
+clustering time (ms): 132455229
+clean_answers_full
+clustering time (ms): 124457135
+question 9
+raw
+clustering time (ms): 223442986
+clean_answers_only_lowercase
+clustering time (ms): 527431401
+clean_answers_only_stopwords
+clustering time (ms): 200096728
+clean_answers_only_lemma
+clustering time (ms): 247316122
+clean_answers_stopwords_lemma
+clustering time (ms): 212258023
+clean_answers_full
+clustering time (ms): 221351044
+question 10
+raw
+clustering time (ms): 197240072
+clean_answers_only_lowercase
+clustering time (ms): 282888716
+clean_answers_only_stopwords
+clustering time (ms): 157676327
+clean_answers_only_lemma
+clustering time (ms): 170787385
+clean_answers_stopwords_lemma
+clustering time (ms): 151479626
+clean_answers_full
+clustering time (ms): 165732137
+question 11
+raw
+clustering time (ms): 329958780
+clean_answers_only_lowercase
+clustering time (ms): 380121855
+clean_answers_only_stopwords
+clustering time (ms): 254543616
+clean_answers_only_lemma
+clustering time (ms): 276107221
+clean_answers_stopwords_lemma
+clustering time (ms): 224332491
+clean_answers_full
+clustering time (ms): 225338384
+question 12
+raw
+clustering time (ms): 224931069
+clean_answers_only_lowercase
+clustering time (ms): 368215783
+clean_answers_only_stopwords
+clustering time (ms): 146109560
+clean_answers_only_lemma
+clustering time (ms): 234200158
+clean_answers_stopwords_lemma
+clustering time (ms): 148340809
+clean_answers_full
+clustering time (ms): 158838226
+question 13
+raw
+clustering time (ms): 170927003
+clean_answers_only_lowercase
+clustering time (ms): 441181099
+clean_answers_only_stopwords
+clustering time (ms): 157350907
+clean_answers_only_lemma
+clustering time (ms): 193466462
+clean_answers_stopwords_lemma
+clustering time (ms): 157882223
+clean_answers_full
+clustering time (ms): 147028017
+question 14
+raw
+clustering time (ms): 132736672
+clean_answers_only_lowercase
+clustering time (ms): 538736863
+clean_answers_only_stopwords
+clustering time (ms): 129013159
+clean_answers_only_lemma
+clustering time (ms): 160122942
+clean_answers_stopwords_lemma
+clustering time (ms): 162366005
+clean_answers_full
+clustering time (ms): 161912272
+question 15
+raw
+clustering time (ms): 330833460
+clean_answers_only_lowercase
+clustering time (ms): 486858522
+clean_answers_only_stopwords
+clustering time (ms): 210051688
+clean_answers_only_lemma
+clustering time (ms): 371534722
+clean_answers_stopwords_lemma
+clustering time (ms): 221102073
+clean_answers_full
+clustering time (ms): 221265578
+question 16
+raw
+clustering time (ms): 281291330
+clean_answers_only_lowercase
+clustering time (ms): 349164170
+clean_answers_only_stopwords
+clustering time (ms): 244713847
+clean_answers_only_lemma
+clustering time (ms): 349373774
+clean_answers_stopwords_lemma
+clustering time (ms): 243355258
+clean_answers_full
+clustering time (ms): 242886325
+question 17
+raw
+clustering time (ms): 272077746
+clean_answers_only_lowercase
+clustering time (ms): 448127758
+clean_answers_only_stopwords
+clustering time (ms): 194473678
+clean_answers_only_lemma
+clustering time (ms): 337186638
+clean_answers_stopwords_lemma
+clustering time (ms): 248282040
+clean_answers_full
+clustering time (ms): 249224192
+question 18
+raw
+clustering time (ms): 402393819
+clean_answers_only_lowercase
+clustering time (ms): 480378964
+clean_answers_only_stopwords
+clustering time (ms): 329426149
+clean_answers_only_lemma
+clustering time (ms): 401197606
+clean_answers_stopwords_lemma
+clustering time (ms): 329373132
+clean_answers_full
+clustering time (ms): 329193243
+question 19
+raw
+clustering time (ms): 149376966
+clean_answers_only_lowercase
+clustering time (ms): 362289473
+clean_answers_only_stopwords
+clustering time (ms): 105474964
+clean_answers_only_lemma
+clustering time (ms): 155924500
+clean_answers_stopwords_lemma
+clustering time (ms): 111019602
+clean_answers_full
+clustering time (ms): 111115492
+question 20
+raw
+clustering time (ms): 138406394
+clean_answers_only_lowercase
+clustering time (ms): 363716264
+clean_answers_only_stopwords
+clustering time (ms): 112647147
+clean_answers_only_lemma
+clustering time (ms): 147233447
+clean_answers_stopwords_lemma
+clustering time (ms): 111445736
+clean_answers_full
+clustering time (ms): 111411511
