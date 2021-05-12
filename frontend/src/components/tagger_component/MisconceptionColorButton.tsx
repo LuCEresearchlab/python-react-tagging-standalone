@@ -2,17 +2,19 @@ import React from "react";
 import {Brush, FiberManualRecord, FiberManualRecordOutlined} from "@material-ui/icons";
 import {Button} from "@material-ui/core";
 import stringEquals from "../../util/StringEquals";
+import {HIGHLIGHT_COLOR_ELEMENT} from "../../util/Colors";
 
 interface Input {
     color: string,
     enabled: boolean,
     current_color: string,
     staticColor: boolean,
+    highlighted?: boolean,
 
     setColor(c: string): void
 }
 
-function MisconceptionColorButton({color, enabled, current_color, setColor, staticColor}: Input) {
+function MisconceptionColorButton({color, enabled, current_color, setColor, staticColor, highlighted}: Input) {
 
     const disabled: boolean = stringEquals(color, "") || stringEquals(color, "#000000")
 
@@ -29,6 +31,7 @@ function MisconceptionColorButton({color, enabled, current_color, setColor, stat
                 setColor(color)
             }}
             disabled={disabled || !enabled}
+            style={{backgroundColor: highlighted ? HIGHLIGHT_COLOR_ELEMENT : ''}}
         >
             {
                 stringEquals(color, current_color) ?

@@ -5,6 +5,7 @@ import {createStyles, makeStyles} from "@material-ui/core/styles";
 import stringEquals from "../../util/StringEquals";
 import NoMisconception from "../../util/NoMisconception";
 import withKeyboard from "../../hooks/withKeyboard";
+import {HIGHLIGHT_COLOR_ELEMENT} from "../../util/Colors";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -17,10 +18,11 @@ const useStyles = makeStyles(() =>
 interface Input {
     handled_element: number,
     tags: (string | null)[],
-    keyboardIndex?: string
+    keyboardIndex?: string,
+    highlighted?: boolean
 }
 
-function MisconceptionInfoButton({tags, handled_element, keyboardIndex}: Input) {
+function MisconceptionInfoButton({tags, handled_element, keyboardIndex, highlighted}: Input) {
     const classes = useStyles()
 
     const ref = useRef<HTMLButtonElement>(null)
@@ -62,7 +64,9 @@ function MisconceptionInfoButton({tags, handled_element, keyboardIndex}: Input) 
                 </Button>
             </> :
             <>
-                <Button title={"Definition"} ref={ref} onClick={handle_click_popup} className={classes.root}>
+                <Button title={"Definition"} ref={ref} onClick={handle_click_popup}
+                        className={classes.root}
+                        style={{backgroundColor: (highlighted ? HIGHLIGHT_COLOR_ELEMENT : '')}}>
                     <HelpIcon/>
                 </Button>
                 <Popover

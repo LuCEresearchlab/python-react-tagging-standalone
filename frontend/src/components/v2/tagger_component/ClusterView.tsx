@@ -1,9 +1,9 @@
-import React, {useEffect} from "react"
+import React, {useCallback, useEffect, useState} from "react"
 import {Answer, Cluster} from "../../../interfaces/Dataset";
 import {rangesCompressor} from "../../../util/RangeCompressor";
 import {HighlightRange, HighlightRangeColor} from "../../../interfaces/HighlightRange";
 import {Button, Paper, TextField} from "@material-ui/core";
-import {GREY} from "../../../util/Colors"
+import {GREY, HIGHLIGHT_COLOR_ELEMENT} from "../../../util/Colors"
 
 // @ts-ignore
 import Highlightable from "highlightable";
@@ -29,6 +29,7 @@ import {useFetch} from "../../../hooks/useFetch";
 import withKeyboard from "../../../hooks/withKeyboard";
 import stringEquals from "../../../util/StringEquals";
 import {postClusters} from "../../../helpers/PostHelper";
+import withActiveKeyboard from "../../../hooks/withActiveKeyboard";
 
 const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
@@ -91,6 +92,7 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
         '/answer/' + answer.answer_id +
         '/user/' + taggingClusterSession.user_id
 
+    const [localCommand, setLocalCommand] = useState<string>('')
     const {data, isLoading} = useFetch<TaggedAnswer[]>(get_selected_misc_url)
 
     useEffect(() => {
@@ -143,47 +145,79 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
         dispatchTaggingClusterSession(clusterSessionPost())
     }
 
+    const keyboardAction = useCallback((command: string) => {
+            if (command.startsWith("" + displayKey + sep) && regExp.test(command)) {
+                if (command.indexOf('-') == -1) {
+                    const from: number = parseInt(command.slice(('' + displayKey).length + 1)) - 1
 
-    withKeyboard((command: string) => {
-        if (command.startsWith("" + displayKey + sep) && regExp.test(command)) {
-            if (command.indexOf('-') == -1) {
-                const from: number = parseInt(command.slice(('' + displayKey).length + 1)) - 1
+                    if (isNaN(from)) return
 
-                if (isNaN(from)) return
+                    let relative_start = nthIndex(answer.data, ' ', from)
+                    relative_start = relative_start == -1 ? 0 : relative_start
 
-                let relative_start = nthIndex(answer.data, ' ', from)
-                relative_start = relative_start == -1 ? 0 : relative_start
+                    let relative_end = nthIndex(answer.data, ' ', from + 1)
+                    relative_end = relative_end == -1 ? answer.data.length : relative_end - 1
 
-                let relative_end = nthIndex(answer.data, ' ', from + 1)
-                relative_end = relative_end == -1 ? answer.data.length : relative_end - 1
+                    onTextHighlighted({
+                        start: relative_start,
+                        end: relative_end
+                    })
+                } else {
+                    const split_index: number = command.indexOf('-')
+                    const from: number = parseInt(command.slice(('' + displayKey).length + 1, split_index)) - 1
+                    const to: number = parseInt(command.slice(split_index + 1))
 
-                onTextHighlighted({
-                    start: relative_start,
-                    end: relative_end
-                })
-            } else {
-                const split_index: number = command.indexOf('-')
-                const from: number = parseInt(command.slice(('' + displayKey).length + 1, split_index)) - 1
-                const to: number = parseInt(command.slice(split_index + 1))
+                    if (isNaN(from) || isNaN(to)) return
 
-                if (isNaN(from) || isNaN(to)) return
+                    let relative_start = nthIndex(answer.data, ' ', from)
+                    relative_start = relative_start == -1 ? 0 : relative_start
 
-                let relative_start = nthIndex(answer.data, ' ', from)
-                relative_start = relative_start == -1 ? 0 : relative_start
+                    let relative_end = nthIndex(answer.data, ' ', to)
+                    relative_end = relative_end == -1 ? answer.data.length : relative_end - 1
 
-                let relative_end = nthIndex(answer.data, ' ', to)
-                relative_end = relative_end == -1 ? answer.data.length : relative_end - 1
-
-                onTextHighlighted({
-                    start: relative_start,
-                    end: relative_end
-                })
+                    onTextHighlighted({
+                        start: relative_start,
+                        end: relative_end
+                    })
+                }
             }
+            if (command == "" + displayKey + 'rc') {
+                clear()
+            }
+        },
+        [displayKey, regExp, answer, onTextHighlighted]
+    )
+
+
+    withKeyboard((command: string) => keyboardAction(command))
+
+    const activeKeyboardAction = useCallback((command: string) => {
+        setLocalCommand(command)
+        const my_div = document.getElementById("Highlightable|" + displayKey)
+        const letters = my_div?.firstChild?.childNodes
+        if (letters == undefined) return
+
+        // hack to support indexes for words
+        if (command.startsWith('' + displayKey + 'h')) {
+            let counter: number = 0
+            letters.forEach(letter => {
+                const content = letter.textContent
+                if (content == ' ') {
+                    counter++
+                    letter.textContent = `[${counter}] `
+                }
+            })
+        } else {
+            letters.forEach(letter => {
+                const content = letter.textContent
+                if (content?.indexOf(' ') != -1) {
+                    letter.textContent = ' '
+                }
+            })
         }
-        if (command == "" + displayKey + 'rc') {
-            clear()
-        }
-    })
+    }, [displayKey, answer])
+
+    withActiveKeyboard(command => activeKeyboardAction(command))
 
     if (isLoading) return <div>Loading...</div>
 
@@ -193,19 +227,30 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
             padding: '0.5em', backgroundColor: GREY, display: 'flex', flexDirection: 'row',
             marginBottom: '1em'
         }}>
-            <KeyIndication displayKey={"" + displayKey}/>
-            <TruthCircle value={answer.picked}/>
-            <Highlightable
-                ranges={ranges}
-                enabled={true}
-                onTextHighlighted={onTextHighlighted}
-                text={answer.data}
-                highlightStyle={(range: HighlightRange) =>
-                    highlightStyle(range, taggingClusterSession.availableMisconceptions)
-                }
-                style={{padding: 'inherit'}}
+            <KeyIndication
+                displayKey={"" + displayKey}
+                highlighted={stringEquals('' + displayKey + 'h', localCommand)}
             />
-            <Button style={{marginLeft: 'auto'}} onClick={clear} title={'Clear highlighting'}>
+            <TruthCircle value={answer.picked}/>
+            <div id={"Highlightable|" + displayKey} style={{padding: 'inherit'}}>
+                <Highlightable
+                    ranges={ranges}
+                    enabled={true}
+                    onTextHighlighted={onTextHighlighted}
+                    text={answer.data}
+                    highlightStyle={(range: HighlightRange) =>
+                        highlightStyle(range, taggingClusterSession.availableMisconceptions)
+                    }
+                    style={{padding: 'inherit'}}
+                />
+            </div>
+
+            <Button style={{
+                marginLeft: 'auto',
+                backgroundColor: stringEquals('' + displayKey + 'rc', localCommand) ?
+                    HIGHLIGHT_COLOR_ELEMENT : ''
+            }}
+                    onClick={clear} title={'Clear highlighting'}>
                 <FormatColorReset/>
             </Button>
 

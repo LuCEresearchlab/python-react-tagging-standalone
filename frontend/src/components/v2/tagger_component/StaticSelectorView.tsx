@@ -1,4 +1,4 @@
-import React, {useMemo} from "react"
+import React, {useCallback, useMemo, useState} from "react"
 import {
     getCurrentCluster,
     initEmptyTagsList, TaggingClusterSession, TaggingClusterSessionDispatch
@@ -7,7 +7,7 @@ import {MisconceptionElement} from "../../../interfaces/MisconceptionElement";
 import {getColor, highlightRangesColorUpdating, isNoMisconception, NO_COLOR} from "../../../helpers/Util";
 import {Button} from "@material-ui/core";
 import stringEquals from "../../../util/StringEquals";
-import {GREY, DARK_GREY} from "../../../util/Colors";
+import {GREY, DARK_GREY, HIGHLIGHT_COLOR_ELEMENT} from "../../../util/Colors";
 import KeyIndication from "./KeyIndication";
 import {
     clusterSessionPost,
@@ -39,6 +39,7 @@ function StaticSelectorView({
 
 
     const isSelected = () => taggingClusterSession.tags.findIndex(tag => stringEquals(tag, misconception)) !== -1
+    const [localCommand, setLocalCommand] = useState<string>('')
 
     const getNewRangesList = (element: (string | null), index: number) => {
 
@@ -86,8 +87,7 @@ function StaticSelectorView({
             dispatchTaggingClusterSession(setCurrentColor(color))
     }
 
-    const keyboardAction = useMemo(() => {
-        return function (command: string) {
+    const keyboardAction = useCallback((command: string) => {
             if (isNoMisconception(misconception) && command == 'n') onClickHandler()
             if (command == ('' + handledIndex)) onClickHandler()
 
@@ -96,19 +96,30 @@ function StaticSelectorView({
 
             if (command == ('' + handledIndex + 'c'))
                 setColor(getColor(misconceptionsAvailable, misconception))
-        }
-    }, [misconception, taggingClusterSession.currentColor, taggingClusterSession.tags, misconceptionsAvailable])
+
+        },
+        [misconception, taggingClusterSession.currentColor, taggingClusterSession.tags, misconceptionsAvailable]
+    )
 
     withKeyboard((command: string) => keyboardAction(command))
 
-    withActiveKeyboard(command => {
-        console.log('active', command)
-    })
+    const activeKeyboardAction = useMemo(() => {
+        return function (command: string) {
+            setLocalCommand(command)
+        }
+    }, [misconception, handledIndex])
+
+    withActiveKeyboard(command => activeKeyboardAction(command))
+
+    const displayKey = useMemo(
+        () => isNoMisconception(misconception) ? 'n' : "" + handledIndex,
+        [misconception, handledIndex]
+    )
 
     return (
         <>
             <KeyIndication
-                displayKey={isNoMisconception(misconception) ? 'n' : "" + handledIndex}
+                displayKey={displayKey}
             />
             <MisconceptionColorButton
                 key={"MisconceptionColorButton|" + misconception}
@@ -117,6 +128,7 @@ function StaticSelectorView({
                 current_color={taggingClusterSession.currentColor}
                 setColor={setColor}
                 staticColor={true}
+                highlighted={stringEquals(displayKey + 'c', localCommand)}
             />
             <Button
                 type={"button"}
@@ -124,7 +136,10 @@ function StaticSelectorView({
                 onClick={onClickHandler}
                 style={
                     {
-                        backgroundColor: (isSelected() ? DARK_GREY : GREY),
+                        backgroundColor: (displayKey == localCommand ?
+                                HIGHLIGHT_COLOR_ELEMENT :
+                                isSelected() ? DARK_GREY : GREY
+                        ),
                         textTransform: "none",
                         width: '50%',
                     }
@@ -135,6 +150,7 @@ function StaticSelectorView({
                 handled_element={0}
                 tags={[misconception]}
                 keyboardIndex={'' + handledIndex}
+                highlighted={stringEquals('' + handledIndex + '?', localCommand)}
             />
         </>
     )
