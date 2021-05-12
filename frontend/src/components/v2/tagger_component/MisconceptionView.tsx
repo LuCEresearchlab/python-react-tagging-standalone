@@ -1,4 +1,4 @@
-import React, {useMemo} from "react"
+import React, {useMemo, useState} from "react"
 import SingleTagSelector from "./SingleTagSelector";
 import {
     filteredMisconceptions,
@@ -23,6 +23,7 @@ import {
 import MisconceptionColorButton from "../../tagger_component/MisconceptionColorButton";
 import MisconceptionInfoButton from "../../tagger_component/MisconceptionInfoButton";
 import stringEquals from "../../../util/StringEquals";
+import withActiveKeyboard from "../../../hooks/withActiveKeyboard";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -69,6 +70,8 @@ function MisconceptionView(
 
     const classes = useStyles()
 
+    const [localCommand, setLocalCommand] = useState<string>('')
+
     const misconceptions_string_list: string[] = useMemo(
         () => misconceptionsAvailable.map<string>(misc => misc.name),
         [misconceptionsAvailable]
@@ -108,13 +111,21 @@ function MisconceptionView(
         dispatchTaggingClusterSession(clusterSessionPost())
     }
 
+    const activeKeyboardAction = useMemo(() => {
+        return function (command: string) {
+            setLocalCommand(command)
+        }
+    }, [misconceptionsAvailable])
+
+    withActiveKeyboard(command => activeKeyboardAction(command))
+
     const FIRST_DYNAMIC_INDEX: number = PRE_DYNAMIC_SIZE + 1
 
     return (
         <div className={classes.root}>
             <>
                 <div className={classes.divLine}>
-                    <KeyIndication displayKey={"t" + 1}/>
+                    <KeyIndication displayKey={"t" + 1} highlighted={stringEquals('t1', localCommand)}/>
                     <MisconceptionColorButton
                         color={getColor(misconceptionsAvailable, tags[FIRST_DYNAMIC_INDEX])}
                         current_color={currentColor}
@@ -144,7 +155,12 @@ function MisconceptionView(
                             const handled_element = PRE_DYNAMIC_SIZE + index + 2 // +2 = NoMisc and default add above
                             return (
                                 <div key={"tag-selector-" + handled_element} className={classes.divLine}>
-                                    <KeyIndication displayKey={"t" + (handled_element - PRE_DYNAMIC_SIZE)}/>
+                                    <KeyIndication
+                                        displayKey={"t" + (handled_element - PRE_DYNAMIC_SIZE)}
+                                        highlighted={
+                                            stringEquals("t" + (handled_element - PRE_DYNAMIC_SIZE), localCommand)
+                                        }
+                                    />
                                     <MisconceptionColorButton
                                         color={(() => getColor(misconceptionsAvailable, tags[handled_element]))()}
                                         current_color={currentColor}
