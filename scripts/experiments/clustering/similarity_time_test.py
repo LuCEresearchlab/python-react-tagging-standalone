@@ -35,7 +35,7 @@ lemma = nltk.wordnet.WordNetLemmatizer()
 wordnet.ensure_loaded()
 
 easy_split = False
-algo = 'agglomerative'  # agglomerative | spectral | affinity | agglomerative_average
+algo = 'agglomerative_average'  # agglomerative | spectral | affinity | agglomerative_average
 
 
 def raw(answers):
@@ -204,15 +204,15 @@ def compute_metrics(question_idx):
         # cleaning answers
         print(clean_function.__name__)
 
-        start_time = time.perf_counter_ns()
-        cleaned_answers = clean_function(dirty_answers)
-        end_time = time.perf_counter_ns()
-        print_time_taken(prepend='clean time (ms):', start_time=start_time, end_time=end_time)
-
-        start_time = time.perf_counter_ns()
-        get_similarity_matrix_testing(cleaned_answers=cleaned_answers)
-        end_time = time.perf_counter_ns()
-        print_time_taken(prepend='similarity matrix time (ms):', start_time=start_time, end_time=end_time)
+        # start_time = time.perf_counter_ns()
+        # cleaned_answers = clean_function(dirty_answers)
+        # end_time = time.perf_counter_ns()
+        # print_time_taken(prepend='clean time (ms):', start_time=start_time, end_time=end_time)
+        #
+        # start_time = time.perf_counter_ns()
+        # get_similarity_matrix_testing(cleaned_answers=cleaned_answers)
+        # end_time = time.perf_counter_ns()
+        # print_time_taken(prepend='similarity matrix time (ms):', start_time=start_time, end_time=end_time)
 
         start_time = time.perf_counter_ns()
         cluster_testing(answers=dirty_answers, clean_func=clean_function)
