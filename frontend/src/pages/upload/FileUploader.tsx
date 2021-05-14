@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme: Theme) =>
             '& > *': {
                 margin: theme.spacing(1),
             },
+            alignSelf: 'center'
         },
         input: {
             display: 'none',
@@ -23,7 +24,7 @@ export default function Uploader() {
     const [fileName, setFileName] = useState("");
 
     return (
-        <Grid container>
+        <Grid container style={{display: 'flex', flexDirection: 'column'}}>
             <form
                 encType="multipart/form-data"
                 action={TAGGING_SERVICE_URL + "/datasets/upload"}
