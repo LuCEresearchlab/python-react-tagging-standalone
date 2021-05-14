@@ -16,15 +16,17 @@ function Logout({setSession}: Input) {
     if (username == undefined || username.length == 0) router.push('/login')
 
     return (
-        <Button
-            variant={'contained'}
-            onClick={() => {
-                setSession({username: '', password: '', loggedIn: false})
-                router.push('/login')
-            }}
-            style={{marginLeft: '50%'}}>
-            Logout
-        </Button>
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+            <Button
+                style={{alignSelf: 'center'}}
+                variant={'contained'}
+                onClick={() => {
+                    setSession({username: '', password: '', loggedIn: false})
+                    router.push('/login')
+                }}>
+                Logout
+            </Button>
+        </div>
     )
 }
 
