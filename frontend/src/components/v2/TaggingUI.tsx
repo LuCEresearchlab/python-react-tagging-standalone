@@ -100,7 +100,7 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
                 setShowQuestion(!showQuestion)
             }
         },
-        [taggingClusterSession.currentCluster, taggingSession.currentQuestion, page, showQuestion]
+        [taggingClusterSession.currentCluster, taggingSession.currentQuestion, page, showQuestion, tab]
     )
 
     const [keyHistory] = withKeyboard((command: string) => keyboardAction(command))
