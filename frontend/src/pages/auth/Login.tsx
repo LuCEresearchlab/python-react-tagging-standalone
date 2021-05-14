@@ -2,7 +2,6 @@ import React, {useContext, useState} from "react"
 import {Button, TextField} from "@material-ui/core";
 import {JSONLoader} from "../../helpers/LoaderHelper";
 import {User, userContext} from "../../util/UserContext";
-import {FiberManualRecord} from "@material-ui/icons";
 import {useHistory} from "react-router-dom";
 
 const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
@@ -72,8 +71,9 @@ function Login({setSession}: Input) {
 
 
     return (
-        <>
+        <div style={{display: 'flex', flexDirection: 'column'}}>
             <TextField
+                style={{alignSelf: 'center'}}
                 value={username_local}
                 label={"Username"}
                 onChange={(e) => {
@@ -82,15 +82,17 @@ function Login({setSession}: Input) {
                     else setAvailable(false)
                 }}/>
             <TextField
+                style={{alignSelf: 'center'}}
                 type={'password'}
                 value={password_local}
                 label={"Password"}
                 onChange={(e) => setPassword(e.target.value)}/>
-            <Button onClick={() => handle_button(available)}>
-                Login
+            <Button
+                style={{alignSelf: 'center'}}
+                onClick={() => handle_button(available)}>
+                {available ? 'Register' : 'Login'}
             </Button>
-            <FiberManualRecord style={{color: available ? 'green' : 'red'}}/>
-        </>
+        </div>
     )
 
 }
