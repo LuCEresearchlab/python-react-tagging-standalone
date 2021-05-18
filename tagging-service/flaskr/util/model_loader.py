@@ -6,7 +6,7 @@ import numpy as np
 import nltk
 
 from semantic_text_similarity.models import WebBertSimilarity
-from sklearn.cluster import SpectralClustering, AgglomerativeClustering
+from sklearn.cluster import AgglomerativeClustering
 
 from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import word_tokenize
