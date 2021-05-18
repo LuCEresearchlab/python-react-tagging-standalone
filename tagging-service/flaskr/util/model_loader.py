@@ -80,12 +80,9 @@ def get_distance_matrix(answers):
     return sim_matrix
 
 
-def _cluster(answers):
+def _opt_cluster(answers, dist_matrix):
     nr_answers = len(answers)
     nr_clusters = max(int(math.ceil(nr_answers / 10)), 2)
-
-    dist_matrix = get_distance_matrix(answers)
-
     clustering = AgglomerativeClustering(n_clusters=nr_clusters,
                                          affinity='precomputed',
                                          linkage='complete').fit(dist_matrix)
@@ -96,16 +93,40 @@ def _cluster(answers):
     return clusters
 
 
-def cluster(answers):
-    clusters = _cluster(answers)
+def opt_cluster(all_answers, answers, dist_matrix):
+    clusters = _opt_cluster(answers=answers,
+                            dist_matrix=opt_dist_matrix(
+                                all_answers=all_answers,
+                                answers=answers,
+                                dist_matrix=dist_matrix)
+                            )
     final_clusters = []
     for c in clusters:
         if len(c) <= 5:
             final_clusters.append(c)
         else:
-            final_clusters.extend(cluster(c))
+            final_clusters.extend(opt_cluster(all_answers=all_answers, answers=c, dist_matrix=dist_matrix))
     return final_clusters
 
+
+def opt_dist_matrix(all_answers, answers, dist_matrix):
+    indexes_to_take = []
+    for index in range(len(all_answers)):
+        if all_answers[index] in answers:
+            indexes_to_take.append(index)
+
+    new_dist_matrix = []
+    for index in indexes_to_take:
+        elements = []
+        for idx in indexes_to_take:
+            elements.append(dist_matrix[index][idx])
+        new_dist_matrix.append(elements)
+    return new_dist_matrix
+
+
+def cluster(answers):
+    dist_matrix = get_distance_matrix(answers)
+    return opt_cluster(all_answers=answers, answers=answers, dist_matrix=dist_matrix)
 
 # anss = load_answers()
 # all_clusters = cluster(answers=anss)
