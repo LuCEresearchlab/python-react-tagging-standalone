@@ -6,7 +6,7 @@ import numpy as np
 import nltk
 
 from semantic_text_similarity.models import WebBertSimilarity
-from sklearn.cluster import SpectralClustering
+from sklearn.cluster import SpectralClustering, AgglomerativeClustering
 
 from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import word_tokenize
@@ -66,41 +66,29 @@ def get_similarity_matrix(answers):
     return sim_matrix
 
 
-def _sort_answers_by_sim(answers, sim_matrix):
-    r = list(range(len(answers)))
-    answers = list(zip(r, answers))
+def get_distance_matrix(answers):
+    sim_matrix = get_similarity_matrix(answers=answers)
+    for i in range(len(answers)):
+        sim_matrix[i][i] = 0  #
 
-    sorted_answers = [answers[0]]
-    answers = answers[1:]
+    maximal_value = np.max(sim_matrix)
+    sim_matrix = sim_matrix / maximal_value  # normalize
+    sim_matrix = 1 - sim_matrix
 
-    while len(answers) > 0:
-        last_answer = sorted_answers[-1][0]
-        most_similar = None
-        similarity = -1
-        pos = -1
-
-        for idx, (answer_idx, answer) in enumerate(answers):
-            s = sim_matrix[last_answer][answer_idx]
-            if s > similarity:
-                similarity = s
-                most_similar = (answer_idx, answer)
-                pos = idx
-        sorted_answers.append(most_similar)
-        answers.pop(pos)
-
-    return [a for (idx, a) in sorted_answers]
+    for i in range(len(answers)):
+        sim_matrix[i][i] = 0
+    return sim_matrix
 
 
 def _cluster(answers):
     nr_answers = len(answers)
     nr_clusters = max(int(math.ceil(nr_answers / 10)), 2)
 
-    sim_matrix = get_similarity_matrix(answers)
+    dist_matrix = get_distance_matrix(answers)
 
-    clustering = SpectralClustering(n_clusters=nr_clusters,
-                                    affinity='precomputed',
-                                    random_state=0,
-                                    n_init=50).fit(sim_matrix)
+    clustering = AgglomerativeClustering(n_clusters=nr_clusters,
+                                         affinity='precomputed',
+                                         linkage='complete').fit(dist_matrix)
 
     clusters = [[] for _ in range(nr_clusters)]
     for idx, cluster_idx in enumerate(clustering.labels_):
@@ -117,11 +105,6 @@ def cluster(answers):
         else:
             final_clusters.extend(cluster(c))
     return final_clusters
-
-
-def get_sorted_answers(answers):
-    sim_matrix = get_similarity_matrix(answers)
-    return _sort_answers_by_sim(answers, sim_matrix)
 
 
 # anss = load_answers()
