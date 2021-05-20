@@ -27,7 +27,8 @@ docker-compose -f docker-compose-deploy.yml up -d  # deployment
 then connect to http://localhost:8080/
 
 In the case of deploying the application it is required to set
-`TAGGING_SERVICE_URL=<host-url>:5000` inside the file `frontend/.env.prod`.
+`TAGGING_SERVICE_URL=<host-url>:5000` inside the file `frontend/.env.prod`, then it's also required to set the
+`server_name` inside `frontend/nginx/nginx.conf`.
 
 To stop the containers
 
