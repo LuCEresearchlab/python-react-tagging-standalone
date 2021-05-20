@@ -116,13 +116,13 @@ class TaggedAnswersDownloadAPI(Resource):
          })
 class TaggedAnswersMisconceptionAPI(Resource):
     def get(self, dataset_id, misconception):
-        id_to_question_data, id_to_answer_data = populate_retrieving_maps(dataset_id)
+        id_to_question_data, id_to_answer_data = populate_retrieving_maps(get_dataset(dataset_id=dataset_id))
 
         answers = get_tagged_dataset_with_tag(dataset_id=dataset_id, tag=misconception)
 
         for answer in answers:
             question_id = answer['question_id']
-            answer_id = int(answer['answer_id'])
+            answer_id = answer['answer_id']
 
             answer['question_text'] = id_to_question_data[question_id]['text']
             answer['data'] = id_to_answer_data[answer_id]['data']
