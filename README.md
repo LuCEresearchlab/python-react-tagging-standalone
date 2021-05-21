@@ -28,7 +28,8 @@ then connect to http://localhost:8080/
 
 In the case of deploying the application it is required to set
 `TAGGING_SERVICE_URL=<host-url>:5000` inside the file `frontend/.env.prod`, then it's also required to set the
-`server_name` inside `frontend/nginx/nginx.conf`.
+`server_name` inside `frontend/nginx/nginx.conf`. To change the URL of the database it is required to modify
+the `DATABASE_URL` inside `.env`, by default it is using the docker container initialized by our `docker-compose`.
 
 To stop the containers
 
