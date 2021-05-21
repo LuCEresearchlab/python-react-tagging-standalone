@@ -1,8 +1,10 @@
+import os
+
 from pymongo import MongoClient
 
 
 def get_new_mongo_client():
-    return MongoClient("mongodb://tagging-database:27017/?appname=tagging_service&ssl=false", connect=False)
+    return MongoClient(os.getenv('DATABASE_URL'), connect=False)
 
 
 client = get_new_mongo_client()

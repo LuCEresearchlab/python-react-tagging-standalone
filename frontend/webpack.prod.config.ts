@@ -14,6 +14,7 @@ const config: webpack.Configuration = {
   entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "build"),
+    publicPath: '/',
     filename: "[name].[contenthash].js"
   },
   module: {
