@@ -120,9 +120,12 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
         const misconception = getCurrentMisconception(taggingClusterSession)
         if (misconception == null) return
 
+        const start: number = answer.data[e.start] == ' ' ? e.start + 1 : e.start
+        const end: number = answer.data[e.end] == ' ' ? e.end - 1 : e.end
+
         const newRange: HighlightRangeColor = {
-            start: e.start,
-            end: e.end,
+            start: start,
+            end: end,
             misconception: misconception,
             color: taggingClusterSession.currentColor
         }
