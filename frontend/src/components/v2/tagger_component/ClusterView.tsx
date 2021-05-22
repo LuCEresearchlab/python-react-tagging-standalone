@@ -120,9 +120,12 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
         const misconception = getCurrentMisconception(taggingClusterSession)
         if (misconception == null) return
 
+        const start: number = answer.data[e.start] == ' ' ? e.start + 1 : e.start
+        const end: number = answer.data[e.end] == ' ' ? e.end - 1 : e.end
+
         const newRange: HighlightRangeColor = {
-            start: e.start,
-            end: e.end,
+            start: start,
+            end: end,
             misconception: misconception,
             color: taggingClusterSession.currentColor
         }
@@ -200,18 +203,20 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
         // hack to support indexes for words
         if (command.startsWith('' + displayKey + 'h')) {
             let counter: number = 0
-            letters.forEach(letter => {
+            letters.forEach((letter: any) => {
                 const content = letter.textContent
                 if (content == ' ') {
                     counter++
                     letter.textContent = `[${counter}] `
+                    letter.style.color = HIGHLIGHT_COLOR_ELEMENT
                 }
             })
         } else {
-            letters.forEach(letter => {
+            letters.forEach((letter: any) => {
                 const content = letter.textContent
                 if (content?.indexOf(' ') != -1) {
                     letter.textContent = ' '
+                    letter.style.color = ""
                 }
             })
         }
@@ -229,7 +234,7 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
         }}>
             <KeyIndication
                 displayKey={"" + displayKey}
-                highlighted={stringEquals('' + displayKey + 'h', localCommand)}
+                highlighted={localCommand.startsWith('' + displayKey + 'h')}
             />
             <TruthCircle value={answer.picked}/>
             <div id={"Highlightable|" + displayKey} style={{padding: 'inherit'}}>

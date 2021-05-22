@@ -8,15 +8,15 @@ const post_answer_url = TAGGING_SERVICE_URL + '/datasets/tagged-answer'
 
 
 function post(url: string, data: any) {
-    console.log('posting to ' + url)
-    console.log(data)
     fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify(data)
-    }).then((response: Response) => console.log(response.status));
+    }).then((response: Response) => {
+        if (response.status != 200) console.log(response.status)
+    });
 }
 
 export function postHelper(dataset_id: string,
@@ -45,9 +45,6 @@ export function postClusters(dataset_id: string,
                              question_id: string,
                              user_id: string,
                              clusters: Cluster[]) {
-    console.log(`posting to ${TAGGING_SERVICE_URL}/clusters/dataset/${dataset_id}/question/${question_id}/user/${
-        user_id}`)
-    console.log(clusters)
     post(`${TAGGING_SERVICE_URL}/clusters/dataset/${dataset_id}/question/${question_id}/user/${user_id}`,
         clusters)
 }

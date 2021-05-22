@@ -106,7 +106,6 @@ function init(state: TaggingClusterSession,
                   currentColor: string,
                   history: string[]
               }) {
-    console.log("init")
     return {
         ...state,
         dataset_id: payload.dataset_id,
@@ -138,7 +137,6 @@ function setTags(state: TaggingClusterSession, tags: (string | null)[]): Tagging
     const new_tags = loadedTagsFormatAndSet(state, tags)
 
     if (arrayFilteredNotNullEquals(new_tags, state.tags)) return state // no change
-    console.log("setTags")
     return {
         ...state,
         tags: new_tags,
@@ -147,7 +145,6 @@ function setTags(state: TaggingClusterSession, tags: (string | null)[]): Tagging
 
 function setRangesList(state: TaggingClusterSession, rangesList: HighlightRange[][]): TaggingClusterSession {
     if (arrayFilteredNotNullEquals(rangesList, state.tags)) return state
-    console.log("setRangesList")
     return {
         ...state,
         rangesList
@@ -159,7 +156,6 @@ function setRanges(state: TaggingClusterSession, payload: { answer: Answer, rang
     const ranges: HighlightRange[] = payload.ranges
     const idx = getCurrentCluster(state).answers.findIndex(ans => stringEquals(ans.answer_id, answer.answer_id))
     if (idx === -1) return state
-    console.log("setRanges")
     const new_ranges = [...state.rangesList]
     new_ranges[idx] = ranges
     return {
@@ -176,7 +172,6 @@ function setTagsAndRanges(state: TaggingClusterSession,
                                   ranges: HighlightRange[]
                               }): TaggingClusterSession {
 
-    console.log("setTagsAndRanges")
 
     const answer: Answer = payload.answer
     const tags: (string | null)[] = payload.tags
