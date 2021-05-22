@@ -3,7 +3,7 @@ from flask_restx import Namespace, Resource, fields
 
 import flaskr.util.mongo_helper as db
 
-api = Namespace('datasets', description='API to view available datasets')
+api = Namespace('datasets', description='API to interact with datasets')
 
 RANGE = api.model('Range', {
     'start': fields.Integer(required=True, readonly=True, description='start of the range',

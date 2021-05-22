@@ -9,7 +9,7 @@ from flaskr.handlers.dataset_handler import get_dataset_list, add_dataset, get_d
 from flaskr.util.answers_loader import populate_retrieving_maps
 from flaskr.util.mongo_helper import get_tagged_dataset, get_tagged_dataset_with_tag
 
-api = Namespace('datasets', description='Upload API to load files')
+api = Namespace('datasets', description='API to interact with datasets')
 
 logger = logging.getLogger(__name__)
 

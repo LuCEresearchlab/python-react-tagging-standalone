@@ -43,11 +43,12 @@ class LoginTest(Resource):
         return authenticate(username=username, password=password)
 
 
-@api.route('/test')
-class LoginTest(Resource):
-    @auth.login_required
-    def get(self):
-        return "test, {}!".format(auth.current_user())
+#
+# @api.route('/test')
+# class LoginTest(Resource):
+#     @auth.login_required
+#     def get(self):
+#         return "test, {}!".format(auth.current_user())
 
 
 def user_exists(username):
