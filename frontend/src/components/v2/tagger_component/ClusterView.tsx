@@ -200,18 +200,20 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
         // hack to support indexes for words
         if (command.startsWith('' + displayKey + 'h')) {
             let counter: number = 0
-            letters.forEach(letter => {
+            letters.forEach((letter: any) => {
                 const content = letter.textContent
                 if (content == ' ') {
                     counter++
                     letter.textContent = `[${counter}] `
+                    letter.style.color = HIGHLIGHT_COLOR_ELEMENT
                 }
             })
         } else {
-            letters.forEach(letter => {
+            letters.forEach((letter: any) => {
                 const content = letter.textContent
                 if (content?.indexOf(' ') != -1) {
                     letter.textContent = ' '
+                    letter.style.color = ""
                 }
             })
         }
@@ -229,7 +231,7 @@ function ClusterItem({answer, taggingClusterSession, dispatchTaggingClusterSessi
         }}>
             <KeyIndication
                 displayKey={"" + displayKey}
-                highlighted={stringEquals('' + displayKey + 'h', localCommand)}
+                highlighted={localCommand.startsWith('' + displayKey + 'h')}
             />
             <TruthCircle value={answer.picked}/>
             <div id={"Highlightable|" + displayKey} style={{padding: 'inherit'}}>
