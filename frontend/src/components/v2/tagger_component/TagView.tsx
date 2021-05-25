@@ -33,7 +33,7 @@ function TagView({misconceptionsAvailable, taggingClusterSession, dispatchTaggin
             <Table>
                 <TableBody>
                     <TableRow>
-                        <TableCell>
+                        <TableCell style={{paddingLeft: 0, paddingRight: 0}}>
                             <StaticSelectorView
                                 misconceptionsAvailable={misconceptionsAvailable}
                                 taggingClusterSession={taggingClusterSession}
@@ -51,7 +51,7 @@ function TagView({misconceptionsAvailable, taggingClusterSession, dispatchTaggin
                         />
                     </TableRow>
                     <TableRow>
-                        <TableCell style={{borderBottom: "none"}}>
+                        <TableCell style={{borderBottom: "none", paddingLeft: 0, paddingRight: 0}}>
                             <MisconceptionView
                                 misconceptionsAvailable={misconceptionsAvailableNoMisc}
                                 taggingClusterSession={taggingClusterSession}
