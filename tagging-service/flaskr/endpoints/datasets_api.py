@@ -33,20 +33,6 @@ TAGGED_DATA = api.model('Tagged Answer', {
     'highlighted_ranges': fields.List(fields.Nested(RANGE), required=True)
 })
 
-IDS = api.model('IDS', {
-    'ids': fields.List(fields.String(readonly=True, description='Tags for answer'), required=True,
-                       example='603501f39175ac3898e094cc')
-})
-
-
-@api.route('/tagged-datasets')
-@api.doc(description='API for tagged datasets')
-class TaggedDatasetsAPI(Resource):
-    @api.doc(description='Get all tagged datasets')
-    @api.marshal_with(IDS)
-    def get(self):
-        return {'ids': db.get_tagged_datasets()}
-
 
 @api.route('/tagged-answer')
 class UserTaggedPostAPI(Resource):
