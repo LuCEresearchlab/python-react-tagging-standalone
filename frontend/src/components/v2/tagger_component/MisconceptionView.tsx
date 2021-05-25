@@ -12,7 +12,7 @@ import {
     TaggingClusterSession,
     TaggingClusterSessionDispatch
 } from "../../../model/TaggingClusterSession";
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import {createStyles, makeStyles} from "@material-ui/core/styles";
 import KeyIndication from "./KeyIndication";
 import {
     clusterSessionPost,
@@ -26,13 +26,8 @@ import stringEquals from "../../../util/StringEquals";
 import withActiveKeyboard from "../../../hooks/withActiveKeyboard";
 
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
     createStyles({
-        root: {
-            '& > * + *': {
-                marginTop: theme.spacing(3),
-            }
-        },
         divLine: {
             display: "inline-flex",
             width: '100%',
@@ -122,8 +117,7 @@ function MisconceptionView(
     const FIRST_DYNAMIC_INDEX: number = PRE_DYNAMIC_SIZE + 1
 
     return (
-        <div className={classes.root}>
-            <>
+        <>
                 <div className={classes.divLine}>
                     <KeyIndication displayKey={"t" + 1} highlighted={stringEquals('t1', localCommand)}/>
                     <MisconceptionColorButton
@@ -187,8 +181,7 @@ function MisconceptionView(
                             }
                         )
                 }
-            </>
-        </div>
+        </>
     )
 }
 

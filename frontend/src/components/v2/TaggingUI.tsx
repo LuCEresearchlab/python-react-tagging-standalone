@@ -146,7 +146,7 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
                         'command: ' + keyHistory
                 }
             </div>
-            <Grid container direction={'row'} className={classes.root} spacing={10}>
+            <Grid container direction={'row'} className={classes.root}>
                 <Grid item xs={showQuestion ? 4 : 1}>
                     <Button
                         style={{position: 'sticky', top: '1em', zIndex: 2}}
@@ -179,16 +179,16 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
                             />
                         </TabList>
                         <TabPanel value={'1'}>
-                            <Grid container direction={'row'} className={classes.taggingMiscBlock} spacing={2}
+                            <Grid container direction={'row'} className={classes.taggingMiscBlock} spacing={1}
                                   component={Paper}
                                   style={{backgroundColor: LIGHT_GREY}}>
-                                <Grid item xs={8}>
+                                <Grid item xs={7}>
                                     <ClusterView
                                         taggingClusterSession={taggingClusterSession}
                                         dispatchTaggingClusterSession={dispatchTaggingClusterSession}
                                     />
                                 </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={5}>
                                     <TagView
                                         misconceptionsAvailable={data}
                                         taggingClusterSession={taggingClusterSession}

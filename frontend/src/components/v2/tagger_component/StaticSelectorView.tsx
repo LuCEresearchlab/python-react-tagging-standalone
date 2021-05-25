@@ -146,12 +146,16 @@ function StaticSelectorView({
                 }>
                 {misconception}
             </Button>
-            <MisconceptionInfoButton
-                handled_element={0}
-                tags={[misconception]}
-                keyboardIndex={'' + handledIndex}
-                highlighted={stringEquals('' + handledIndex + '?', localCommand)}
-            />
+            {
+                isNoMisconception(misconception) ?
+                    <></>:
+                    <MisconceptionInfoButton
+                        handled_element={0}
+                        tags={[misconception]}
+                        keyboardIndex={'' + handledIndex}
+                        highlighted={stringEquals('' + handledIndex + '?', localCommand)}
+                    />
+            }
         </>
     )
 }
