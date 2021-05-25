@@ -4,7 +4,7 @@ from flaskr.endpoints.upload_api import ANSWER
 from flaskr import cache
 from flaskr.util.mongo_helper import get_cluster, save_cluster
 
-api = Namespace('clusters', description='API to view available datasets')
+api = Namespace('clusters', description='API to obtain and modify clusters')
 
 CLUSTER = api.model('Cluster', {
     'name': fields.String(required=True, readonly=True, description='Name of the cluster',

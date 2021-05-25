@@ -2,7 +2,7 @@ from flask_restx import Namespace, Resource
 from flaskr.util.progmiscon_helper import get_java_public_misconceptions
 from flaskr import cache
 
-api = Namespace('progmiscon_api', description='API for grouping answers by similarity')
+api = Namespace('progmiscon_api', description='API to obtain formatted list of misconceptions')
 
 
 @api.route('/misconceptions')

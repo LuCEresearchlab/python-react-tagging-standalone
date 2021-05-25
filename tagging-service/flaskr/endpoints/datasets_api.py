@@ -3,7 +3,7 @@ from flask_restx import Namespace, Resource, fields
 
 import flaskr.util.mongo_helper as db
 
-api = Namespace('datasets', description='API to view available datasets')
+api = Namespace('datasets', description='API to interact with datasets')
 
 RANGE = api.model('Range', {
     'start': fields.Integer(required=True, readonly=True, description='start of the range',
@@ -32,20 +32,6 @@ TAGGED_DATA = api.model('Tagged Answer', {
                                    example='15000'),
     'highlighted_ranges': fields.List(fields.Nested(RANGE), required=True)
 })
-
-IDS = api.model('IDS', {
-    'ids': fields.List(fields.String(readonly=True, description='Tags for answer'), required=True,
-                       example='603501f39175ac3898e094cc')
-})
-
-
-@api.route('/tagged-datasets')
-@api.doc(description='API for tagged datasets')
-class TaggedDatasetsAPI(Resource):
-    @api.doc(description='Get all tagged datasets')
-    @api.marshal_with(IDS)
-    def get(self):
-        return {'ids': db.get_tagged_datasets()}
 
 
 @api.route('/tagged-answer')
