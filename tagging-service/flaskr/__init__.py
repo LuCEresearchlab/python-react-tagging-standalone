@@ -13,7 +13,6 @@ def create_app(test_config=None):
 
     api.init_app(app)
     cache.init_app(app)
-    app.config.from_pyfile('./config/env_config.py')
     CORS(app, resources={r'/*': {"origins": "*"}})
 
     @app.errorhandler(Error)
