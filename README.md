@@ -141,5 +141,5 @@ npm test
 ### Service testing
 ```
 cd tagging-service/test
-pytest -c pyenv.ini
+pytest -c pyenv.ini -v "$(pwd)" --cov="../flaskr" --cov-report html
 ```

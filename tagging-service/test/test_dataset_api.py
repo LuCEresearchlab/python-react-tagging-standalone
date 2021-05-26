@@ -51,7 +51,7 @@ class DatasetApiTest(TestCase):
 
         return app
 
-    def test1_upload(self):
+    def test01_upload(self):
         test_client = self.app.test_client()
         response = test_client.post('/datasets/upload',
                                     headers={"Content-Type": "multipart/form-data"},
@@ -62,7 +62,7 @@ class DatasetApiTest(TestCase):
 
         assert response.json == 'uploaded file: file successfully'
 
-    def test2_list(self):
+    def test02_list(self):
         test_client = self.app.test_client()
         response = test_client.get('/datasets/list')
         while len(response.json) == 0 or not response.json[0]['finished_clustering']:
@@ -85,7 +85,7 @@ class DatasetApiTest(TestCase):
         assert dataset['nr_questions'] == 1
         assert dataset['finished_clustering']
 
-    def test3_download_empty(self):
+    def test03_download_empty(self):
         test_client = self.app.test_client()
 
         response = test_client.get('/datasets/download/dataset/d1')
@@ -95,7 +95,7 @@ class DatasetApiTest(TestCase):
         assert type(response.json) == list
         assert len(response.json) == 0
 
-    def test4_get_dataset(self):
+    def test04_get_dataset(self):
         test_client = self.app.test_client()
         response = test_client.get('/datasets/get-dataset/dataset/d1')
 
@@ -107,7 +107,7 @@ class DatasetApiTest(TestCase):
         assert dataset['dataset_id'] == 'd1'
         assert dataset['questions'] == [{'question_id': 'q1', 'text': 'question_text'}]
 
-    def test5_tagged_answer_post(self):
+    def test05_tagged_answer_post(self):
         payload = json.dumps(tagged_answer)
 
         test_client = self.app.test_client()
@@ -119,7 +119,7 @@ class DatasetApiTest(TestCase):
         assert response.mimetype == 'application/json'
         assert response.json == tagged_answer
 
-    def test6_tagged_answer_dataset(self):
+    def test06_tagged_answer_dataset(self):
         response = self.app.test_client().get('/datasets/tagged-answer/dataset/d1')
         TestCase.assert200(self, response)
         assert response.mimetype == 'application/json'
@@ -127,7 +127,7 @@ class DatasetApiTest(TestCase):
         assert len(response.json) == 1
         assert response.json[0] == tagged_answer
 
-    def test7_download_not_empty(self):
+    def test07_download_not_empty(self):
         response = self.app.test_client().get('/datasets/download/dataset/d1')
 
         TestCase.assert200(self, response)
@@ -137,7 +137,7 @@ class DatasetApiTest(TestCase):
         assert response.json[0] != tagged_answer
         assert response.json[0]['question_text'] is not None
 
-    def test8_tagged_answer_dataset_question(self):
+    def test08_tagged_answer_dataset_question(self):
         response = self.app.test_client().get('/datasets/tagged-answer/dataset/d1/question/q1')
         TestCase.assert200(self, response)
         assert response.mimetype == 'application/json'
@@ -145,7 +145,7 @@ class DatasetApiTest(TestCase):
         assert len(response.json) == 1
         assert response.json[0] == tagged_answer
 
-    def test8_tagged_answer_dataset_question_answer_user(self):
+    def test09_tagged_answer_dataset_question_answer_user(self):
         response = self.app.test_client().get('/datasets/tagged-answer/dataset/d1/question/q1/answer/a1/user/user_test')
         TestCase.assert200(self, response)
         assert response.mimetype == 'application/json'
@@ -153,14 +153,14 @@ class DatasetApiTest(TestCase):
         assert len(response.json) == 1
         assert response.json[0] == tagged_answer
 
-    def test8_tagged_answer_dataset_tag(self):
+    def test10_tagged_answer_dataset_tag(self):
         response = self.app.test_client().get('/datasets/tagged-answer/dataset/d1/tag/NoMisconception')
         TestCase.assert200(self, response)
         assert response.mimetype == 'application/json'
         assert type(response.json) == list
         assert len(response.json) == 1
 
-    def test8_tagged_answer_dataset_tag(self):
+    def test11_tagged_answer_dataset_tag(self):
         response = self.app.test_client().get('/datasets/user-tags/d1/user_test')
         TestCase.assert200(self, response)
         assert response.mimetype == 'application/json'
