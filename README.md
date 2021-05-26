@@ -140,5 +140,6 @@ npm test
 
 ### Service testing
 ```
-pytest
+cd tagging-service/test
+pytest -c pyenv.ini
 ```

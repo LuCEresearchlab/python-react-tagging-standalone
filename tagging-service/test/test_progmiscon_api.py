@@ -1,7 +1,13 @@
 from flask import Flask
+from flask_caching import Cache
 from flask_testing import TestCase
-from flaskr.config import cache
 from flaskr.endpoints import api
+
+config = {
+    "DEBUG": True,  # some Flask specific configs
+    "CACHE_TYPE": "simple",  # Flask-Caching related configs
+}
+cache = Cache(config=config)
 
 
 class ProgmisconAPITest(TestCase):

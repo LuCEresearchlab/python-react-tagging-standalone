@@ -2,17 +2,25 @@ import json
 import os
 
 from flask import Flask
+from flask_caching import Cache
+from flask_httpauth import HTTPBasicAuth
 from flask_testing import TestCase
-from testcontainers.core.generic import GenericContainer
+from testcontainers.core.container import DockerContainer
 
-from flaskr.config import cache
 from flaskr.endpoints import api
 
-mongo_container = GenericContainer("mongo:4.2.13-bionic")
+mongo_container = DockerContainer("mongo:4.2.13-bionic")
 mongo_container.with_volume_mapping(host=str(os.path.abspath('../../mongodb/init-mongo.js')),
                                     container='/docker-entrypoint-initdb.d/init-mongo.js', mode='ro')
 
 mongo_container.with_bind_ports(27017, 27017)
+
+config = {
+    "DEBUG": True,  # some Flask specific configs
+    "CACHE_TYPE": "simple",  # Flask-Caching related configs
+}
+cache = Cache(config=config)
+auth = HTTPBasicAuth()
 
 
 class AuthApiTest(TestCase):
