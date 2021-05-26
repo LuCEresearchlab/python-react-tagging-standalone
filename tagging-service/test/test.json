@@ -1,0 +1,37 @@
+{
+  "name": "test-dataset",
+  "creation_data": "2021-03-29T14:10:50.947204",
+  "dataset_id": "d1",
+  "questions": [
+    {
+      "question_id": "q1",
+      "text": "question_text",
+      "answers": [
+        {
+          "answer_id": "a1",
+          "data": "data1",
+          "picked": false,
+          "matches_expected": true
+        },
+        {
+          "answer_id": "a2",
+          "data": "data2",
+          "picked": false,
+          "matches_expected": true
+        },
+        {
+          "answer_id": "a3",
+          "data": "",
+          "picked": false,
+          "matches_expected": true
+        },
+        {
+          "answer_id": "a4",
+          "data": "",
+          "picked": false,
+          "matches_expected": true
+        }
+      ]
+    }
+  ]
+}
