@@ -1,7 +1,6 @@
 import json
 import os
 
-import pytest
 from flask import Flask
 from flask_testing import TestCase
 from testcontainers.core.generic import GenericContainer
@@ -33,13 +32,13 @@ class AuthApiTest(TestCase):
         self.app = app
         return app
 
-    def test_user_exists_false(self):
+    def test1_user_exists_false(self):
         response = self.app.test_client().get('/auth/exists/test_user')
         TestCase.assert200(self, response)
         assert response.mimetype == 'application/json'
         assert not response.json
 
-    def test_user_register(self):
+    def test2_user_register(self):
         payload = json.dumps({'username': 'test_user', 'password': 'test_user_password'})
 
         response = self.app.test_client().post('/auth/register',
@@ -48,13 +47,13 @@ class AuthApiTest(TestCase):
         TestCase.assert200(self, response)
         assert response.mimetype == 'application/json'
 
-    def test_user_exists_true(self):
+    def test3_user_exists_true(self):
         response = self.app.test_client().get('/auth/exists/test_user')
         TestCase.assert200(self, response)
         assert response.mimetype == 'application/json'
         TestCase.assertTrue(self, response)
 
-    def test_user_login(self):
+    def test4_user_login(self):
         payload = json.dumps({'username': 'test_user', 'password': 'test_user_password'})
 
         response = self.app.test_client().post('/auth/login',
