@@ -15,14 +15,14 @@ package "Tagging Service" as TService {
     [AnswersLoader] as AL
     [ProgmisconHelper] as PGH
 
-    TAPI -- TU
+    TAPI -(0- TU
 
-    G -- TU
-    MS -- TU
-    H -- TU
-    TU -- AL
-    TU -- MH
-    TU -- PGH
+    G -0)- TU
+    MS -0)- TU
+    H -0)- TU
+    TU -(0- AL
+    TU -(0- MH
+    TU -(0- PGH
 }
 
 package "Front End" {
