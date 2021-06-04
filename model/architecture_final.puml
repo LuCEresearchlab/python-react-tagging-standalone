@@ -1,0 +1,51 @@
+@startuml
+
+
+database "MongoDB\n" {
+    [Tagging Data] as D
+}
+
+package "Tagging Service" as TService {
+    [Auth] as A
+    [Progmiscon API] as PAPI
+    [Datasets API] as DAPI
+    [Cluster API] as CAPI
+    [Upload API] as UAPI
+    [Dataset Handler] as DH
+    [Model Loader] as ML
+    [Mongo Helper] as MH
+    [Progmiscon Helper] as PGH
+
+    DAPI -(0- MH
+    CAPI -(0- MH
+    CAPI -r(0- UAPI
+    PAPI -(0-- PGH
+    UAPI -(0- MH
+    DH -r(0- ML
+    DH -0)- UAPI
+    MH -0)- DH
+    MH -u0)- A
+
+}
+
+package "Front End" {
+    [Tagging UI] as tui
+    [Tagging session] as ts
+
+    tui -r(0- ts
+}
+
+node "Progmiscon" as PG
+
+A -u0)-- tui
+PAPI -u0)-- tui
+ts --d(0- DAPI
+ts --d(0- CAPI
+ts --d(0- UAPI
+
+MH -r(0- D
+
+PGH -(0- PG
+
+
+@enduml

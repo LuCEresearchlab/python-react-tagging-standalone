@@ -29,7 +29,7 @@ package "Front End" {
     [Tagging UI] as tui
     [Tagging session] as ts
 
-    tui -- ts
+    tui -(0- ts
 }
 
 node "AssignmentService" as AS
