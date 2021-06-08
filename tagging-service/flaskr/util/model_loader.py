@@ -125,13 +125,24 @@ def opt_dist_matrix(all_answers, answers, dist_matrix):
 
 
 def cluster(answers):
-    dist_matrix = get_distance_matrix(answers)
-    return opt_cluster(all_answers=answers, answers=answers, dist_matrix=dist_matrix)
+    # extract empty answers
+    empty_answers, not_empty_answers = [], []
+    for a in answers:
+        if not a['data']:  # empty string
+            empty_answers.append(a)
+        else:
+            not_empty_answers.append(a)
+
+    dist_matrix = get_distance_matrix(not_empty_answers)
+
+    computed_clusters = opt_cluster(all_answers=not_empty_answers, answers=not_empty_answers, dist_matrix=dist_matrix)
+
+    if not empty_answers:  # no empty answer exists
+        return computed_clusters
+
+    computed_clusters.append(empty_answers)  # add values
+    return computed_clusters
 
 # anss = load_answers()
 # all_clusters = cluster(answers=anss)
 # print(all_clusters)
-# sorted_ans = get_sorted_answers(anss)
-# print(all_clusters)
-
-# get_sorted_answers2(anss)

@@ -11,6 +11,18 @@
           "data": "actual answer",
           "picked": false,
           "matches_expected": true
+        },
+        {
+          "answer_id": "hex2",
+          "data": "actual answer 2",
+          "picked": true,
+          "matches_expected": false
+        },
+        {
+          "answer_id": "hex_for_empty",
+          "data": "",
+          "picked": false,
+          "matches_expected": true
         }
       ]
     }
