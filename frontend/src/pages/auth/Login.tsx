@@ -42,7 +42,6 @@ function Login({setSession}: Input) {
                 }
             )
             .then(body => {
-                console.log(body)
                 next(body)
             })
     }
