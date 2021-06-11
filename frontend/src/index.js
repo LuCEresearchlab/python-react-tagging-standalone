@@ -24,7 +24,6 @@ function App() {
     const update_session = (data) => {
         setSession(data)
         setSessionCookie(data)
-        console.log('save cookies')
     }
 
 
