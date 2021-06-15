@@ -367,11 +367,14 @@ export function getCurrentCluster(state: TaggingClusterSession): Cluster {
 }
 
 export function getCurrentMisconception(state: TaggingClusterSession): (string | null) {
-    return isUsingDefaultColor(state) || state.clusters.length == 0 ?
-        null :
-        state.availableMisconceptions[
-            state.availableMisconceptions.findIndex(misc => stringEquals(misc.color, state.currentColor))
-            ].name
+    if (isUsingDefaultColor(state) || state.clusters.length == 0)
+        return null
+
+    const index = state.availableMisconceptions.findIndex(misc => stringEquals(misc.color, state.currentColor))
+    if (index == -1)
+        return null
+
+    return state.availableMisconceptions[index].name
 }
 
 export default useTaggingClusterSession

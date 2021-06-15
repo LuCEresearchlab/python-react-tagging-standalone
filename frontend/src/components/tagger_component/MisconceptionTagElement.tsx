@@ -13,7 +13,6 @@ import Highlightable from "highlightable";
 import {rangesCompressor} from "../../util/RangeCompressor";
 import SingleTagSelector from "./SingleTagSelector";
 import MisconceptionInfoButton from "./MisconceptionInfoButton";
-import MisconceptionNoteButton from "./MisconceptionNoteButton";
 import MisconceptionColorButton from "./MisconceptionColorButton";
 import {MisconceptionElement} from "../../interfaces/MisconceptionElement";
 import stringEquals from "../../util/StringEquals";
@@ -282,7 +281,6 @@ function MisconceptionTagElement(
                                     tags={tags}
                                     handled_element={0}
                                 />
-                                <MisconceptionNoteButton/>
                             </div>
                             {
                                 [...Array(Math.min(tags.length - 1, 4))]
@@ -324,7 +322,6 @@ function MisconceptionTagElement(
                                                         tags={tags}
                                                         handled_element={handled_element}
                                                     />
-                                                    <MisconceptionNoteButton/>
                                                 </div>)
                                         }
                                     )
