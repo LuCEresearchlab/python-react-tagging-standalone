@@ -67,13 +67,8 @@ function _createTaggingClusterSession(state: TaggingSession,
 }
 
 
-function next_question(state: TaggingSession) {
-    const next_question_idx = state.currentQuestion + 1
-    if (next_question_idx >= state.questions.length) return state
-    return {
-        ...state,
-        currentQuestion: next_question_idx
-    }
+function next_question(state: TaggingSession, dispatcher: React.Dispatch<TaggingClusterSessionDispatch>) {
+    return set_current_question(state, state.currentQuestion + 1, dispatcher)
 }
 
 function set_current_question(state: TaggingSession, idx: number,
@@ -97,7 +92,7 @@ function reducer(dispatcher: React.Dispatch<TaggingClusterSessionDispatch>,
                  state: TaggingSession, action: TaggingSessionDispatch) {
     switch (action.type) {
         case TaggingSessionActions.NEXT_QUESTION:
-            return next_question(state)
+            return next_question(state, dispatcher)
         case TaggingSessionActions.SET_CURRENT_QUESTION:
             return set_current_question(state, action.payload, dispatcher)
         case TaggingSessionActions.INIT:

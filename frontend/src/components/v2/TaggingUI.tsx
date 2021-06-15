@@ -100,7 +100,8 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
                 setShowQuestion(!showQuestion)
             }
         },
-        [taggingClusterSession.currentCluster, taggingSession.currentQuestion, page, showQuestion, tab]
+        [taggingClusterSession.currentCluster, taggingSession.currentQuestion, page, showQuestion, tab,
+            taggingClusterSession.clusters.length]
     )
 
     const [keyHistory] = withKeyboard((command: string) => keyboardAction(command))
@@ -184,6 +185,7 @@ function TaggingUI({taggingSession, dispatchTaggingSession, taggingClusterSessio
                                   style={{backgroundColor: LIGHT_GREY}}>
                                 <Grid item xs={7}>
                                     <ClusterView
+                                        taggingSession={taggingSession}
                                         taggingClusterSession={taggingClusterSession}
                                         dispatchTaggingClusterSession={dispatchTaggingClusterSession}
                                     />

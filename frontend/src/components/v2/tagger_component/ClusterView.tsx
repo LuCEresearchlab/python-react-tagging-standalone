@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {Answer, Cluster} from "../../../interfaces/Dataset";
 import {rangesCompressor} from "../../../util/RangeCompressor";
 import {HighlightRange, HighlightRangeColor} from "../../../interfaces/HighlightRange";
@@ -30,10 +30,12 @@ import withKeyboard from "../../../hooks/withKeyboard";
 import stringEquals from "../../../util/StringEquals";
 import {postClusters} from "../../../helpers/PostHelper";
 import withActiveKeyboard from "../../../hooks/withActiveKeyboard";
+import {TaggingSession} from "../../../model/TaggingSession";
 
 const TAGGING_SERVICE_URL = process.env.TAGGING_SERVICE_URL
 
 interface Input {
+    taggingSession: TaggingSession,
     taggingClusterSession: TaggingClusterSession,
     dispatchTaggingClusterSession: React.Dispatch<TaggingClusterSessionDispatch>
 }
@@ -41,9 +43,12 @@ interface Input {
 const sep: string = 'h'
 const regExp = new RegExp(/^[1-9]\d*h[1-9](:?-[1-9]\d*)?$/)
 
-function ClusterView({taggingClusterSession, dispatchTaggingClusterSession}: Input) {
+function ClusterView({taggingSession, taggingClusterSession, dispatchTaggingClusterSession}: Input) {
 
-    const currentCluster: Cluster = getCurrentCluster(taggingClusterSession)
+    const currentCluster: Cluster = useMemo(() => getCurrentCluster(taggingClusterSession),
+        [taggingClusterSession.dataset_id, taggingClusterSession.question_id,
+            taggingSession.currentQuestion,
+            taggingClusterSession.currentCluster, taggingClusterSession.clusters])
 
     return (
         <div>
